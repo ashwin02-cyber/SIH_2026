@@ -1,0 +1,14 @@
+config setup
+    charondebug="ike 2, esp 2"
+
+conn {{ conn_name }}
+    left={{ left_ip }}
+    right={{ right_ip }}
+    authby=secret
+    ike={{ ike_cipher }}-{{ ike_hash }}-{{ dh_group }}!
+    esp={{ esp_cipher }}-{{ esp_hash }}!
+    type={{ mode }}
+    keyingtries=1
+    ikelifetime=1h
+    keylife=20m
+    auto=start

@@ -1,0 +1,37 @@
+services:
+  peer-a:
+    build: .
+    container_name: peer-a
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.disable_xfrm=0
+    volumes:
+      - ./configs/peer-a/ipsec.conf:/etc/ipsec.conf:ro
+      - ./configs/peer-a/ipsec.secrets:/etc/ipsec.secrets:ro
+    networks:
+      vpn-net:
+        ipv4_address: 10.10.0.10
+
+  peer-b:
+    build: .
+    container_name: peer-b
+    cap_add:
+      - NET_ADMIN
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.disable_xfrm=0
+    volumes:
+      - ./configs/peer-b/ipsec.conf:/etc/ipsec.conf:ro
+      - ./configs/peer-b/ipsec.secrets:/etc/ipsec.secrets:ro
+    networks:
+      vpn-net:
+        ipv4_address: 10.10.0.20
+
+networks:
+  vpn-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
