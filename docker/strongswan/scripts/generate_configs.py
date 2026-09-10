@@ -45,7 +45,7 @@ for cipher in CIPHERS:
                 )
 
                 out_path = f"generated_configs/{conn_name}.conf"
-                with open(out_path, "w") as f:
+                with open(out_path, "w", newline="\n") as f:
                     f.write(rendered)
 
                 count += 1
