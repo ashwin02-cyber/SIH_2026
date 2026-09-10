@@ -1,1 +1,7 @@
 venv/
+ml-engineer/venv/
+ml-engineer/__pycache__/
+ml-engineer/*.pkl
+*/venv/
+*/__pycache__/
+*.pcap
