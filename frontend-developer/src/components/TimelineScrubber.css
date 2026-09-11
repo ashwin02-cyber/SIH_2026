@@ -1,0 +1,54 @@
+.timeline__meta {
+  margin: 0 0 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+  min-height: 18px;
+}
+
+.timeline__meta strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.timeline {
+  display: flex;
+  gap: 3px;
+  height: 36px;
+}
+
+.timeline__segment {
+  flex: 1;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  padding: 0;
+}
+
+.timeline__segment:hover,
+.timeline__segment:focus-visible {
+  opacity: 1;
+  transform: scaleY(1.08);
+}
+
+.timeline__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.timeline__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.timeline__legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}

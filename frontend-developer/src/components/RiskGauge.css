@@ -1,0 +1,31 @@
+.gauge {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin: 0 auto;
+}
+
+.gauge svg circle {
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.gauge__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gauge__score {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.gauge__level {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  margin-top: 2px;
+}

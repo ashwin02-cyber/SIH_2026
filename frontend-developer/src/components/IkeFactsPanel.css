@@ -1,0 +1,56 @@
+.ike-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 0 0 20px;
+}
+
+.ike-grid__item dt {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.ike-grid__item dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 15px;
+  color: var(--text);
+}
+
+.ike-findings {
+  list-style: none;
+  margin: 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ike-findings__item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.ike-findings__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.ike-findings__factor {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.ike-findings__note {
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

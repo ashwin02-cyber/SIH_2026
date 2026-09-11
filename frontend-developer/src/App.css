@@ -1,0 +1,25 @@
+.app {
+  min-height: 100%;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 24px;
+  padding: 32px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard__column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (max-width: 800px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+  }
+}
