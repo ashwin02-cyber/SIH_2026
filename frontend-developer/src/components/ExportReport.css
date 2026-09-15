@@ -1,0 +1,20 @@
+.export-btn {
+  padding: 8px 14px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 13px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.export-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.export-btn:disabled {
+  color: var(--text-muted);
+  cursor: wait;
+}
