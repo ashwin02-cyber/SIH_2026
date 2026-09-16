@@ -26,7 +26,7 @@ import os
 
 # ── 1. Load data ──────────────────────────────────────────────────────────────
 print("Loading features.csv ...")
-df = pd.read_csv('features.csv')
+df = pd.read_csv('features_real.csv')
 print(f"Total rows: {len(df)}")
 print(f"Classes: {df['label'].unique()}")
 print(f"Class distribution:\n{df.groupby('label').size()}\n")
