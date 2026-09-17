@@ -87,12 +87,34 @@ def switch_config(combo_name):
     shutil.copy(src, CONFIGS_PEER_A)
     shutil.copy(src, CONFIGS_PEER_B)
     print(f"Applied config: {combo_name}")
+
+    # Start capturing BEFORE restart, so we catch the IKE handshake
+    handshake_remote_path = "/tmp/handshake_capture.pcap"
+    docker_exec("peer-a", "rm", "-f", handshake_remote_path)
+    handshake_proc = subprocess.Popen(
+        ["docker", "exec", "peer-a", "tcpdump", "-U", "-i", "eth0", "-w", handshake_remote_path],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+    )
+    time.sleep(2)  # let tcpdump attach before the restart triggers the handshake
+
     run(["docker", "restart", "peer-a", "peer-b"])
     time.sleep(10)  # give strongSwan time to renegotiate the tunnel
 
     # re-start background services that don't survive a container restart
     docker_exec("peer-b", "sh", "-c", "mkdir -p /run/sshd && /usr/sbin/sshd")
     docker_exec("peer-b", "sh", "-c", "nginx || true")
+
+    # stop the handshake capture now that the tunnel should be up
+    handshake_proc.terminate()
+    try:
+        handshake_proc.wait(timeout=5)
+    except subprocess.TimeoutExpired:
+        handshake_proc.kill()
+
+    # copy the handshake pcap out and log it
+    local_path,local_filename = copy_pcap_out("peer-a", handshake_remote_path, combo_name, "handshake")
+    log_capture(local_filename, combo_name, "handshake", notes="IKE negotiation, captured during container restart")
+    print(f"Handshake captured: {local_filename}")
 
 
 def verify_tunnel():
