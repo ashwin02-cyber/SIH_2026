@@ -12,7 +12,8 @@ import ExplanationPanel from "./components/ExplanationPanel";
 import { CompletenessPanel, CompliancePanel, ExposurePanel } from "./components/AssessmentPanels";
 import RecommendationsPanel from "./components/RecommendationsPanel";
 import DefencePanel from "./components/DefencePanel";
-import { analyzeFile, analyzeSample, checkHealth, listSamples } from "./api";
+import ReplayPanel from "./components/ReplayPanel";
+import { analyzeFile, analyzeSample, checkHealth, listSamples, replayFile, replaySample } from "./api";
 import { bundledSamples, weakExample } from "./data/mockData";
 import "./App.css";
 
@@ -25,6 +26,8 @@ function App() {
   const [serverChecked, setServerChecked] = useState(false);
   const [serverOnline, setServerOnline] = useState(false);
   const [serverSamples, setServerSamples] = useState([]);
+  const [replayMode, setReplayMode] = useState(false);
+  const [replay, setReplay] = useState(null); // live state of a replay of a capture file
 
   useEffect(() => {
     let cancelled = false;
@@ -60,10 +63,34 @@ function App() {
     }
   }
 
-  const handleAnalyzeFile = (file) => run(() => analyzeFile(file));
+  // Replay of a capture file (not live sniffing): progressive events, then the full analysis.
+  async function runReplay(start) {
+    setBusy(true);
+    setError(null);
+    setAnalysis(null);
+    setReplay({ label: "", windows: [], latest: null, total: 0, done: false });
+    try {
+      await start((ev) => {
+        if (ev.type === "start") setReplay((r) => ({ ...r, label: ev.label, total: ev.total_windows }));
+        else if (ev.type === "window") setReplay((r) => ({ ...r, windows: [...r.windows, ev], latest: ev }));
+        else if (ev.type === "end") setReplay((r) => ({ ...r, done: true }));
+        else if (ev.type === "final") {
+          setAnalysis(ev.analysis);
+          setSource("server");
+        } else if (ev.type === "error") setError(ev.detail);
+      });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setBusy(false);
+      setReplay((r) => (r ? { ...r, done: true } : r));
+    }
+  }
+
+  const handleAnalyzeFile = (file) => (replayMode ? runReplay((on) => replayFile(file, on)) : run(() => analyzeFile(file)));
 
   function handleAnalyzeSample(sample) {
-    if (typeof sample === "string") return run(() => analyzeSample(sample));
+    if (typeof sample === "string") return replayMode ? runReplay((on) => replaySample(sample, on)) : run(() => analyzeSample(sample));
     // A bundled (offline) sample: real API output that ships with the app.
     setError(null);
     setAnalysis(sample.analysis);
@@ -88,6 +115,8 @@ function App() {
             serverOnline={serverOnline}
             serverSamples={serverSamples}
             bundledSamples={bundledSamples}
+            replayMode={replayMode}
+            onReplayModeChange={setReplayMode}
           />
           {error && (
             <div className="banner banner--error" role="alert">
@@ -100,8 +129,9 @@ function App() {
           {analysis && <ConfigComparison current={analysis} weak={weakExample} />}
         </div>
         <div className="dashboard__column">
-          {busy && <div className="banner">Analyzing capture - this can take a few seconds for large files...</div>}
-          {!analysis && !busy && (
+          {busy && !replay && <div className="banner">Analyzing capture - this can take a few seconds for large files...</div>}
+          {replay && !analysis && <ReplayPanel replay={replay} />}
+          {!analysis && !busy && !replay && (
             <section className="panel empty">
               <h2 className="panel__title">No capture analyzed yet</h2>
               <p>

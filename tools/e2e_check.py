@@ -107,6 +107,18 @@ def main():
 
             assert not errors, f"unexpected browser console errors: {errors}"
 
+            # replay mode: a progressive replay of the capture FILE (clearly not live sniffing), then the full dashboard
+            page.get_by_label("Replay as a stream", exact=False).check()
+            page.set_input_files("input[type=file]", SAMPLE)
+            page.get_by_role("button", name="Analyze capture").click()
+            page.get_by_text("REPLAY OF A CAPTURE - NOT LIVE SNIFFING").wait_for(timeout=20000)
+            page.get_by_text("Traffic type so far").wait_for(timeout=20000)
+            assert page.get_by_role("progressbar").count() == 1
+            page.locator(".gauge__level", has_text=strong["risk_level"]).wait_for(timeout=60000)
+            assert page.locator(".gauge__score").inner_text() == str(strong["score"])
+            page.get_by_label("Replay as a stream", exact=False).uncheck()
+            print("replay mode: banner + progressive panel + final dashboard OK")
+
             # bad file is rejected by the UI/API without crashing the page (the browser logs the
             # expected HTTP 400 in its console, so console errors are only checked before this step)
             bad = os.path.join(ROOT, "tests", "fixtures", "SYNTHETIC_not_a_pcap.pcap")

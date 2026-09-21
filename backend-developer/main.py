@@ -5,6 +5,8 @@ FastAPI app for the IPsec VPN Analyzer backend.
     POST /analyze                 upload a .pcap/.pcapng -> the contract response (see contract.py)
     GET  /samples                 list the bundled sample captures
     POST /analyze/sample/{name}   analyze one of the bundled samples (handy for demos)
+    POST /replay                  upload a pcap -> a progressive REPLAY stream (NDJSON), one event per second of capture time
+    POST /replay/sample/{name}    the same for a bundled sample
     POST /report/{kind}.{fmt}     render a report from an analysis (see reports/) - kind: executive|technical,
                                   fmt: html|pdf
     GET  /health                  liveness + model status
@@ -20,6 +22,7 @@ Environment variables (all optional):
     SIH_SAMPLES_DIR   folder with sample pcaps, default <repo>/data/samples
 """
 
+import json
 import os
 import sys
 import tempfile
@@ -27,7 +30,7 @@ import traceback
 
 from fastapi import Body, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, StreamingResponse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, ".."))
@@ -43,6 +46,7 @@ try:
     import traffic_features as tf
     from defence_capture import simulate_packets
     from esp_analysis import analyze_packets
+    from replay_stream import REPLAY_LABEL, replay_events
     from predict import predict_from_pcap
     ML_MODEL_LOADED = True
     _ml_import_error = None
@@ -124,8 +128,8 @@ def analyze_path(path: str, display_name: str) -> dict:
     return build_response(display_name, ike_facts, ml_result, errors=errors, esp=esp_fp, extras=extras)
 
 
-@app.post("/analyze")
-async def analyze(file: UploadFile = File(...)):
+async def _store_upload(file: UploadFile):
+    """Stream an upload to a temp file (with a size cap). Returns (display_name, temp_path)."""
     name = os.path.basename(file.filename or "")
     if not name.lower().endswith(ALLOWED_EXT):
         raise HTTPException(status_code=400, detail="Please upload a .pcap or .pcapng file")
@@ -146,7 +150,12 @@ async def analyze(file: UploadFile = File(...)):
     if size == 0:
         os.remove(tmp_path)
         raise HTTPException(status_code=400, detail="The uploaded file is empty")
+    return name, tmp_path
 
+
+@app.post("/analyze")
+async def analyze(file: UploadFile = File(...)):
+    name, tmp_path = await _store_upload(file)
     try:
         return analyze_path(tmp_path, name)
     except ValueError as e:
@@ -157,6 +166,39 @@ async def analyze(file: UploadFile = File(...)):
     finally:
         if os.path.exists(tmp_path):
             os.remove(tmp_path)
+
+
+def _replay_response(path, name, pace, cleanup):
+    """NDJSON stream: 'start', one 'window' per second of capture time, 'end', then 'final' with the full analysis."""
+    if not ML_MODEL_LOADED:
+        cleanup()
+        raise HTTPException(status_code=503, detail=f"Replay needs the ML model: {_ml_import_error}")
+    try:
+        packets, esp_only, _ = tf.read_packets(path)          # raises ValueError for a file that is not a capture
+    except ValueError as e:
+        cleanup()
+        raise HTTPException(status_code=400, detail=f"Not a valid capture file: {e}")
+
+    def lines():
+        try:
+            for ev in replay_events(packets, esp_only, name, pace):
+                yield json.dumps(ev) + "\n"
+            yield json.dumps({"type": "final", "analysis": analyze_path(path, name)}) + "\n"
+        except Exception as e:  # the stream has started, so report the failure as an event
+            traceback.print_exc()
+            yield json.dumps({"type": "error", "detail": f"Replay failed: {e}"}) + "\n"
+        finally:
+            cleanup()
+
+    return StreamingResponse(lines(), media_type="application/x-ndjson",
+                             headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"})
+
+
+@app.post("/replay")
+async def replay(file: UploadFile = File(...), pace: float = 0.15):
+    """REPLAY (not live sniffing): stream the analysis of an uploaded capture progressively. `pace` = seconds between windows (0-2)."""
+    name, tmp_path = await _store_upload(file)
+    return _replay_response(tmp_path, name, pace, lambda: os.path.exists(tmp_path) and os.remove(tmp_path))
 
 
 def _sample_names():
@@ -178,6 +220,13 @@ def analyze_sample(name: str):
         return analyze_path(os.path.join(SAMPLES_DIR, name), name)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/replay/sample/{name}")
+def replay_sample(name: str, pace: float = 0.15):
+    if name not in _sample_names():  # whitelist: no path traversal
+        raise HTTPException(status_code=404, detail="Unknown sample")
+    return _replay_response(os.path.join(SAMPLES_DIR, name), name, pace, lambda: None)
 
 
 @app.post("/report/{kind}.{fmt}")

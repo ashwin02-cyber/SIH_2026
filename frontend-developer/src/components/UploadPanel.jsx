@@ -1,9 +1,10 @@
 import { useState, useRef } from "react";
 import "./UploadPanel.css";
+import "./ReplayPanel.css";
 
 const MAX_MB = 50;
 
-export default function UploadPanel({ onAnalyzeFile, onAnalyzeSample, busy, serverOnline, serverSamples, bundledSamples }) {
+export default function UploadPanel({ onAnalyzeFile, onAnalyzeSample, busy, serverOnline, serverSamples, bundledSamples, replayMode, onReplayModeChange }) {
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [localError, setLocalError] = useState(null);
@@ -77,6 +78,10 @@ export default function UploadPanel({ onAnalyzeFile, onAnalyzeSample, busy, serv
       >
         {busy ? "Analyzing..." : "Analyze capture"}
       </button>
+      <label className="replay-toggle">
+        <input type="checkbox" checked={replayMode} onChange={(e) => onReplayModeChange(e.target.checked)} disabled={busy} />
+        <span>Replay as a stream: watch the analysis build up second by second. This is a replay of the capture file, not live sniffing.</span>
+      </label>
       {!serverOnline && (
         <p className="upload-hint">
           The analysis server is offline, so uploads are disabled. You can still look at the bundled samples below.

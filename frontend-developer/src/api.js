@@ -71,6 +71,37 @@ export async function analyzeSample(name) {
   return response.json();
 }
 
+// Replay of a capture file (NOT live sniffing): the server streams one JSON event per line (NDJSON).
+async function readNdjson(response, onEvent) {
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let nl;
+    while ((nl = buffer.indexOf("\n")) >= 0) {
+      const line = buffer.slice(0, nl).trim();
+      buffer = buffer.slice(nl + 1);
+      if (line) onEvent(JSON.parse(line));
+    }
+  }
+  if (buffer.trim()) onEvent(JSON.parse(buffer));
+}
+
+export async function replayFile(file, onEvent, pace = 0.15) {
+  const form = new FormData();
+  form.append("file", file);
+  const response = await request(`/replay?pace=${pace}`, { method: "POST", body: form });
+  await readNdjson(response, onEvent);
+}
+
+export async function replaySample(name, onEvent, pace = 0.15) {
+  const response = await request(`/replay/sample/${encodeURIComponent(name)}?pace=${pace}`, { method: "POST" });
+  await readNdjson(response, onEvent);
+}
+
 // kind: "executive" | "technical"   format: "pdf" | "html"
 export async function downloadReport(analysis, kind, format) {
   const response = await request(`/report/${kind}.${format}`, {
