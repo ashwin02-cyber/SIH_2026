@@ -13,8 +13,10 @@ const OPTIONS = [
 export default function ExportReport({ analysis, serverOnline }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
 
   async function handle(option) {
+    setOpen(false);
     setBusy(true);
     setError(null);
     try {
@@ -36,7 +38,7 @@ export default function ExportReport({ analysis, serverOnline }) {
 
   return (
     <div className="export">
-      <details className="export__menu">
+      <details className="export__menu" open={open} onToggle={(e) => setOpen(e.currentTarget.open)}>
         <summary className="export-btn">{busy ? "Preparing..." : "Download report"}</summary>
         <ul className="export__list">
           {OPTIONS.map((o) => (
@@ -47,7 +49,13 @@ export default function ExportReport({ analysis, serverOnline }) {
             </li>
           ))}
           <li>
-            <button className="export__item" onClick={() => downloadJson(analysis)}>
+            <button
+              className="export__item"
+              onClick={() => {
+                setOpen(false);
+                downloadJson(analysis);
+              }}
+            >
               Raw analysis (JSON)
             </button>
           </li>

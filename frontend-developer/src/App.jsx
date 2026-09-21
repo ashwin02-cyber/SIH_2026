@@ -46,6 +46,7 @@ function App() {
   async function run(task) {
     setBusy(true);
     setError(null);
+    setAnalysis(null); // never show the previous file's results next to a new file name
     try {
       setAnalysis(await task());
       setSource("server");

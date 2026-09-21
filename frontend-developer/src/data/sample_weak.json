@@ -79,9 +79,9 @@
  "explanation": [
   "Overall security score 30/100 - high risk.",
   "This rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
-  "Cipher (AES-CBC-128) is rated medium: AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
-  "DH group (Group 2 (1024-bit MODP)) is rated weak: 1024-bit MODP is considered too small against modern computing power.",
-  "Mode (transport) is rated medium: Transport mode leaves the original IP header visible; only the payload is encrypted.",
+  "Cipher - AES-CBC-128 - is rated medium. AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
+  "DH group - Group 2 (1024-bit MODP) - is rated weak. 1024-bit MODP is considered too small against modern computing power.",
+  "Mode - transport - is rated medium. Transport mode leaves the original IP header visible; only the payload is encrypted.",
   "Not determinable from this capture: PFS. These are left out of the score instead of being counted as weak.",
   "The encrypted traffic looks like icmp (ping) (model confidence 100%).",
   "Largest packet size (typically 140) pushed the prediction towards 'icmp'.",

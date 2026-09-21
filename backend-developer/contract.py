@@ -161,7 +161,7 @@ def build_explanation(score, risk, basis, breakdown, traffic, ml_explanation, so
                          "testbed file name.")
     for b in breakdown:
         if b["rating"] in ("weak", "medium"):
-            lines.append(f"{b['factor']} ({b['value']}) is rated {b['rating']}: {b['reason']}")
+            lines.append(f"{b['factor']} - {b['value']} - is rated {b['rating']}. {b['reason']}")
     unknown = [b["factor"] for b in breakdown if b["rating"] == "unknown" and b["weight"] > 0]
     if unknown:
         lines.append(f"Not determinable from this capture: {', '.join(unknown)}. "

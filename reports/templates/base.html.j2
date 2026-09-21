@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}IPsec VPN analysis{% endblock %} - {{ a.filename }}</title>
+<style>
+  @page {
+    size: a4 portrait;
+    margin: 1.6cm 1.8cm 2cm 1.8cm;
+    @frame footer_frame {
+      -pdf-frame-content: footer_content;
+      left: 1.8cm; width: 17.4cm; top: 27.7cm; height: 0.8cm;
+    }
+  }
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 10pt; color: #1d2433; line-height: 1.35; }
+  h1 { font-size: 20pt; margin: 0 0 2pt 0; color: #14203a; }
+  h2 { font-size: 13pt; margin: 14pt 0 4pt 0; color: #14203a; border-bottom: 1px solid #c9d1e0; padding-bottom: 2pt; }
+  h3 { font-size: 10.5pt; margin: 8pt 0 2pt 0; color: #14203a; }
+  p { margin: 3pt 0 5pt 0; }
+  .muted { color: #5b6479; font-size: 8.5pt; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background-color: #eef1f7; text-align: left; font-size: 9pt; padding: 4pt 5pt; border: 1px solid #c9d1e0; }
+  td { padding: 4pt 5pt; border: 1px solid #c9d1e0; vertical-align: top; font-size: 9.5pt; }
+  .num { text-align: right; }
+  .badge { color: #ffffff; font-weight: bold; padding: 1pt 5pt; font-size: 8.5pt; }
+  .risk { color: #ffffff; text-align: center; font-size: 22pt; font-weight: bold; padding: 8pt; }
+  .risk-sub { color: #ffffff; text-align: center; font-size: 9pt; padding-bottom: 6pt; }
+  .notice { border: 1px solid #b26a00; background-color: #fff6e5; padding: 6pt 8pt; margin: 6pt 0; font-size: 9pt; }
+  .error { border: 1px solid #c62828; background-color: #fdecec; padding: 6pt 8pt; margin: 6pt 0; font-size: 9pt; }
+  ul { margin: 2pt 0 4pt 0; padding-left: 14pt; }
+  li { margin-bottom: 2pt; }
+  .mono { font-family: Courier, monospace; font-size: 8.5pt; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+{% block body %}{% endblock %}
+<div id="footer_content" class="muted" style="text-align:center;">
+  IPsec VPN Analyzer - {{ a.filename }} - generated {{ generated }} - page <pdf:pagenumber> of <pdf:pagecount>
+</div>
+</body>
+</html>
