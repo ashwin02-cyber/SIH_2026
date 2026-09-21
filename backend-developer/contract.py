@@ -21,7 +21,8 @@ One shape, always (also when parts fail - failures go into `errors`):
   "anomalies": [ {severity, name, description} ],
   "timeline": [ {window, start_sec, end_sec, class, label, confidence, packets, bytes} ],
   "capture": {packets, bytes, span_sec, windows, window_sec, esp_only, truncated} | null,
-  "details": {"ike": <raw ike_parser output> | null, "esp_fingerprint": <passive ESP fingerprint> | null},
+  "details": {"ike": <raw ike_parser output> | null, "esp_fingerprint": <passive ESP fingerprint> | null,
+                                                "esp_sequence": <SPI/sequence analysis> | null},
   "warnings": [str, ...],
   "errors": [str, ...]
 }
@@ -175,7 +176,7 @@ def build_explanation(score, risk, basis, breakdown, traffic, ml_explanation, so
     return lines
 
 
-def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, esp_fingerprint=None):
+def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, esp=None):
     """Assemble the contract response. Never raises; problems become `errors` / `warnings`."""
     errors = list(errors or [])
     warnings = list(warnings or [])
@@ -242,7 +243,8 @@ def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, e
         "anomalies": anomalies or [],
         "timeline": timeline or [],
         "capture": capture,
-        "details": {"ike": ike_facts, "esp_fingerprint": esp_fingerprint},
+        "details": {"ike": ike_facts, "esp_fingerprint": (esp or {}).get("fingerprint"),
+                    "esp_sequence": (esp or {}).get("sequence")},
         "warnings": list(dict.fromkeys(warnings)),  # de-duplicate, keep order
         "errors": errors,
     }

@@ -20,3 +20,17 @@ for. Regenerate them with `python tests/make_fixtures.py`.
 | `SYNTHETIC_ikev1_main_mode.pcap` | IKEv1-looking header |
 | `SYNTHETIC_udp4500_esp_not_ike.pcap` | ESP-in-UDP that must NOT be read as IKE |
 | `SYNTHETIC_not_a_pcap.pcap` | a text file with a .pcap name |
+
+## SYNTHETIC ESP sequence / SPI fixtures (Stage 2)
+
+Also **hand-built** (by `tests/make_esp_fixtures.py`, with Scapy) with a *known* sequence-number / SPI behaviour.
+**They are not real captures.** The real testbed captures contain no rekey, no duplicates and no gaps, so the
+SPI/sequence analysis could not otherwise be tested on those situations.
+
+| File | Known behaviour |
+|---|---|
+| `SYNTHETIC_esp_clean_two_sas.pcap` | two SAs (one per direction), strictly increasing sequence numbers starting at 1 |
+| `SYNTHETIC_esp_anomalies.pcap` | one SA with a gap (11-14), two duplicates (20, 21) and one late arrival (12) |
+| `SYNTHETIC_esp_rekey_observed.pcap` | both directions rekey after 25 s; the old SAs start at sequence 1 |
+| `SYNTHETIC_esp_rekey_start_not_observed.pcap` | capture starts mid-SA (sequence ~5000), then a rekey: only a lower bound is possible |
+| `SYNTHETIC_esp_parallel_sas.pcap` | two SPIs overlapping for a long time in one direction: parallel SAs, not a rekey |

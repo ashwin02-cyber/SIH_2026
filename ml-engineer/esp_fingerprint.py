@@ -178,16 +178,18 @@ def fingerprint_packets(packets):
     }
 
 
+def no_esp_result():
+    return {"esp_packets": 0, "cipher_family": {"value": "undetermined", "confidence": None, "evidence": "no ESP packets in this capture"},
+            "integrity_tag": {"value": None, "candidates": [], "evidence": "no ESP packets"},
+            "mode": {"value": "undetermined", "confidence": None, "evidence": "no ESP packets in this capture"},
+            "distinct_sizes": 0, "residues_mod16": {}, "not_observable": NOT_OBSERVABLE,
+            "method": "packet sizes only (no file names, no keys, no IKE)"}
+
+
 def fingerprint_pcap(path):
     import traffic_features as tf
     packets, esp_only, _ = tf.read_packets(path)
-    if not esp_only:
-        return {"esp_packets": 0, "cipher_family": {"value": "undetermined", "confidence": None, "evidence": "no ESP packets in this capture"},
-                "integrity_tag": {"value": None, "candidates": [], "evidence": "no ESP packets"},
-                "mode": {"value": "undetermined", "confidence": None, "evidence": "no ESP packets in this capture"},
-                "distinct_sizes": 0, "residues_mod16": {}, "not_observable": NOT_OBSERVABLE,
-                "method": "packet sizes only (no file names, no keys, no IKE)"}
-    return fingerprint_packets(packets)
+    return fingerprint_packets(packets) if esp_only else no_esp_result()
 
 
 if __name__ == "__main__":
