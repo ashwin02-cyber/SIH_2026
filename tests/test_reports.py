@@ -79,9 +79,18 @@ def test_recommendations_follow_ratings():
     weak = recommendations(load("sample_weak.json"))
     text = " ".join(t for _, t in weak)
     assert any(p == "High" for p, _ in weak) and "elliptic-curve" in text and "Perfect Forward Secrecy" in text
-    assert "Transport mode" in text
+    assert "tunnel mode" in text
     strong = " ".join(t for _, t in recommendations(load("sample_strong.json")))
-    assert "Switch to DH" not in strong
+    assert "weak Diffie-Hellman" not in strong
+
+
+def test_reports_contain_recommendations_snippet_and_before_after():
+    a = load("sample_weak.json")
+    text = pdf_text(render_report(a, "technical", "pdf", generated_at=FIXED)[0])
+    for needle in ("Recommendations and secure configuration", "keyexchange=ikev2", "aes256gcm16", "NOT verified", "Before / after"):
+        assert needle in text, needle
+    ex = pdf_text(render_report(a, "executive", "pdf", generated_at=FIXED)[0])
+    assert "projection, not a measurement" in ex and "cannot reach 100" in ex
 
 
 def test_report_endpoint_returns_downloadable_files():

@@ -95,6 +95,15 @@ def probability_chart(analysis):
 
 
 def recommendations(analysis):
+    """(priority, text) rows for the executive summary. Uses the assessment's prioritised recommendations when the
+    analysis has them (schema 1.1); older analyses fall back to the simple rules below."""
+    rec = analysis.get("recommendations")
+    if rec and rec.get("items"):
+        return [(i["priority"], f"{i['title']}. {i['action']}") for i in rec["items"]]
+    return _legacy_recommendations(analysis)
+
+
+def _legacy_recommendations(analysis):
     """Deterministic, rule-based advice derived from the ratings (no free-text generation)."""
     recs = []
     by = {b["factor"]: b for b in analysis["breakdown"]}
@@ -164,6 +173,8 @@ def build_context(analysis, generated_at=None):
         "prob_img": probability_chart(analysis),
         "score_rows": _score_rows(analysis),
         "metrics": _load_metrics(),
+        "before_after": (analysis.get("recommendations") or {}).get("before_after"),
+        "secure_config": (analysis.get("recommendations") or {}).get("secure_config"),
     }
     return ctx
 

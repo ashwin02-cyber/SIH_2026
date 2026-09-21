@@ -121,6 +121,23 @@ declared = stated by the testbed file name (unverified); unknown = not determina
 </table>
 <ul>{% for n in a.assessment.compliance.not_evaluated %}<li class="muted">{{ n }}</li>{% endfor %}</ul>
 
+<h2>8d. Recommendations and secure configuration</h2>
+{% if a.recommendations and a.recommendations["items"] %}
+<table>
+  <tr><th>#</th><th>Priority</th><th>Action</th><th>Why</th><th>Based on</th></tr>
+  {% for r in a.recommendations["items"] %}<tr><td>{{ r.rank }}</td><td><b>{{ r.priority }}</b></td><td><b>{{ r.title }}.</b> {{ r.action }}</td><td class="muted">{{ r.why }}</td><td>{{ r.based_on.status }}</td></tr>{% endfor %}
+</table>
+{% else %}<p>No recommendation for the facts that could be checked.</p>{% endif %}
+{% if secure_config %}
+<div class="notice">{{ secure_config.note }}</div>
+<pre class="mono">{{ secure_config.text }}</pre>
+{% endif %}
+{% if before_after %}
+<p><b>Before / after ({{ before_after.label }}):</b> before {{ before_after.before.score if before_after.before.score is not none else "n/a" }};
+after a new passive capture {{ before_after.after_passive_capture.score }} (completeness {{ before_after.after_passive_capture.completeness_pct }}%);
+after a direct configuration review {{ before_after.after_config_review.score }}.</p>
+{% endif %}
+
 <h2>9. Model validation and limits</h2>
 {% if metrics %}
 {% set ev = metrics.evaluation.selected %}

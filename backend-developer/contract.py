@@ -18,6 +18,8 @@ One shape, always (also when parts fail - failures go into `errors`):
   "breakdown": [ {factor, value, rating, weight, source, reason} ],
   "assessment": { completeness_pct, completeness_detail, score_cap, score_capped, adjustments, unknown_facts,
                   findings[ {id,title,value,status,confidence,rating,evidence} ], metadata_exposure, compliance, ... },
+  "recommendations": { items[ {rank, priority, title, action, why, based_on, standards, config_hint} ],
+                       secure_config {text, verified, note}, before_after {before, after_passive_capture, after_config_review} },
   "traffic": {"class", "label", "confidence", "probabilities": [...]} | null,
   "model_confidence": float | null,
   "explanation": [str, ...],
@@ -31,6 +33,7 @@ One shape, always (also when parts fail - failures go into `errors`):
 """
 
 from assessment import assess
+from recommendations import recommend
 from config_hint import declared_config_from_filename
 from ike_parser import DH_GROUP_LABELS
 from scoring_engine import FACTOR_WEIGHT, score_ike_facts
@@ -53,7 +56,7 @@ TRAFFIC_LABELS = {
 REQUIRED_KEYS = {
     "schema_version": str, "filename": str, "score": (int, type(None)), "raw_score": (int, type(None)), "risk_level": str,
     "score_basis": str, "cipher": str, "mode": str, "dh_group": str, "pfs": str, "sources": dict, "confidence": dict,
-    "breakdown": list, "assessment": dict, "traffic": (dict, type(None)), "model_confidence": (float, int, type(None)),
+    "breakdown": list, "assessment": dict, "recommendations": dict, "traffic": (dict, type(None)), "model_confidence": (float, int, type(None)),
     "explanation": list, "anomalies": list, "timeline": list, "capture": (dict, type(None)),
     "details": dict, "warnings": list, "errors": list,
 }
@@ -292,6 +295,7 @@ def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, e
                           "source": f["status"], "reason": f["evidence"]})
 
     score = assessment["score_after_cap"]
+    recs = recommend(ctx, assessment, score, risk["overall_score"])
     basis = _score_basis(breakdown)
     for c in consistency:
         if not c["agree"]:
@@ -312,6 +316,7 @@ def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, e
         "confidence": {k: (round(v, 3) if v is not None else None) for k, v in conf.items()},
         "breakdown": breakdown,
         "assessment": assessment,
+        "recommendations": recs,
         "traffic": traffic,
         "model_confidence": model_confidence,
         "explanation": build_explanation(score, risk["overall_score"], risk_from_score(score), basis, breakdown, traffic, ml_explanation,
@@ -357,6 +362,15 @@ def validate_response(resp):
         problems.append("score exceeds the completeness cap")
     if resp["risk_level"] == "LOW" and a.get("completeness_pct", 0) < 69:
         problems.append("LOW risk with assessment completeness below 69%")
+    r = resp["recommendations"]
+    for k in ("items", "secure_config", "before_after"):
+        if k not in r:
+            problems.append(f"recommendations missing {k}")
+    for it in r.get("items", []):
+        if not {"rank", "priority", "title", "action", "why", "based_on"} <= set(it) or it["priority"] not in ("Critical", "High", "Medium", "Low"):
+            problems.append("bad recommendation item")
+    if r.get("secure_config", {}).get("verified") is not False:
+        problems.append("secure_config.verified must be false (the snippet was not run against a live strongSwan)")
     for f in a.get("findings", []):
         if not {"id", "title", "value", "status", "confidence", "rating", "evidence"} <= set(f) or f["status"] not in SOURCES:
             problems.append("bad finding")

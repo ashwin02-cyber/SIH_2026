@@ -72,6 +72,16 @@ Settings that cannot be determined are left out instead of being counted as weak
   {% endfor %}
 </table>
 
+{% if before_after %}
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>If the recommended configuration were applied (projection, not a measurement):</b>
+  score now {{ before_after.before.score if before_after.before.score is not none else "n/a" }} ({{ before_after.before.risk_level }});
+  from a new passive capture {{ before_after.after_passive_capture.score }} ({{ before_after.after_passive_capture.risk_level }});
+  with the gateway configuration reviewed directly {{ before_after.after_config_review.score }} ({{ before_after.after_config_review.risk_level }}).
+  <span class="muted">A capture alone cannot show forward secrecy or the authentication method, so it cannot reach 100.</span>
+</div>
+{% endif %}
+
 {% if a.traffic %}
 <h2>What is travelling through the tunnel</h2>
 <p>Without decrypting anything, the size and timing pattern of the encrypted packets was matched against five known traffic types.
