@@ -11,6 +11,7 @@ import ConfigComparison from "./components/ConfigComparison";
 import ExplanationPanel from "./components/ExplanationPanel";
 import { CompletenessPanel, CompliancePanel, ExposurePanel } from "./components/AssessmentPanels";
 import RecommendationsPanel from "./components/RecommendationsPanel";
+import DefencePanel from "./components/DefencePanel";
 import { analyzeFile, analyzeSample, checkHealth, listSamples } from "./api";
 import { bundledSamples, weakExample } from "./data/mockData";
 import "./App.css";
@@ -121,6 +122,7 @@ function App() {
               <TrafficChart traffic={analysis.traffic} capture={analysis.capture} />
               <TimelineScrubber timeline={analysis.timeline} windowSec={analysis.capture?.window_sec} />
               <RecommendationsPanel recommendations={analysis.recommendations} />
+              <DefencePanel simulation={analysis.details?.defence_simulation} />
               <AnomaliesList anomalies={analysis.anomalies} />
               <ExposurePanel exposure={analysis.assessment.metadata_exposure} />
               <CompliancePanel compliance={analysis.assessment.compliance} />

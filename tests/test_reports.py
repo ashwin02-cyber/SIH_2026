@@ -105,3 +105,12 @@ def test_report_endpoint_returns_downloadable_files():
     assert client.post("/report/secret.pdf", json=a).status_code == 404
     assert client.post("/report/executive.docx", json=a).status_code == 404
     assert client.post("/report/executive.pdf", json={"nonsense": 1}).status_code == 422
+
+
+def test_technical_report_has_the_labelled_defence_simulation():
+    from fastapi.testclient import TestClient
+    import main
+    a = TestClient(main.app).post("/analyze/sample/aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap").json()
+    text = pdf_text(render_report(a, "technical", "pdf", generated_at=FIXED)[0])
+    for needle in ("Defence what-if (SIMULATION)", "nothing was re-sent", "Adaptive attacker", "Naive attacker", "Bandwidth"):
+        assert needle in text, needle

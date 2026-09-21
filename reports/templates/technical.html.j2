@@ -138,6 +138,28 @@ after a new passive capture {{ before_after.after_passive_capture.score }} (comp
 after a direct configuration review {{ before_after.after_config_review.score }}.</p>
 {% endif %}
 
+{% if defence and defence.available %}
+<h2>8e. Defence what-if (SIMULATION)</h2>
+<div class="notice"><b>SIMULATION.</b> {{ defence.label }}</div>
+<p>Without a defence the classifier says <b>{{ defence.baseline["class"] }}</b> ({{ (defence.baseline.confidence * 100)|round|int }}%).</p>
+<table>
+  <tr><th>Defence</th><th>Classifier then says</th><th class="num">Bandwidth</th><th class="num">Delay</th></tr>
+  {% for d in defence.defences %}<tr><td>{{ d.label }}<br><span class="muted">{{ d.description }}</span></td>
+    <td>{% if d.result %}{{ d.result["class"] }} ({{ (d.result.confidence * 100)|round|int }}%){% else %}too sparse{% endif %}{% if d.changes_answer %} - <b>changed</b>{% endif %}</td>
+    <td class="num">+{{ d.cost.bandwidth_overhead_pct }}%</td><td class="num">{{ d.cost.mean_added_delay_ms }} ms</td></tr>{% endfor %}
+</table>
+{% if defence.population %}
+<p><b>Across the {{ defence.population.captures }} lab captures (unseen VPN configurations).</b> Naive attacker = classifier trained on clean traffic; adaptive attacker = retrained on defended traffic. Chance level {{ (defence.population.chance_level_capture_accuracy * 100)|round|int }}%.</p>
+<table>
+  <tr><th>Defence</th><th class="num">Naive attacker</th><th class="num">Adaptive attacker</th><th class="num">Median bandwidth</th></tr>
+  <tr><td>No defence</td><td class="num">{{ (defence.population.baseline.non_adaptive_capture_accuracy * 100)|round(1) }}%</td><td class="num">-</td><td class="num">0%</td></tr>
+  {% for k, r in defence.population.defences.items() %}<tr><td>{{ r.label }}</td><td class="num">{{ (r.non_adaptive_capture_accuracy * 100)|round(1) }}%</td>
+    <td class="num">{{ (r.adaptive_capture_accuracy * 100)|round(1) }}%</td><td class="num">+{{ r.cost.bandwidth_overhead_pct_median }}%</td></tr>{% endfor %}
+</table>
+<ul>{% for c in defence.population.caveats %}<li class="muted">{{ c }}</li>{% endfor %}</ul>
+{% endif %}
+{% endif %}
+
 <h2>9. Model validation and limits</h2>
 {% if metrics %}
 {% set ev = metrics.evaluation.selected %}

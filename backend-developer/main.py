@@ -40,7 +40,9 @@ from ike_parser import parse_ike_handshake  # noqa: E402
 
 # --- the ML Engineer's predict_from_pcap() ----------------------------------
 try:
-    from esp_analysis import analyze_pcap as analyze_esp
+    import traffic_features as tf
+    from defence_capture import simulate_packets
+    from esp_analysis import analyze_packets
     from predict import predict_from_pcap
     ML_MODEL_LOADED = True
     _ml_import_error = None
@@ -104,10 +106,13 @@ def analyze_path(path: str, display_name: str) -> dict:
         errors.append(f"ML model not loaded: {_ml_import_error}")
 
     # Passive ESP fingerprint + SPI/sequence analysis: from packet headers and sizes only - the file name is never used.
-    esp_fp = None
+    esp_fp, extras = None, {}
     if ML_MODEL_LOADED:
         try:
-            esp_fp = analyze_esp(path)
+            packets, esp_only, _ = tf.read_packets(path)          # the capture is read once for both analyses below
+            esp_fp = analyze_packets(packets, esp_only)
+            if esp_only:
+                extras["defence_simulation"] = simulate_packets(packets)   # SIMULATION: what-if padding / dummy traffic / delay
         except ValueError:
             pass  # not a capture: already reported above
         except Exception as e:
@@ -116,7 +121,7 @@ def analyze_path(path: str, display_name: str) -> dict:
 
     if not_a_capture >= (2 if ML_MODEL_LOADED else 1):
         raise ValueError(errors[0])
-    return build_response(display_name, ike_facts, ml_result, errors=errors, esp=esp_fp)
+    return build_response(display_name, ike_facts, ml_result, errors=errors, esp=esp_fp, extras=extras)
 
 
 @app.post("/analyze")

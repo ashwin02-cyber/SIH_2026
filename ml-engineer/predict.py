@@ -222,6 +222,35 @@ def build_timeline(windows_df, predictions, confidences):
 
 
 # ── Main prediction function ──────────────────────────────────────────────────
+def classify_windows(wdf):
+    """Calibrated classification of a table of window features (columns = FEATURE_COLS), with open-set rejection.
+    Shared by predict_from_pcap and the defence what-if simulation (defence_capture.py)."""
+    X = wdf[FEATURE_COLS]
+    proba = model.predict_proba(X)
+    if _open_set:
+        proba = osr.temperature_scale(proba, _open_set["temperature"])   # calibrated; never changes the winning class
+    classes = le.inverse_transform(model.classes_).tolist()
+    window_pred = [classes[i] for i in proba.argmax(axis=1)]
+    window_conf = proba.max(axis=1)
+    mean_proba = proba.mean(axis=0)
+    class_index = int(np.argmax(mean_proba))
+    nearest_class = classes[class_index]
+    confidence = float(mean_proba[class_index])
+
+    # open-set rejection: low calibrated confidence OR a pattern unlike anything in the training windows
+    novelty = None
+    rejected, rejection_reason = False, None
+    if _open_set:
+        capture_distance = float(np.median(_novelty.distance(X)))
+        rejected, rejection_reason = osr.decide(confidence, capture_distance, _open_set["tau_conf"], _open_set["tau_dist"])
+        novelty = {"distance": round(capture_distance, 4), "distance_threshold": round(_open_set["tau_dist"], 4),
+                   "confidence_threshold": round(_open_set["tau_conf"], 4)}
+    return {"classes": classes, "proba": proba, "window_pred": window_pred, "window_conf": window_conf, "mean_proba": mean_proba,
+            "class_index": class_index, "nearest_class": nearest_class, "confidence": confidence, "novelty": novelty,
+            "rejected": rejected, "rejection_reason": rejection_reason,
+            "predicted_class": "unrecognised" if rejected else nearest_class}
+
+
 def predict_from_pcap(pcap_path):
     """
     Main function for the Backend Developer.
@@ -242,28 +271,11 @@ def predict_from_pcap(pcap_path):
 
     wdf = pd.DataFrame(windows)
     X = wdf[FEATURE_COLS]
-    proba = model.predict_proba(X)
-    if _open_set:
-        proba = osr.temperature_scale(proba, _open_set["temperature"])   # calibrated; never changes the winning class
-    classes = le.inverse_transform(model.classes_).tolist()
-
-    window_pred = [classes[i] for i in proba.argmax(axis=1)]
-    window_conf = proba.max(axis=1)
-
-    mean_proba = proba.mean(axis=0)
-    class_index = int(np.argmax(mean_proba))
-    nearest_class = classes[class_index]
-    confidence = float(mean_proba[class_index])
-
-    # open-set rejection: low calibrated confidence OR a pattern unlike anything in the training windows
-    novelty = None
-    rejected, rejection_reason = False, None
-    if _open_set:
-        capture_distance = float(np.median(_novelty.distance(X)))
-        rejected, rejection_reason = osr.decide(confidence, capture_distance, _open_set["tau_conf"], _open_set["tau_dist"])
-        novelty = {"distance": round(capture_distance, 4), "distance_threshold": round(_open_set["tau_dist"], 4),
-                   "confidence_threshold": round(_open_set["tau_conf"], 4)}
-    predicted_class = "unrecognised" if rejected else nearest_class
+    c = classify_windows(wdf)
+    classes, proba = c["classes"], c["proba"]
+    window_pred, window_conf, mean_proba = c["window_pred"], c["window_conf"], c["mean_proba"]
+    class_index, nearest_class, confidence = c["class_index"], c["nearest_class"], c["confidence"]
+    novelty, rejected, rejection_reason, predicted_class = c["novelty"], c["rejected"], c["rejection_reason"], c["predicted_class"]
 
     # SHAP on an evenly spaced subset of windows, for the predicted class
     step = max(1, len(X) // MAX_SHAP_WINDOWS)

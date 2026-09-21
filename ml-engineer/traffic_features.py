@@ -170,6 +170,25 @@ def window_features(packets, first_src, index, window_sec=WINDOW_SEC):
     }
 
 
+def windows_from_packets(packets, window_sec=WINDOW_SEC, min_packets=MIN_PACKETS_PER_WINDOW):
+    """Cut a packet list into fixed windows and compute the features. Returns (windows, n_total, n_dropped).
+    Used by extract_windows and by the defence simulator (which changes the packets first)."""
+    if not packets:
+        return [], 0, 0
+    packets = sorted(packets, key=lambda p: p["time"])
+    t0, first_src = packets[0]["time"], packets[0]["src"]
+    buckets = defaultdict(list)
+    for p in packets:
+        buckets[int((p["time"] - t0) // window_sec)].append(p)
+    windows, dropped = [], 0
+    for idx in sorted(buckets):
+        if len(buckets[idx]) < min_packets:
+            dropped += 1
+            continue
+        windows.append(window_features(buckets[idx], first_src, idx, window_sec))
+    return windows, len(buckets), dropped
+
+
 def extract_windows(pcap_path, window_sec=WINDOW_SEC, min_packets=MIN_PACKETS_PER_WINDOW):
     """pcap -> list of per-window feature dicts plus capture-level info.
 
@@ -187,19 +206,6 @@ def extract_windows(pcap_path, window_sec=WINDOW_SEC, min_packets=MIN_PACKETS_PE
         "n_windows_total": 0,
         "n_windows_dropped": 0,
     }
-    if not packets:
-        return [], info
-
-    t0 = packets[0]["time"]
-    buckets = defaultdict(list)
-    for p in packets:
-        buckets[int((p["time"] - t0) // window_sec)].append(p)
-
-    windows = []
-    for idx in sorted(buckets):
-        info["n_windows_total"] += 1
-        if len(buckets[idx]) < min_packets:
-            info["n_windows_dropped"] += 1
-            continue
-        windows.append(window_features(buckets[idx], info["first_src"], idx, window_sec))
+    windows, total, dropped = windows_from_packets(packets, window_sec, min_packets)
+    info["n_windows_total"], info["n_windows_dropped"] = total, dropped
     return windows, info

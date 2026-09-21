@@ -1,0 +1,16 @@
+.sim-banner {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 2px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--risk-medium);
+  border: 1px dashed var(--risk-medium);
+  border-radius: 3px;
+}
+
+.sim-table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+.sim-table th { text-align: left; font-weight: 500; color: var(--text-muted); padding: 4px 6px; border-bottom: 1px solid var(--border); }
+.sim-table td { padding: 6px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.sim-table__changed td:nth-child(2) { color: var(--risk-medium); }

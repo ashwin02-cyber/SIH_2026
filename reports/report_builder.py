@@ -175,6 +175,7 @@ def build_context(analysis, generated_at=None):
         "metrics": _load_metrics(),
         "before_after": (analysis.get("recommendations") or {}).get("before_after"),
         "secure_config": (analysis.get("recommendations") or {}).get("secure_config"),
+        "defence": (analysis.get("details") or {}).get("defence_simulation"),
     }
     return ctx
 

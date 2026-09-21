@@ -1,0 +1,114 @@
+{
+  "what": "SIMULATED traffic-analysis defences at the feature level (not a measurement on a real gateway)",
+  "attackers": {
+    "non_adaptive": "classifier trained on clean traffic of other configs, shown defended traffic of unseen configs",
+    "adaptive": "classifier retrained on defended traffic of other configs (knows the defence), tested on unseen configs"
+  },
+  "chance_level_capture_accuracy": 0.2,
+  "captures": 180,
+  "configs": 36,
+  "baseline": {
+    "non_adaptive_capture_accuracy": 1.0,
+    "non_adaptive_window_accuracy": 1.0,
+    "captures_classified": 180,
+    "windows": 1027
+  },
+  "defences": {
+    "pad_buckets": {
+      "label": "Pad packets to size buckets",
+      "description": "every packet padded up to the next of (128, 256, 512, 1024, 1500) bytes",
+      "non_adaptive_capture_accuracy": 1.0,
+      "non_adaptive_window_accuracy": 0.9980525803310614,
+      "captures_classified": 180,
+      "windows": 1027,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 25.8,
+        "bandwidth_overhead_pct_median": 10.2,
+        "mean_added_delay_ms": 0.0
+      }
+    },
+    "pad_mtu": {
+      "label": "Pad every packet to full size",
+      "description": "every packet padded to 1500 bytes",
+      "non_adaptive_capture_accuracy": 0.42777777777777776,
+      "non_adaptive_window_accuracy": 0.11100292112950341,
+      "captures_classified": 180,
+      "windows": 1027,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9990262901655307,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 389.2,
+        "bandwidth_overhead_pct_median": 223.4,
+        "mean_added_delay_ms": 0.0
+      }
+    },
+    "dummy": {
+      "label": "Constant-rate dummy traffic",
+      "description": "40 dummy packets per second of 600 bytes",
+      "non_adaptive_capture_accuracy": 0.6,
+      "non_adaptive_window_accuracy": 0.1563106796116505,
+      "captures_classified": 180,
+      "windows": 1030,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 1666.3,
+        "bandwidth_overhead_pct_median": 71.9,
+        "mean_added_delay_ms": 0.0
+      }
+    },
+    "delay": {
+      "label": "Random delay (timing jitter)",
+      "description": "each packet delayed by |N(0, 100 ms)|",
+      "non_adaptive_capture_accuracy": 0.9944444444444445,
+      "non_adaptive_window_accuracy": 0.9836065573770492,
+      "captures_classified": 180,
+      "windows": 1037,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9932497589199615,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 0.0,
+        "bandwidth_overhead_pct_median": 0.0,
+        "mean_added_delay_ms": 79.4
+      }
+    },
+    "shape": {
+      "label": "Timing shaping",
+      "description": "packets held until the next 100 ms slot",
+      "non_adaptive_capture_accuracy": 1.0,
+      "non_adaptive_window_accuracy": 1.0,
+      "captures_classified": 180,
+      "windows": 1050,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 0.0,
+        "bandwidth_overhead_pct_median": 0.0,
+        "mean_added_delay_ms": 59.5
+      }
+    },
+    "combined": {
+      "label": "Combined",
+      "description": "size buckets + dummy traffic + random delay",
+      "non_adaptive_capture_accuracy": 0.6,
+      "non_adaptive_window_accuracy": 0.19205298013245034,
+      "captures_classified": 180,
+      "windows": 1057,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9962157048249763,
+      "cost": {
+        "bandwidth_overhead_pct_mean": 1692.0,
+        "bandwidth_overhead_pct_median": 119.2,
+        "mean_added_delay_ms": 79.7
+      }
+    }
+  },
+  "caveats": [
+    "Feature-level simulation on scripted lab traffic: real padding/dummy-traffic implementations differ in detail.",
+    "The adaptive attacker uses the same 12 window features; a stronger attacker (sequence models, longer windows) may do better.",
+    "Captures are short (file transfer, VoIP and video < 2 s), which limits how well dummy traffic and shaping can be judged.",
+    "Costs are per capture and depend on how busy the capture is: padding a ping stream costs a lot, padding a bulk transfer almost nothing."
+  ]
+}
