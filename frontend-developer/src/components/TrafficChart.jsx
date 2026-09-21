@@ -11,14 +11,24 @@ export default function TrafficChart({ traffic, capture }) {
     );
   }
 
+  const unrecognised = traffic.class === "unrecognised";
   return (
     <section className="panel">
       <div className="chart-header">
         <h2 className="panel__title">Traffic classification</h2>
-        <p className="chart-header__meta">
-          {capture ? `${capture.windows} time windows analyzed` : "Analyzed"} &middot; top guess{" "}
-          <strong>{traffic.label}</strong> at {Math.round(traffic.confidence * 100)}% model confidence
-        </p>
+        {unrecognised ? (
+          <p className="chart-header__meta" role="alert">
+            <strong>Unrecognised traffic.</strong> It does not match any trained traffic type well enough to name one. The closest is{" "}
+            {traffic.nearest_label} ({Math.round(traffic.confidence * 100)}% confidence), but that is not reported as the answer.
+            <br />
+            Why: {traffic.rejection_reason}.
+          </p>
+        ) : (
+          <p className="chart-header__meta">
+            {capture ? `${capture.windows} time windows analyzed` : "Analyzed"} &middot; top guess <strong>{traffic.label}</strong> at{" "}
+            {Math.round(traffic.confidence * 100)}% calibrated confidence
+          </p>
+        )}
       </div>
       <ResponsiveContainer width="100%" height={220}>
         <BarChart data={traffic.probabilities} layout="vertical" margin={{ left: 8, right: 24 }}>

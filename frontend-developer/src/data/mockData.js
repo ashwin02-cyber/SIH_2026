@@ -22,6 +22,7 @@ export const trafficClassColor = {
   voip: "#34D399",
   file_transfer: "#FBBF24",
   icmp: "#F87171",
+  unrecognised: "#8B96AC",
 };
 
 export const trafficClassLabel = {
@@ -30,4 +31,5 @@ export const trafficClassLabel = {
   voip: "VoIP",
   file_transfer: "File transfer",
   icmp: "ICMP (ping)",
+  unrecognised: "Unrecognised traffic",
 };

@@ -23,6 +23,7 @@ import numpy as np
 import pandas as pd
 import shap
 
+import open_set as osr
 from traffic_features import (FEATURE_COLS, FEATURE_DESCRIPTIONS, MIN_PACKETS_PER_WINDOW,
                               WINDOW_SEC, extract_windows)
 
@@ -39,6 +40,12 @@ le = joblib.load(ENCODER_PATH)
 if hasattr(model, "feature_names_in_") and list(model.feature_names_in_) != FEATURE_COLS:
     raise RuntimeError("models/traffic_classifier.pkl was trained on different features than "
                        "traffic_features.FEATURE_COLS - re-run batch_extract.py and train_model.py")
+
+# Calibration + open-set rejection (train_open_set.py). If the file is missing the classifier behaves as before
+# (no rejection).
+OPEN_SET_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "models", "open_set.pkl")
+_open_set = joblib.load(OPEN_SET_PATH) if os.path.exists(OPEN_SET_PATH) else None
+_novelty = osr.Novelty.from_dict(_open_set["novelty"]) if _open_set else None
 
 MAX_SHAP_WINDOWS = 80  # explain at most this many windows (evenly sampled) to keep /analyze fast
 
@@ -236,6 +243,8 @@ def predict_from_pcap(pcap_path):
     wdf = pd.DataFrame(windows)
     X = wdf[FEATURE_COLS]
     proba = model.predict_proba(X)
+    if _open_set:
+        proba = osr.temperature_scale(proba, _open_set["temperature"])   # calibrated; never changes the winning class
     classes = le.inverse_transform(model.classes_).tolist()
 
     window_pred = [classes[i] for i in proba.argmax(axis=1)]
@@ -243,8 +252,18 @@ def predict_from_pcap(pcap_path):
 
     mean_proba = proba.mean(axis=0)
     class_index = int(np.argmax(mean_proba))
-    predicted_class = classes[class_index]
+    nearest_class = classes[class_index]
     confidence = float(mean_proba[class_index])
+
+    # open-set rejection: low calibrated confidence OR a pattern unlike anything in the training windows
+    novelty = None
+    rejected, rejection_reason = False, None
+    if _open_set:
+        capture_distance = float(np.median(_novelty.distance(X)))
+        rejected, rejection_reason = osr.decide(confidence, capture_distance, _open_set["tau_conf"], _open_set["tau_dist"])
+        novelty = {"distance": round(capture_distance, 4), "distance_threshold": round(_open_set["tau_dist"], 4),
+                   "confidence_threshold": round(_open_set["tau_conf"], 4)}
+    predicted_class = "unrecognised" if rejected else nearest_class
 
     # SHAP on an evenly spaced subset of windows, for the predicted class
     step = max(1, len(X) // MAX_SHAP_WINDOWS)
@@ -253,6 +272,10 @@ def predict_from_pcap(pcap_path):
     fwd_pkts = float(np.average(wdf["fwd_packet_ratio"], weights=wdf["n_packets"]))
     capture = {**info, "fwd_ratio": fwd_pkts}
     anomalies = detect_anomalies(capture, wdf, confidence)
+    if rejected:
+        anomalies.append({"name": "Unrecognised traffic", "severity": "MEDIUM",
+                          "description": f"The traffic does not match any trained traffic type: {rejection_reason}. "
+                                         f"The closest type is {nearest_class.replace('_', ' ')}, but it is not reported as the answer."})
 
     warnings_out = []
     if not info["esp_only"]:
@@ -268,6 +291,11 @@ def predict_from_pcap(pcap_path):
         "class": predicted_class,
         "confidence": round(confidence, 4),
         "class_probabilities": {c: round(float(p), 4) for c, p in zip(classes, mean_proba)},
+        "nearest_class": nearest_class,
+        "rejected": rejected,
+        "rejection_reason": rejection_reason,
+        "novelty": novelty,
+        "calibration": {"temperature": _open_set["temperature"]} if _open_set else None,
         "windows_analyzed": len(windows),
         "window_sec": WINDOW_SEC,
         "esp_only": info["esp_only"],

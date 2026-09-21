@@ -1,0 +1,139 @@
+{
+  "what": "calibrated confidence and open-set rejection for the traffic classifier",
+  "method": "temperature scaling on out-of-fold probabilities; rejection = low calibrated confidence OR high novelty (5-NN distance), thresholds from known classes only (target 95% of known captures accepted)",
+  "calibration": {
+    "temperature": 1.0,
+    "temperature_fitted": 0.0500052583326839,
+    "temperature_note": "the unconstrained fit runs to the lower bound of the search range because the model is almost always right on unseen configurations; sharpening confidences from 180 lab captures would be over-confident, so T is floored at 1.0",
+    "window_level": {
+      "nll": {
+        "before": 0.0027339939010303338,
+        "after": 0.0027379413128500074
+      },
+      "brier": {
+        "before": 0.0009178621659634318,
+        "after": 0.000917866014785187
+      },
+      "ece": {
+        "before": 0.002340149302174617,
+        "after": 0.0023440937687913893
+      }
+    },
+    "capture_level": {
+      "nll": {
+        "before": 0.004970869909332191,
+        "after": 0.004974764749610612
+      },
+      "brier": {
+        "before": 0.0007750517004615632,
+        "after": 0.0007750789791420788
+      },
+      "ece": {
+        "before": 0.004696505731922469,
+        "after": 0.004700387663416827
+      }
+    },
+    "mean_confidence_window": {
+      "before": 0.9976598506978255,
+      "after": 0.9976559062312088
+    },
+    "accuracy_window": 1.0,
+    "argmax_unchanged_by_calibration": true
+  },
+  "thresholds": {
+    "tau_conf": 0.9432474135079733,
+    "tau_dist": 0.5489942631231428,
+    "target_accept": 0.95
+  },
+  "known_accepted_in_sample": 0.9444444444444444,
+  "leave_one_class_out": {
+    "file_transfer": {
+      "unknown_captures": 36,
+      "known_captures": 144,
+      "temperature": 1.0,
+      "tau_conf": 0.9681228462975856,
+      "tau_dist": 0.5038125007441095,
+      "known_accepted": 0.9444444444444444,
+      "unknown_rejected_combined": 1.0,
+      "unknown_rejected_confidence_only": 1.0,
+      "unknown_rejected_novelty_only": 1.0,
+      "old_rule_unknown_flagged": 0.0,
+      "old_rule_known_flagged": 0.0,
+      "auroc_confidence": 1.0,
+      "auroc_novelty": 1.0,
+      "known_accuracy_when_accepted": 1.0
+    },
+    "icmp": {
+      "unknown_captures": 36,
+      "known_captures": 144,
+      "temperature": 1.0,
+      "tau_conf": 0.925553186645478,
+      "tau_dist": 0.6001894447450095,
+      "known_accepted": 0.9444444444444444,
+      "unknown_rejected_combined": 1.0,
+      "unknown_rejected_confidence_only": 1.0,
+      "unknown_rejected_novelty_only": 1.0,
+      "old_rule_unknown_flagged": 0.5277777777777778,
+      "old_rule_known_flagged": 0.0,
+      "auroc_confidence": 1.0,
+      "auroc_novelty": 1.0,
+      "known_accuracy_when_accepted": 1.0
+    },
+    "video_streaming": {
+      "unknown_captures": 36,
+      "known_captures": 144,
+      "temperature": 1.0,
+      "tau_conf": 0.9833323500009835,
+      "tau_dist": 0.5454437024119841,
+      "known_accepted": 0.9513888888888888,
+      "unknown_rejected_combined": 1.0,
+      "unknown_rejected_confidence_only": 1.0,
+      "unknown_rejected_novelty_only": 1.0,
+      "old_rule_unknown_flagged": 1.0,
+      "old_rule_known_flagged": 0.0,
+      "auroc_confidence": 1.0,
+      "auroc_novelty": 1.0,
+      "known_accuracy_when_accepted": 1.0
+    },
+    "voip": {
+      "unknown_captures": 36,
+      "known_captures": 144,
+      "temperature": 1.0,
+      "tau_conf": 0.9295253635067171,
+      "tau_dist": 0.7778252461225975,
+      "known_accepted": 0.9444444444444444,
+      "unknown_rejected_combined": 1.0,
+      "unknown_rejected_confidence_only": 1.0,
+      "unknown_rejected_novelty_only": 1.0,
+      "old_rule_unknown_flagged": 1.0,
+      "old_rule_known_flagged": 0.0,
+      "auroc_confidence": 1.0,
+      "auroc_novelty": 1.0,
+      "known_accuracy_when_accepted": 1.0
+    },
+    "web_browsing": {
+      "unknown_captures": 36,
+      "known_captures": 144,
+      "temperature": 1.0,
+      "tau_conf": 0.93110858222928,
+      "tau_dist": 0.48319959819584546,
+      "known_accepted": 0.9513888888888888,
+      "unknown_rejected_combined": 1.0,
+      "unknown_rejected_confidence_only": 1.0,
+      "unknown_rejected_novelty_only": 1.0,
+      "old_rule_unknown_flagged": 0.8055555555555556,
+      "old_rule_known_flagged": 0.0,
+      "auroc_confidence": 1.0,
+      "auroc_novelty": 1.0,
+      "known_accuracy_when_accepted": 1.0
+    }
+  },
+  "mean_unknown_rejection": 1.0,
+  "mean_known_accepted": 0.9472222222222222,
+  "caveats": [
+    "Five scripted traffic classes from one lab; 'unknown' here means a scripted class the model never saw, not arbitrary real traffic.",
+    "Thresholds for the shipped model come from the same out-of-fold captures they are evaluated on, so known-capture acceptance (~95%) holds by construction; the held-out-class rejection numbers are the honest ones (the held-out class never influences its thresholds).",
+    "Calibration was measured on clean, unseen-configuration captures only; under degraded captures (see ACCURACY_REPORT.md: 200 ms jitter, 10-packet captures) accuracy is lower, so confidence there is an upper bound.",
+    "The two signals overlap: novelty distance catches patterns unlike the training windows, confidence catches ambiguity between known classes."
+  ]
+}
