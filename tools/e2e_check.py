@@ -72,6 +72,16 @@ def main():
             assert page.locator(".recharts-bar-rectangle").count() > 5, "timeline chart did not render bars"
             page.screenshot(path=os.path.join(SHOTS, "02-strong-web.png"), full_page=True)
 
+            # "Compare against a weak setup": this capture -> PFS unknown; weak reference -> PFS off, score 24
+            card = page.locator("section", has=page.get_by_text("Compare against a weak setup"))
+            assert card.locator("dt", has_text="Forward secrecy").locator("xpath=following-sibling::dd").inner_text() == "unknown"
+            card.get_by_role("button", name="Weak example").click()
+            assert card.locator("dt", has_text="Forward secrecy").locator("xpath=following-sibling::dd").inner_text() == "off"
+            assert card.locator(".compare__score").inner_text().startswith("24")
+            assert "not a capture" in card.inner_text()
+            card.get_by_role("button", name="This capture").click()
+            assert card.locator("dt", has_text="Forward secrecy").locator("xpath=following-sibling::dd").inner_text() == "unknown"
+
             # report download (real PDF from the backend)
             page.get_by_text("Download report").click()
             with page.expect_download(timeout=60000) as dl:

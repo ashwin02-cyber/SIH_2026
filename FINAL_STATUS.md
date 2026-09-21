@@ -16,7 +16,7 @@ Branch `finish-project`, one local commit per stage, **nothing pushed**. Everyth
 | 8 Packaging | Dockerfiles, root `docker-compose.yml`, `render.yaml`, `railway.json`, `vercel.json`, `netlify.toml`, `DEPLOY.md`, `data/samples` (10 real pcaps) + manifest. | fresh-venv API run from a Docker-like layout (see A7, `DEPLOY.md`) |
 | 9 Docs | Root README, technical documentation + architecture diagram, `integration-docs-lead/`, `.pptx` (12 slides, rendered in real PowerPoint and checked), video script, sample assessment from a real pcap. | `tests/test_docs.py` |
 
-**Automated tests: 92 passed, 0 failed** (`pytest tests`). Also passing: `npm run lint`, `npm run build`, `tools/e2e_check.py`.
+**Automated tests: 95 passed, 0 failed** (`pytest tests`). Also passing: `npm run lint`, `npm run build`, `tools/e2e_check.py`.
 
 ## 2. Real ML metrics (from `ml-engineer/metrics.json`)
 
@@ -46,6 +46,7 @@ Branch `finish-project`, one local commit per stage, **nothing pushed**. Everyth
 | A7 | Deploy the API as a Docker image (Render/Railway), the site on Vercel/Netlify; upload limit 50 MB locally, 20 MB on Render (512 MB RAM; measured ~320 MB in use after one analysis + PDF on Windows). |
 | A8 | Removed superseded files (old feature scripts/CSVs, duplicate `docker/strongswan/generated_configs/`, html2canvas PNG export); all recoverable from git history. |
 | A9 | strongSwan accepts `esp=aes128-sha256-modp2048!`, `esp=aes128gcm16!`, `keylife=25s` — standard syntax, **not verified without Docker**. |
+| A11 | The "Compare against a weak setup" card compares the analysed capture with a **fixed reference configuration** (AES-CBC-128, DH 2, transport, PFS **off**, score 24 / HIGH from the real scoring engine), labelled as not a capture. "This capture" keeps showing PFS `unknown` for real captures. |
 | A10 | Not touched: anything in `E:\SIH\SIH_2026` outside `SIH_2026_full` (read-only; only copied 10 small pcaps into `data/samples/`). No zip, no bulk pcap committed. |
 
 ## 5. What still needs you

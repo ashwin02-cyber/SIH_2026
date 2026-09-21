@@ -8,8 +8,13 @@ const levelColor = {
   UNKNOWN: "var(--text-muted)",
 };
 
-// Compares the analysed capture with the bundled weak example (a real analysis of a weak
-// testbed configuration: AES-CBC-128, DH group 2, transport mode).
+// Forward secrecy wording for this card: on / off / unknown. A real capture whose PFS cannot be
+// determined stays "unknown"; only the fixed reference example (a defined configuration) is "off".
+const PFS_TEXT = { enabled: "on", disabled: "off" };
+const pfsLabel = (pfs) => PFS_TEXT[pfs] ?? pfs;
+
+// Compares the analysed capture with a fixed weak REFERENCE configuration (not a capture):
+// AES-CBC-128, DH group 2, transport mode, PFS off - scored by the same scoring engine.
 export default function ConfigComparison({ current, weak }) {
   const [showWeak, setShowWeak] = useState(false);
   const config = showWeak ? weak : current;
@@ -34,6 +39,8 @@ export default function ConfigComparison({ current, weak }) {
         </button>
       </div>
 
+      {showWeak && <p className="compare__note">{weak.note}</p>}
+
       <div className="compare__result">
         <div className="compare__score" style={{ color: levelColor[config.risk_level] }}>
           {config.score ?? "n/a"}
@@ -54,7 +61,7 @@ export default function ConfigComparison({ current, weak }) {
           </div>
           <div>
             <dt>Forward secrecy</dt>
-            <dd>{config.pfs}</dd>
+            <dd>{pfsLabel(config.pfs)}</dd>
           </div>
         </dl>
       </div>

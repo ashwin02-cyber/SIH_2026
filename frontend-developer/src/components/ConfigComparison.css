@@ -67,3 +67,10 @@
   font-family: var(--font-mono);
   font-size: 13px;
 }
+
+.compare__note {
+  margin: 0 0 12px;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
