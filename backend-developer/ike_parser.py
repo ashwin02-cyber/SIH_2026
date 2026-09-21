@@ -300,14 +300,11 @@ def _summarize_proposal(proposal: dict) -> dict:
     }
 
 
-def _read_packets(pcap_path: str):
-    """Read packets from a pcap/pcapng. Returns (list_of_packets, truncated).
-    A truncated file yields the packets that could be read. A file that is
-    not a capture at all raises ValueError. The file handle is always closed
-    (Scapy leaks it when the header is invalid, which blocks deleting the
-    file on Windows)."""
-    packets = []
-    truncated = False
+def _iter_packets(pcap_path: str, state: dict):
+    """Yield packets one at a time from a pcap/pcapng (streaming: a large capture is never held
+    in memory). Sets state["truncated"] = True if the file ends in a damaged record. A file that
+    is not a capture at all raises ValueError. The file handle is always closed (Scapy leaks it
+    when the header is invalid, which blocks deleting the file on Windows)."""
     try:
         fh = open(pcap_path, "rb")
     except OSError as e:
@@ -323,16 +320,15 @@ def _read_packets(pcap_path: str):
             try:
                 pkt = reader.read_packet()
             except EOFError:
-                break
+                return
             except (Scapy_Exception, struct.error, ValueError, IndexError):
-                truncated = True  # damaged record in the middle/end of file
-                break
+                state["truncated"] = True  # damaged record in the middle/end of file
+                return
             if pkt is None:
-                break
-            packets.append(pkt)
+                return
+            yield pkt
     finally:
         fh.close()
-    return packets, truncated
 
 
 def parse_ike_handshake(pcap_path: str) -> dict:
@@ -352,7 +348,7 @@ def parse_ike_handshake(pcap_path: str) -> dict:
       "warnings": [str, ...],
     }
     """
-    packets, file_truncated = _read_packets(pcap_path)
+    read_state = {"truncated": False}
 
     warnings = []
     mode = "unknown"
@@ -366,7 +362,7 @@ def parse_ike_handshake(pcap_path: str) -> dict:
     esp_packets = 0
     packet_truncated = False
 
-    for pkt in packets:
+    for pkt in _iter_packets(pcap_path, read_state):
         if IP in pkt and pkt[IP].proto == 50:
             esp_packets += 1
             continue
@@ -436,6 +432,7 @@ def parse_ike_handshake(pcap_path: str) -> dict:
     else:
         ike_version = "unknown"
 
+    file_truncated = read_state["truncated"]
     if file_truncated or packet_truncated:
         warnings.append(
             "The capture is truncated (cut-off file or packets shorter than "

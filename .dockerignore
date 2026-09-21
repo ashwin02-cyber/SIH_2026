@@ -1,0 +1,14 @@
+.git
+venv
+.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+frontend-developer/dist
+real_captures
+*.pcap
+!data/samples/*.pcap
+*.zip
+tests
+docs
+.env

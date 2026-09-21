@@ -1,0 +1,11 @@
+filename,combo_name,cipher,mode,dh_group,pfs,traffic_class,timestamp,notes,capture_stop,capture_seconds,config_version
+aes128-dh2-transport-pfs-off__file_transfer_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,file_transfer,2026-09-17T08:28:49.319535,run 1; excerpt: packets 1000-1299 of the original capture (bulk-transfer phase),packet-count,,v1-pfs-identical
+aes128-dh2-transport-pfs-off__handshake.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,handshake,2026-09-17T08:28:33.226093,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
+aes128-dh2-transport-pfs-off__icmp_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,icmp,2026-09-17T08:28:45.377248,run 1,packet-count,,v1-pfs-identical
+aes128-dh2-transport-pfs-off__video_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,video,2026-09-17T08:29:18.402634,run 1,packet-count,,v1-pfs-identical
+aes128-dh2-transport-pfs-off__voip_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,voip,2026-09-17T08:29:43.671846,run 1,packet-count,,v1-pfs-identical
+aes128-dh2-transport-pfs-off__web_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,web,2026-09-17T08:29:12.420263,run 1,packet-count,,v1-pfs-identical
+aes128gcm16-dh19-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,handshake,2026-09-17T09:28:15.182828,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
+aes128gcm16-dh19-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,icmp,2026-09-17T09:28:27.375615,run 1,packet-count,,v1-pfs-identical
+aes128gcm16-dh19-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,voip,2026-09-17T09:29:06.688938,run 1,packet-count,,v1-pfs-identical
+aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,web,2026-09-17T09:28:54.896500,run 1,packet-count,,v1-pfs-identical

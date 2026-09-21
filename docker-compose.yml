@@ -1,0 +1,32 @@
+# Runs the whole app locally:   docker compose up --build
+#   web  -> http://localhost:8080
+#   api  -> http://localhost:8000/docs
+# (The strongSwan testbed that generates the datasets is separate: docker/strongswan/docker-compose.yml)
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend-developer/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      ALLOWED_ORIGINS: "http://localhost:8080,http://127.0.0.1:8080"
+      MAX_UPLOAD_MB: "50"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend-developer/Dockerfile
+      args:
+        VITE_API_URL: "http://localhost:8000"
+    ports:
+      - "8080:80"
+    depends_on:
+      backend:
+        condition: service_healthy
