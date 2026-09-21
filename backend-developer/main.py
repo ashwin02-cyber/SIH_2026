@@ -40,6 +40,7 @@ from ike_parser import parse_ike_handshake  # noqa: E402
 
 # --- the ML Engineer's predict_from_pcap() ----------------------------------
 try:
+    from esp_fingerprint import fingerprint_pcap
     from predict import predict_from_pcap
     ML_MODEL_LOADED = True
     _ml_import_error = None
@@ -102,9 +103,20 @@ def analyze_path(path: str, display_name: str) -> dict:
     else:
         errors.append(f"ML model not loaded: {_ml_import_error}")
 
+    # Passive ESP fingerprinting: from packet sizes only - the file name is never used for these fields.
+    esp_fp = None
+    if ML_MODEL_LOADED:
+        try:
+            esp_fp = fingerprint_pcap(path)
+        except ValueError:
+            pass  # not a capture: already reported above
+        except Exception as e:
+            traceback.print_exc()
+            errors.append(f"ESP fingerprinting failed: {e}")
+
     if not_a_capture >= (2 if ML_MODEL_LOADED else 1):
         raise ValueError(errors[0])
-    return build_response(display_name, ike_facts, ml_result, errors=errors)
+    return build_response(display_name, ike_facts, ml_result, errors=errors, esp_fingerprint=esp_fp)
 
 
 @app.post("/analyze")

@@ -228,6 +228,38 @@
     "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
     "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
    ]
+  },
+  "esp_fingerprint": {
+   "esp_packets": 18,
+   "distinct_sizes": 1,
+   "residues_mod16": {
+    "8": 18
+   },
+   "cipher_family": {
+    "value": "undetermined",
+    "confidence": null,
+    "evidence": "every packet has the same length (120 bytes): a constant-size stream cannot tell CBC from GCM",
+    "leaning": null
+   },
+   "integrity_tag": {
+    "value": null,
+    "candidates": [],
+    "evidence": "not observable from packet sizes for this stream (for AEAD ciphers the 8/12/16-byte tag does not change the 4-byte alignment)"
+   },
+   "mode": {
+    "value": "undetermined",
+    "confidence": 0.678,
+    "evidence": "packet-size statistics do not separate tunnel from transport mode clearly for this stream",
+    "leaning": "transport"
+   },
+   "not_observable": [
+    "AES-128 vs AES-256 (key length does not change packet sizes)",
+    "Diffie-Hellman group (only visible in the cleartext IKE_SA_INIT)",
+    "Perfect Forward Secrecy (negotiated inside encrypted IKE messages)",
+    "Authentication method (pre-shared key vs certificate: encrypted IKE_AUTH)",
+    "Receiver's anti-replay window setting"
+   ],
+   "method": "packet sizes only (no file names, no keys, no IKE)"
   }
  },
  "warnings": [

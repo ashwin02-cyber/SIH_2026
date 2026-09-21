@@ -26,6 +26,7 @@ Design decisions (all deliberate, see ml-engineer/README.md):
 """
 
 import statistics
+import struct
 from collections import defaultdict
 
 from scapy.all import IP, UDP, PcapReader
@@ -73,6 +74,22 @@ def _is_esp(pkt) -> bool:
     return False
 
 
+def _esp_fields(pkt):
+    """ESP header fields of an ESP packet, for the passive fingerprinting / sequence analysis:
+    spi and seq (first 8 bytes of the ESP header) and esp_len = length of the ESP packet (IP payload,
+    i.e. header + IV + encrypted data + ICV). None values if the header is too short to read."""
+    ihl = int(pkt[IP].ihl or 5) * 4
+    esp_len = max(0, int(pkt[IP].len or 0) - ihl) if pkt[IP].len else None
+    payload = bytes(pkt[IP].payload)
+    if pkt[IP].proto != 50 and UDP in pkt:  # ESP-in-UDP (NAT-T): the ESP header follows the 8-byte UDP header
+        payload = payload[8:]
+        esp_len = esp_len - 8 if esp_len is not None else None
+    if len(payload) < 8:
+        return {"spi": None, "seq": None, "esp_len": esp_len}
+    spi, seq = struct.unpack("!II", payload[:8])
+    return {"spi": spi, "seq": seq, "esp_len": esp_len}
+
+
 def _is_ike(pkt) -> bool:
     return UDP in pkt and (pkt[UDP].sport in IKE_PORTS or pkt[UDP].dport in IKE_PORTS) and not _is_esp(pkt)
 
@@ -80,7 +97,8 @@ def _is_ike(pkt) -> bool:
 def read_packets(pcap_path):
     """Read IP packets from a pcap. Returns (packets, esp_only, truncated).
 
-    packets: list of {"src","dst","size","time"} sorted by time.
+    packets: list of {"src","dst","size","time"} sorted by time. ESP records also carry "spi", "seq" and
+    "esp_len" (used by esp_fingerprint.py and esp_sequence.py; the window features ignore them).
     Raises ValueError if the file is not a readable capture.
     """
     try:
@@ -109,6 +127,7 @@ def read_packets(pcap_path):
                 continue
             rec = {"src": pkt[IP].src, "dst": pkt[IP].dst, "size": _ip_size(pkt), "time": float(pkt.time)}
             if _is_esp(pkt):
+                rec.update(_esp_fields(pkt))
                 esp.append(rec)
             elif not _is_ike(pkt):
                 other.append(rec)
