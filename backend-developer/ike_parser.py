@@ -36,8 +36,9 @@ Malformed input that is not a pcap at all raises ValueError.
 
 import struct
 
-from scapy.all import IP, UDP, PcapReader
+from scapy.all import IP, UDP, IPv6, PcapReader
 from scapy.error import Scapy_Exception
+from scapy.layers.ipsec import AH, ESP
 
 IKE_PORTS = (500, 4500)
 NAT_T_PORT = 4500
@@ -331,6 +332,15 @@ def _iter_packets(pcap_path: str, state: dict):
         fh.close()
 
 
+def _ipsec_protocol(pkt):
+    """'ESP' / 'AH' for a plain IPv4 (protocol 50/51) or IPv6 (ESP/AH layer) packet, else None."""
+    if IP in pkt:
+        return {50: "ESP", 51: "AH"}.get(pkt[IP].proto)
+    if IPv6 in pkt:
+        return "ESP" if ESP in pkt else "AH" if AH in pkt else None
+    return None
+
+
 def parse_ike_handshake(pcap_path: str) -> dict:
     """
     Returns:
@@ -342,7 +352,7 @@ def parse_ike_handshake(pcap_path: str) -> dict:
       "handshake": {
           "ike_sa_init_seen": bool,
           "sa_source": "responder-selected" | "initiator-offered" | None,
-          "ike_packets": int, "encrypted_ike_packets": int, "esp_packets": int,
+          "ike_packets": int, "encrypted_ike_packets": int, "esp_packets": int, "ah_packets": int,
           "truncated": bool,
       },
       "warnings": [str, ...],
@@ -360,11 +370,16 @@ def parse_ike_handshake(pcap_path: str) -> dict:
     ike_packets = 0
     encrypted_ike_packets = 0
     esp_packets = 0
+    ah_packets = 0
     packet_truncated = False
 
     for pkt in _iter_packets(pcap_path, read_state):
-        if IP in pkt and pkt[IP].proto == 50:
+        ipsec = _ipsec_protocol(pkt)
+        if ipsec == "ESP":
             esp_packets += 1
+            continue
+        if ipsec == "AH":
+            ah_packets += 1
             continue
         if UDP not in pkt:
             continue
@@ -481,6 +496,7 @@ def parse_ike_handshake(pcap_path: str) -> dict:
             "ike_packets": ike_packets,
             "encrypted_ike_packets": encrypted_ike_packets,
             "esp_packets": esp_packets,
+            "ah_packets": ah_packets,
             "truncated": bool(file_truncated or packet_truncated),
         },
         "warnings": warnings,

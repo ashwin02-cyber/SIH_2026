@@ -29,7 +29,8 @@ import statistics
 import struct
 from collections import defaultdict
 
-from scapy.all import IP, UDP, PcapReader
+from scapy.all import IP, UDP, IPv6, PcapReader
+from scapy.layers.ipsec import AH, ESP
 
 WINDOW_SEC = 1.0
 MIN_PACKETS_PER_WINDOW = 2
@@ -59,46 +60,80 @@ FEATURE_DESCRIPTIONS = {
 IKE_PORTS = (500, 4500)
 
 
-def _ip_size(pkt) -> int:
-    """Link-independent packet size: the IP total length."""
-    ln = pkt[IP].len
-    return int(ln) if ln else len(pkt)
+def _ip_layer(pkt):
+    """(layer, version) of the IP header of a packet: IPv4 or IPv6, else (None, None)."""
+    if IP in pkt:
+        return pkt[IP], 4
+    if IPv6 in pkt:
+        return pkt[IPv6], 6
+    return None, None
 
 
-def _is_esp(pkt) -> bool:
-    if pkt[IP].proto == 50:
-        return True
+def _ip_size(pkt, ip, ver) -> int:
+    """Link-independent packet size: the IP total length (IPv6: 40-byte header + payload length)."""
+    if ver == 4:
+        ln = ip.len
+        return int(ln) if ln else len(pkt)
+    return 40 + int(ip.plen)
+
+
+def _ipsec_kind(pkt, ip, ver):
+    """'ESP', 'AH' or None. ESP-in-UDP (NAT-T, UDP/4500) counts as ESP; a zero 4-byte marker means IKE."""
+    if ver == 4:
+        if ip.proto == 50:
+            return "ESP"
+        if ip.proto == 51:
+            return "AH"
+    else:
+        if ESP in pkt:
+            return "ESP"
+        if AH in pkt:
+            return "AH"
     if UDP in pkt and 4500 in (pkt[UDP].sport, pkt[UDP].dport):
         raw = bytes(pkt[UDP].payload)
-        return len(raw) >= 8 and raw[:4] != b"\x00\x00\x00\x00"  # zero marker => IKE, not ESP
-    return False
+        if len(raw) >= 8 and raw[:4] != b"\x00\x00\x00\x00":
+            return "ESP"
+    return None
 
 
-def _esp_fields(pkt):
-    """ESP header fields of an ESP packet, for the passive fingerprinting / sequence analysis:
-    spi and seq (first 8 bytes of the ESP header) and esp_len = length of the ESP packet (IP payload,
-    i.e. header + IV + encrypted data + ICV). None values if the header is too short to read."""
-    ihl = int(pkt[IP].ihl or 5) * 4
-    esp_len = max(0, int(pkt[IP].len or 0) - ihl) if pkt[IP].len else None
-    payload = bytes(pkt[IP].payload)
-    if pkt[IP].proto != 50 and UDP in pkt:  # ESP-in-UDP (NAT-T): the ESP header follows the 8-byte UDP header
-        payload = payload[8:]
-        esp_len = esp_len - 8 if esp_len is not None else None
-    if len(payload) < 8:
-        return {"spi": None, "seq": None, "esp_len": esp_len}
-    spi, seq = struct.unpack("!II", payload[:8])
-    return {"spi": spi, "seq": seq, "esp_len": esp_len}
+def _ipsec_fields(pkt, ip, ver, kind):
+    """Header fields for the passive fingerprinting / sequence analysis: spi and seq, plus the length of the
+    ESP packet (`esp_len`: SPI onwards, i.e. header + IV + encrypted data + ICV) or of the AH packet (`ah_len`).
+    Values are None where the header is too short to read. IPv6 extension headers in front of ESP/AH are excluded."""
+    total, payload = None, b""
+    if ver == 4:
+        ihl = int(ip.ihl or 5) * 4
+        total = max(0, int(ip.len or 0) - ihl) if ip.len else None
+        payload = bytes(ip.payload)
+        if ip.proto not in (50, 51) and UDP in pkt:      # ESP-in-UDP (NAT-T): the header follows the 8-byte UDP header
+            payload = payload[8:]
+            total = total - 8 if total is not None else None
+    else:
+        layer = pkt[ESP] if (kind == "ESP" and ESP in pkt) else pkt[AH] if AH in pkt else None
+        if layer is not None:
+            payload = bytes(layer)
+            total = int(ip.plen) - (len(bytes(ip.payload)) - len(payload))
+    if kind == "AH":   # AH header: next header(1) length(1) reserved(2) SPI(4) sequence(4) ICV...
+        spi_seq = struct.unpack("!II", payload[4:12]) if len(payload) >= 12 else (None, None)
+    else:              # ESP header: SPI(4) sequence(4) ...
+        spi_seq = struct.unpack("!II", payload[:8]) if len(payload) >= 8 else (None, None)
+    return {"spi": spi_seq[0], "seq": spi_seq[1], "esp_len": total if kind == "ESP" else None,
+            "ah_len": total if kind == "AH" else None}
 
 
 def _is_ike(pkt) -> bool:
-    return UDP in pkt and (pkt[UDP].sport in IKE_PORTS or pkt[UDP].dport in IKE_PORTS) and not _is_esp(pkt)
+    ip, ver = _ip_layer(pkt)
+    return ip is not None and UDP in pkt and (pkt[UDP].sport in IKE_PORTS or pkt[UDP].dport in IKE_PORTS) \
+        and _ipsec_kind(pkt, ip, ver) is None
 
 
 def read_packets(pcap_path):
-    """Read IP packets from a pcap. Returns (packets, esp_only, truncated).
+    """Read IPv4/IPv6 packets from a pcap. Returns (packets, ipsec_only, truncated).
 
-    packets: list of {"src","dst","size","time"} sorted by time. ESP records also carry "spi", "seq" and
-    "esp_len" (used by esp_fingerprint.py and esp_sequence.py; the window features ignore them).
+    packets: list of {"src","dst","size","time"} sorted by time. IPsec records (ESP, AH, ESP-in-UDP) also carry
+    "ipsec_proto" ("ESP" or "AH"), "ip_version", "spi", "seq" and "esp_len" / "ah_len" (used by esp_fingerprint.py and
+    esp_sequence.py; the window features ignore them). AH is treated as IPsec data traffic for the window features,
+    but note that AH does NOT encrypt: its payload is readable.
     Raises ValueError if the file is not a readable capture.
     """
     try:
@@ -123,11 +158,14 @@ def read_packets(pcap_path):
                 break
             if pkt is None:
                 break
-            if IP not in pkt:
+            ip, ver = _ip_layer(pkt)
+            if ip is None:
                 continue
-            rec = {"src": pkt[IP].src, "dst": pkt[IP].dst, "size": _ip_size(pkt), "time": float(pkt.time)}
-            if _is_esp(pkt):
-                rec.update(_esp_fields(pkt))
+            rec = {"src": ip.src, "dst": ip.dst, "size": _ip_size(pkt, ip, ver), "time": float(pkt.time)}
+            kind = _ipsec_kind(pkt, ip, ver)
+            if kind:
+                rec.update(_ipsec_fields(pkt, ip, ver, kind))
+                rec["ipsec_proto"], rec["ip_version"] = kind, ver
                 esp.append(rec)
             elif not _is_ike(pkt):
                 other.append(rec)

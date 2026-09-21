@@ -69,9 +69,16 @@ def build_findings(ctx):
                        "no IKE_SA_INIT in this capture (encrypted IKE messages only, or none)"))
 
     # protocol
-    n_esp = (fp or {}).get("esp_packets", 0)
-    out.append(finding("protocol", "ESP" if n_esp else "unknown", "observed" if n_esp else "unknown", 1.0 if n_esp else None,
-                       "info" if n_esp else "unknown", f"{n_esp} ESP packets seen" if n_esp else "no ESP packets in this capture"))
+    prot = (fp or {}).get("protocols") or {}
+    n_esp, n_ah = prot.get("ESP", (fp or {}).get("esp_packets", 0)), prot.get("AH", 0)
+    if n_ah and not n_esp:
+        out.append(finding("protocol", "AH (no encryption)", "observed", 1.0, "weak",
+                           f"{n_ah} AH packets and no ESP: AH authenticates but does not encrypt, so payloads are readable"))
+    elif n_ah:
+        out.append(finding("protocol", "ESP + AH", "observed", 1.0, "info", f"{n_esp} ESP and {n_ah} AH packets seen"))
+    else:
+        out.append(finding("protocol", "ESP" if n_esp else "unknown", "observed" if n_esp else "unknown", 1.0 if n_esp else None,
+                           "info" if n_esp else "unknown", f"{n_esp} ESP packets seen" if n_esp else "no ESP packets in this capture"))
 
     # mode
     mode_rating = {"tunnel": "strong", "transport": "medium"}.get(facts["mode"], "unknown")
@@ -82,7 +89,11 @@ def build_findings(ctx):
     # cipher + key length
     c = facts["ike_sa"]
     fam = fp.get("cipher_family") or {}
-    if src["cipher"] in ("observed", "declared"):
+    if c["cipher"] == "NONE":
+        out.append(finding("cipher", "none - the traffic is not encrypted", "observed", 1.0, "weak",
+                           "only AH packets were seen; AH provides integrity but no confidentiality"))
+        out.append(finding("key_length", "not applicable", "observed", 1.0, "info", "no encryption"))
+    elif src["cipher"] in ("observed", "declared"):
         cname = f"{c['cipher']}" + (f"-{c['key_length_bits']}" if c["key_length_bits"] else "")
         cev = "read from the IKE_SA_INIT proposal" if src["cipher"] == "observed" else "from the testbed file name (unverified)"
         out.append(finding("cipher", cname, src["cipher"], conf.get("cipher"), ctx["ratings"]["cipher"], cev))
@@ -196,6 +207,11 @@ def metadata_exposure(ctx):
     add("Communicating endpoints", 15, {"tunnel": 0.5, "transport": 1.0}.get(m, 0.75),
         {"tunnel": "the two gateways only", "transport": "the actual hosts", "unknown": "gateways or hosts (mode unknown)"}[m if m in ("tunnel", "transport") else "unknown"],
         "outer IP addresses are always in clear; tunnel mode hides the real endpoints behind the gateways")
+    if fp.get("ah_only"):
+        items.append({"what": "Payload content", "weight": 0, "exposed_fraction": 1.0, "points": 0.0,
+                      "learned": "the whole payload", "why": "AH does not encrypt: everything above the IP header is readable"})
+        return {"score": 100, "level": "HIGH", "scale": "0 = an eavesdropper learns nothing, 100 = learns everything listed",
+                "items": items, "note": "AH-only traffic is not encrypted, so nothing is hidden from an eavesdropper."}
     score = round(sum(i["points"] for i in items))
     level = "LOW" if score < 40 else "MEDIUM" if score < 70 else "HIGH"
     return {"score": score, "level": level, "scale": "0 = an eavesdropper learns nothing, 100 = learns everything listed",

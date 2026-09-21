@@ -712,6 +712,7 @@
     "ike_packets": 2,
     "encrypted_ike_packets": 2,
     "esp_packets": 18,
+    "ah_packets": 0,
     "truncated": false
    },
    "warnings": [
@@ -750,7 +751,13 @@
     "Authentication method (pre-shared key vs certificate: encrypted IKE_AUTH)",
     "Receiver's anti-replay window setting"
    ],
-   "method": "packet sizes only (no file names, no keys, no IKE)"
+   "method": "packet sizes only (no file names, no keys, no IKE)",
+   "protocols": {
+    "ESP": 18,
+    "AH": 0,
+    "IPv6": 0
+   },
+   "ah_only": false
   },
   "esp_sequence": {
    "esp_packets": 18,
@@ -758,6 +765,7 @@
    "sas": [
     {
      "spi": "0xc17daa21",
+     "protocol": "ESP",
      "direction": "10.10.0.10 -> 10.10.0.20",
      "packets": 9,
      "first_seq": 1,
@@ -774,6 +782,7 @@
     },
     {
      "spi": "0xc9fd48f6",
+     "protocol": "ESP",
      "direction": "10.10.0.20 -> 10.10.0.10",
      "packets": 9,
      "first_seq": 1,

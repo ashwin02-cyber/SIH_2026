@@ -34,3 +34,18 @@ SPI/sequence analysis could not otherwise be tested on those situations.
 | `SYNTHETIC_esp_rekey_observed.pcap` | both directions rekey after 25 s; the old SAs start at sequence 1 |
 | `SYNTHETIC_esp_rekey_start_not_observed.pcap` | capture starts mid-SA (sequence ~5000), then a rekey: only a lower bound is possible |
 | `SYNTHETIC_esp_parallel_sas.pcap` | two SPIs overlapping for a long time in one direction: parallel SAs, not a rekey |
+
+## SYNTHETIC IPv6 / AH / NAT-T fixtures (Stage 8)
+
+Also **hand-built** (by `tests/make_ipv6_ah_fixtures.py`, with Scapy, from the RFC 4303 / RFC 4302 / RFC 8200 layouts).
+**They are not real captures.** The real testbed captures are IPv4 ESP only, so IPv6 and AH support could not otherwise
+be tested. The "encrypted" payload is filler bytes; only the headers and sizes are meaningful.
+
+| File | What it is |
+|---|---|
+| `SYNTHETIC_ipv6_esp.pcap` | IPv6 ESP, two SAs (one per direction), 40 packets each, varied lengths |
+| `SYNTHETIC_ipv6_esp_ext_header.pcap` | IPv6 ESP behind a destination-options extension header (its 8 bytes must not count as ESP length) |
+| `SYNTHETIC_ipv4_ah.pcap` / `SYNTHETIC_ipv6_ah.pcap` | AH only: authenticated but NOT encrypted (the payload is readable) |
+| `SYNTHETIC_ipv4_esp_and_ah.pcap` | ESP one way, AH the other, on IPv4 |
+| `SYNTHETIC_natt_esp_udp4500.pcap` | ESP inside UDP/4500 (NAT traversal) |
+| `SYNTHETIC_ipv6_ike_sa_init.pcap` | cleartext IKE_SA_INIT over IPv6 / UDP 500 (AES-256-GCM, group 19) |

@@ -61,7 +61,7 @@ MODE_FEATURES = ["min_len", "p05_len", "p25_len", "p50_len", "p75_len", "p95_len
 
 def esp_lengths(packets):
     """ESP packet lengths (bytes from the SPI onwards) of the records that have one."""
-    return [int(p["esp_len"]) for p in packets if p.get("esp_len") is not None]
+    return [int(p["esp_len"]) for p in packets if p.get("esp_len") is not None and p.get("ipsec_proto", "ESP") == "ESP"]
 
 
 def residue_histogram(lengths):

@@ -126,7 +126,9 @@ def merge_facts(filename, ike_facts, esp_fp=None):
     obs_mode = ike_facts.get("mode", "unknown")
 
     sources, conf = {}, {}
-    if obs_cipher:
+    if fp.get("ah_only"):
+        cipher, bits, sources["cipher"] = "NONE", None, "observed"      # only AH packets: nothing is encrypted
+    elif obs_cipher:
         cipher, bits, sources["cipher"] = obs_cipher, obs_bits, "observed"
     elif declared:
         cipher, bits, sources["cipher"] = declared["cipher"], declared["key_length_bits"], "declared"

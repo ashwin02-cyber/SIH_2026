@@ -36,7 +36,7 @@ LIMITS = [
 
 
 def _sa_stats(key, pkts):
-    src, dst, spi = key
+    src, dst, spi, proto = key
     seqs = [p["seq"] for p in pkts]
     first_seq, last_seq = seqs[0], seqs[-1]
     seen, dup, ooo, gaps, missing, wraps = set(), 0, 0, 0, 0, 0
@@ -61,7 +61,7 @@ def _sa_stats(key, pkts):
         else:
             ooo += 1
     return {
-        "spi": f"0x{spi:08x}", "spi_int": spi, "direction": f"{src} -> {dst}", "packets": len(pkts),
+        "spi": f"0x{spi:08x}", "spi_int": spi, "protocol": proto, "direction": f"{src} -> {dst}", "packets": len(pkts),
         "first_seq": first_seq, "last_seq": last_seq,
         "starts_at_beginning": first_seq <= SEQ_START_MAX,
         "first_time": pkts[0]["time"], "last_time": pkts[-1]["time"],
@@ -75,9 +75,9 @@ def _sa_stats(key, pkts):
 def _rekey_events(sas, t0):
     by_dir = defaultdict(list)
     for s in sas:
-        by_dir[s["direction"]].append(s)
+        by_dir[(s["direction"], s["protocol"])].append(s)
     events = []
-    for direction, lst in by_dir.items():
+    for (direction, _proto), lst in by_dir.items():
         lst.sort(key=lambda s: s["first_time"])
         for old, new in zip(lst, lst[1:]):
             parallel = old["last_time"] > new["first_time"] + PARALLEL_OVERLAP_SEC
@@ -123,7 +123,7 @@ def analyze_sequences(packets):
                                                      "basis": None, "note": "not observable in this capture (no ESP packets)"}}
     groups = defaultdict(list)
     for p in pk:                                   # capture order
-        groups[(p["src"], p["dst"], p["spi"])].append(p)
+        groups[(p["src"], p["dst"], p["spi"], p.get("ipsec_proto", "ESP"))].append(p)
     sas = [_sa_stats(k, v) for k, v in groups.items()]
     sas.sort(key=lambda s: (s["first_time"], s["direction"]))
     t0, t_end = min(p["time"] for p in pk), max(p["time"] for p in pk)

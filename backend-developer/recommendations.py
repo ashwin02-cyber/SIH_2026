@@ -79,6 +79,17 @@ def build_items(ctx, findings, exposure, compliance):
     dh, cipher, pfs, mode = by["dh_group"], by["cipher"], by["pfs"], by["mode"]
     facts = ctx["facts"]["ike_sa"]
 
+    # ---- AH only: no confidentiality at all
+    prot = by["protocol"]
+    if prot["value"].startswith("AH"):
+        items.append(_item("protocol", "Critical", "Use ESP: AH does not encrypt",
+                           "Replace AH with ESP using an AEAD cipher (aes256gcm16). AH only authenticates packets; the payload stays readable.",
+                           "Anyone on the path can read the traffic.", prot["status"], prot["confidence"], [], "esp=aes256gcm16-ecp384!"))
+    elif prot["value"] == "ESP + AH":
+        items.append(_item("protocol", "Low", "Consider dropping AH on top of ESP",
+                           "ESP with an AEAD cipher already provides integrity; AH in addition adds overhead and complexity.",
+                           "Simplifies the configuration.", prot["status"], prot["confidence"]))
+
     # ---- key exchange
     if dh["rating"] == "weak":
         items.append(_item("dh", "High", "Replace the weak Diffie-Hellman group",

@@ -18,6 +18,7 @@ down, and a fabricated "weak" would misrepresent the tunnel.
 """
 
 CIPHER_RATING = {
+    "NONE": {None: "weak"},                        # AH only: authenticates packets but does not encrypt them
     "3DES": {None: "weak"},                        # 64-bit blocks, deprecated
     "AES-CBC": {128: "medium", 256: "strong"},     # CBC needs a separate HMAC for integrity
     "AES-CTR": {128: "medium", 256: "strong"},
@@ -63,7 +64,10 @@ def _rate_cipher(cipher_name, key_length_bits):
     else:
         rating = "unknown"
     label = cipher_name + (f"-{key_length_bits}" if key_length_bits else "")
-    if cipher_name == "3DES":
+    if cipher_name == "NONE":
+        reason = ("No encryption: AH authenticates packets but does not encrypt them, so the payload is readable "
+                  "by anyone on the path.")
+    elif cipher_name == "3DES":
         reason = f"{label} is deprecated: its 64-bit blocks make it vulnerable to birthday attacks."
     elif cipher_name == "AES-CBC":
         reason = (f"{label} provides confidentiality only — it needs a separate HMAC "
