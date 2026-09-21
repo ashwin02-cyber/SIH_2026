@@ -1,9 +1,22 @@
+# environments and caches
 venv/
-ml-engineer/venv/
-ml-engineer/__pycache__/
-ml-engineer/*.pkl
+.venv/
 */venv/
-*/__pycache__/
+node_modules/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.local
+
+# large / bulk data - never commit (kept outside the repo, see DEPLOY.md / README)
 *.pcap
-echo "__pycache__/" >> .gitignore
-real_captures_dataset.zip
+*.pcapng
+!data/samples/*.pcap
+!tests/fixtures/*.pcap
+real_captures/*.pcap
+*.zip
+
+# build output
+frontend-developer/dist/
+reports/out/

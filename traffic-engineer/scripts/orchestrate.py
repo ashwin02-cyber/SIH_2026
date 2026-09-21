@@ -7,7 +7,9 @@ import shutil
 from datetime import datetime
 
 # ---------- CONFIG ----------
-PROJECT_ROOT = r"E:\SIH_2026"
+# Project root = two levels above this file, unless SIH_PROJECT_ROOT is set.
+PROJECT_ROOT = os.environ.get("SIH_PROJECT_ROOT") or os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
 STRONGSWAN_DIR = os.path.join(PROJECT_ROOT, "docker", "strongswan")
 GENERATED_CONFIGS_DIR = os.path.join(STRONGSWAN_DIR, "scripts", "generated_configs")
 CONFIGS_PEER_A = os.path.join(STRONGSWAN_DIR, "configs", "peer-a", "ipsec.conf")
@@ -241,4 +243,4 @@ if __name__ == "__main__":
         run_combo(combo)
 
     print(f"\nFull run complete. Processed {len(combos)} configs.")
-    print("Check E:\\SIH_2026\\real_captures and manifest.csv") 
+    print("Check real_captures/ and manifest.csv in the project root")

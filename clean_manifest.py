@@ -1,6 +1,7 @@
 import csv
+import os
 
-MANIFEST_PATH = r"E:\SIH_2026\manifest.csv"
+MANIFEST_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "manifest.csv")
 
 # Read all rows, keeping only the LAST occurrence of each filename
 rows_by_filename = {}
