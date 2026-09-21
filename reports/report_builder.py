@@ -35,7 +35,7 @@ REPO = os.path.abspath(os.path.join(HERE, ".."))
 METRICS_PATH = os.path.join(REPO, "ml-engineer", "metrics.json")
 
 RISK_COLOR = {"LOW": "#2e7d32", "MEDIUM": "#b26a00", "HIGH": "#c62828", "UNKNOWN": "#616161"}
-RATING_COLOR = {"strong": "#2e7d32", "medium": "#b26a00", "weak": "#c62828", "unknown": "#616161"}
+RATING_COLOR = {"strong": "#2e7d32", "medium": "#b26a00", "weak": "#c62828", "unknown": "#616161", "info": "#2b7bb9"}
 CLASS_COLOR = {"web_browsing": "#2b7bb9", "video_streaming": "#7c4dcc", "voip": "#1e9e73",
                "file_transfer": "#d19a00", "icmp": "#d64545"}
 RATING_POINTS = {"weak": 0, "medium": 60, "strong": 100}

@@ -24,6 +24,7 @@ Needs: pip install -r requirements-dev.txt   (uses the Microsoft Edge that ships
 """
 
 import http.client
+import json
 import os
 import sys
 
@@ -91,8 +92,9 @@ def main():
         print(f"page derived the API address itself: https://{API}  ({len(api_requests)} calls, tunnel header sent): OK")
 
         page.get_by_role("button", name="aes128gcm16-dh19-tunnel-pfs-on__web", exact=True).click()
-        page.locator(".gauge__level", has_text="LOW").wait_for(timeout=60000)
-        assert page.locator(".gauge__score").inner_text() == "100"
+        expected = json.load(open(os.path.join(ROOT, "frontend-developer", "src", "data", "sample_strong.json"), encoding="utf-8"))
+        page.locator(".gauge__level", has_text=expected["risk_level"]).wait_for(timeout=60000)
+        assert page.locator(".gauge__score").inner_text() == str(expected["score"])
         assert "Web browsing" in page.inner_text("body")
         assert any(r.method == "POST" and "/analyze/sample/" in r.url and r.url.startswith(f"https://{API}/") for r in api_requests)
         print("sample analysed through the forwarded API -> results: OK")

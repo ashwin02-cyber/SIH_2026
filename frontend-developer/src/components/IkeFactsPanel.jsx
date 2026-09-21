@@ -10,12 +10,21 @@ const ratingColor = {
 
 const sourceText = {
   observed: "read from capture",
+  inferred: "inferred from packet sizes",
   declared: "from file name",
   unknown: "not determinable",
 };
 
-function Source({ source }) {
-  return <span className={`source source--${source}`}>{sourceText[source]}</span>;
+const keyOf = { Cipher: "cipher", Mode: "mode", "DH group": "dh_group", "Forward secrecy": "pfs" };
+
+function Source({ source, confidence }) {
+  const pct = source === "inferred" && confidence != null ? ` ${Math.round(confidence * 100)}%` : "";
+  return (
+    <span className={`source source--${source}`}>
+      {sourceText[source]}
+      {pct}
+    </span>
+  );
 }
 
 export default function IkeFactsPanel({ analysis, plainEnglish }) {
@@ -34,7 +43,7 @@ export default function IkeFactsPanel({ analysis, plainEnglish }) {
           <div className="ike-grid__item" key={label}>
             <dt>{label}</dt>
             <dd>{value}</dd>
-            <Source source={source} />
+            <Source source={source} confidence={analysis.confidence?.[keyOf[label]]} />
           </div>
         ))}
       </dl>

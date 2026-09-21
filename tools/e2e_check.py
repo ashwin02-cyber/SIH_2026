@@ -11,6 +11,7 @@ to docs/screenshots/ (used by the documentation and slides).
 Needs: pip install playwright   (uses the Microsoft Edge that ships with Windows; no browser download)
 """
 
+import json
 import os
 import subprocess
 import sys
@@ -63,10 +64,12 @@ def main():
             # real upload through the file input
             page.set_input_files("input[type=file]", SAMPLE)
             page.get_by_role("button", name="Analyze capture").click()
-            page.locator(".gauge__level", has_text="LOW").wait_for(timeout=60000)
-            assert page.locator(".gauge__score").inner_text() == "100"
+            strong = json.load(open(os.path.join(ROOT, "frontend-developer", "src", "data", "sample_strong.json"), encoding="utf-8"))
+            page.locator(".gauge__level", has_text=strong["risk_level"]).wait_for(timeout=60000)
+            assert page.locator(".gauge__score").inner_text() == str(strong["score"])
+            assert strong["risk_level"] != "LOW" and "Assessment completeness" in page.inner_text("body")
             body = page.inner_text("body")
-            for needle in ["LOW", "AES-GCM-16-128", "Group 19", "Web browsing", "Threat matrix", "Traffic timeline",
+            for needle in ["MEDIUM", "AES-GCM-16-128", "inferred from packet sizes", "Metadata exposure", "Guideline mapping", "capped", "Group 19", "Web browsing", "Threat matrix", "Traffic timeline",
                            "declared by the testbed"]:
                 assert needle in body, f"missing on page: {needle!r}"
             assert page.locator(".recharts-bar-rectangle").count() > 5, "timeline chart did not render bars"

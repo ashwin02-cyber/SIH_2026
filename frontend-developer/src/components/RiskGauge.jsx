@@ -10,11 +10,12 @@ const levelColor = {
 const basisNote = {
   observed: "Based on values read from the capture.",
   declared: "Based on the configuration named in the file name (declared by the testbed), not read from the capture.",
+  inferred: "Based on values inferred from packet sizes (see the confidence figures).",
   mixed: "Some values were read from the capture, others come from the file name.",
   none: "The capture does not reveal the cipher or key exchange, so no score can be given.",
 };
 
-export default function RiskGauge({ score, level, basis }) {
+export default function RiskGauge({ score, level, basis, assessment }) {
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const shown = score ?? 0;
@@ -47,6 +48,14 @@ export default function RiskGauge({ score, level, basis }) {
         </div>
       </div>
       <p className="gauge__note">{basisNote[basis]}</p>
+      {assessment && (
+        <p className="gauge__note">
+          Assessment completeness {Math.round(assessment.completeness_pct)}%
+          {assessment.score_capped
+            ? ` - score capped at ${assessment.score_cap} (the known facts alone would give ${assessment.raw_score}).`
+            : "."}
+        </p>
+      )}
     </section>
   );
 }

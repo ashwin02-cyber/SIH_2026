@@ -26,6 +26,23 @@ def test_observed_beats_declared():
     assert src["cipher"] == "observed" and src["dh_group"] == "observed" and src["mode"] == "declared"
 
 
+def test_inferred_mode_beats_declared_but_declared_cipher_beats_inferred_family():
+    fp = {"cipher_family": {"value": "GCM-like (AEAD / not 16-byte block aligned)", "confidence": 0.97},
+          "mode": {"value": "transport", "confidence": 0.99}}
+    facts, src = merge_facts("aes128-dh2-tunnel-pfs-off__web_run1.pcap", None, fp)
+    assert src["mode"] == "inferred" and facts["mode"] == "transport"          # packets say transport, name says tunnel
+    assert src["cipher"] == "declared" and facts["ike_sa"]["key_length_bits"] == 128
+    bad = [c for c in facts["_consistency"] if not c["agree"]]
+    assert {c["item"] for c in bad} == {"cipher family", "mode"}              # both contradictions are flagged
+
+
+def test_family_only_inference_leaves_the_key_length_unknown():
+    fp = {"cipher_family": {"value": "CBC-like (16-byte block aligned)", "confidence": 0.99}, "mode": {"value": "undetermined"}}
+    facts, src = merge_facts("capture.pcap", None, fp)
+    assert src["cipher"] == "inferred" and facts["ike_sa"]["key_length_bits"] is None
+    assert src["mode"] == "unknown"
+
+
 def _minimal():
     return build_response("capture.pcap", None, None, errors=["boom"])
 

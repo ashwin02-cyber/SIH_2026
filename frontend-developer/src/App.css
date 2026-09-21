@@ -66,3 +66,8 @@
   color: var(--risk-medium);
   border-color: var(--risk-medium);
 }
+
+.source--inferred {
+  color: var(--accent);
+  border-color: var(--accent);
+}

@@ -9,6 +9,8 @@
 <table>
   <tr><th style="width:30%;">Risk level</th><td><span class="badge" style="background-color:{{ risk_color }};">{{ a.risk_level }}</span></td></tr>
   <tr><th>Security score</th><td>{% if a.score is not none %}{{ a.score }} / 100{% else %}not calculable{% endif %}</td></tr>
+  <tr><th>Raw score / cap</th><td>{{ a.raw_score if a.raw_score is not none else "n/a" }} from the known facts; capped at {{ a.assessment.score_cap if a.assessment.score_cap is not none else "n/a" }}
+    by assessment completeness ({{ a.assessment.completeness_pct }}%). Rule: {{ a.assessment.cap_rule }}</td></tr>
   <tr><th>Score basis</th><td>{{ a.score_basis }}
     {% if a.score_basis == "declared" %} - cipher/DH/mode taken from the testbed naming convention in the capture file name, not observed in the capture{% endif %}</td></tr>
   <tr><th>Traffic class (ML)</th><td>{% if a.traffic %}{{ a.traffic.label }} ({{ (a.traffic.confidence * 100)|round(1) }}% model confidence){% else %}not available{% endif %}</td></tr>
@@ -31,6 +33,17 @@
 </table>
 <p class="muted">Points: strong = 100, medium = 60, weak = 0. Score = sum(points x weight) / sum(weights of rated factors), rounded.
 Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;= 50 MEDIUM, otherwise HIGH.</p>
+
+<h2>2b. Findings and their status</h2>
+<p class="muted">Every finding is tagged: observed = read from the capture; inferred = deduced from packet sizes or sequence numbers (with a confidence, never from file names);
+declared = stated by the testbed file name (unverified); unknown = not determinable from this capture.</p>
+<table>
+  <tr><th>Finding</th><th>Value</th><th>Status</th><th class="num">Confidence</th><th>Evidence</th></tr>
+  {% for f in a.assessment.findings %}
+  <tr><td><b>{{ f.title }}</b></td><td>{{ f.value }}</td><td>{{ f.status }}</td>
+      <td class="num">{{ (f.confidence * 100)|round|int ~ "%" if f.confidence is not none else "-" }}</td><td class="muted">{{ f.evidence }}</td></tr>
+  {% endfor %}
+</table>
 
 <h2>3. IKE handshake analysis</h2>
 {% if ike %}
@@ -92,6 +105,21 @@ Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;
 
 <h2>8. Notes and warnings</h2>
 <ul>{% for w in a.warnings %}<li>{{ w }}</li>{% else %}<li>None.</li>{% endfor %}</ul>
+
+<h2>8b. Metadata exposure (what an eavesdropper learns)</h2>
+<p>Exposure score <b>{{ a.assessment.metadata_exposure.score }} / 100 ({{ a.assessment.metadata_exposure.level }})</b> - {{ a.assessment.metadata_exposure.scale }}.</p>
+<table>
+  <tr><th>What</th><th class="num">Points</th><th>What is learned</th></tr>
+  {% for i in a.assessment.metadata_exposure["items"] %}<tr><td>{{ i.what }}</td><td class="num">{{ i.points }} / {{ i.weight }}</td><td>{{ i.learned }}. <span class="muted">{{ i.why }}.</span></td></tr>{% endfor %}
+</table>
+
+<h2>8c. Guideline mapping</h2>
+<div class="notice">{{ a.assessment.compliance.label }}</div>
+<table>
+  <tr><th>Guideline</th><th>Requirement</th><th>Result</th><th>Evidence</th></tr>
+  {% for c in a.assessment.compliance.checks %}<tr><td>{{ c.guideline }}</td><td>{{ c.requirement }}</td><td><b>{{ c.result|replace("_", " ") }}</b></td><td class="muted">{{ c.evidence }} ({{ c.input_status }})</td></tr>{% endfor %}
+</table>
+<ul>{% for n in a.assessment.compliance.not_evaluated %}<li class="muted">{{ n }}</li>{% endfor %}</ul>
 
 <h2>9. Model validation and limits</h2>
 {% if metrics %}

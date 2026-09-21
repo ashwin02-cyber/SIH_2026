@@ -9,6 +9,7 @@ import ThreatMatrix from "./components/ThreatMatrix";
 import TimelineScrubber from "./components/TimelineScrubber";
 import ConfigComparison from "./components/ConfigComparison";
 import ExplanationPanel from "./components/ExplanationPanel";
+import { CompletenessPanel, CompliancePanel, ExposurePanel } from "./components/AssessmentPanels";
 import { analyzeFile, analyzeSample, checkHealth, listSamples } from "./api";
 import { bundledSamples, weakExample } from "./data/mockData";
 import "./App.css";
@@ -93,6 +94,7 @@ function App() {
           )}
           {analysis && <IkeFactsPanel analysis={analysis} plainEnglish={plainEnglish} />}
           {analysis && <ExplanationPanel analysis={analysis} />}
+          {analysis && <CompletenessPanel assessment={analysis.assessment} />}
           {analysis && <ConfigComparison current={analysis} weak={weakExample} />}
         </div>
         <div className="dashboard__column">
@@ -113,11 +115,13 @@ function App() {
                   Showing a bundled sample analysis (real output from the analyzer, saved with the app).
                 </div>
               )}
-              <RiskGauge score={analysis.score} level={analysis.risk_level} basis={analysis.score_basis} />
+              <RiskGauge score={analysis.score} level={analysis.risk_level} basis={analysis.score_basis} assessment={analysis.assessment} />
               <ThreatMatrix breakdown={analysis.breakdown} />
               <TrafficChart traffic={analysis.traffic} capture={analysis.capture} />
               <TimelineScrubber timeline={analysis.timeline} windowSec={analysis.capture?.window_sec} />
               <AnomaliesList anomalies={analysis.anomalies} />
+              <ExposurePanel exposure={analysis.assessment.metadata_exposure} />
+              <CompliancePanel compliance={analysis.assessment.compliance} />
             </>
           )}
         </div>

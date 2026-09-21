@@ -35,18 +35,27 @@ def test_analyze_real_capture_returns_valid_contract():
 
 
 def test_declared_values_are_labelled_and_pfs_stays_unknown():
-    """The real captures contain no cleartext IKE_SA_INIT, so cipher/DH come from the file name,
-    and must be marked as declared, never observed. PFS is unknowable (v1 configs were identical)."""
+    """The real captures contain no cleartext IKE_SA_INIT, so cipher/DH come from the file name and are marked
+    declared, never observed; the mode is inferred from packet sizes. PFS is unknowable (v1 configs were identical)."""
     body = upload(os.path.join(SAMPLES, WEB)).json()
-    assert body["sources"] == {"cipher": "declared", "dh_group": "declared", "pfs": "unknown", "mode": "declared"}
+    assert body["sources"] == {"cipher": "declared", "dh_group": "declared", "pfs": "unknown", "mode": "inferred"}
     assert body["score_basis"] == "declared"
     assert body["cipher"] == "AES-GCM-16-128"
     assert body["dh_group"].startswith("Group 19")
     assert body["mode"] == "tunnel" and body["pfs"] == "unknown"
     pfs = next(b for b in body["breakdown"] if b["factor"] == "PFS")
     assert pfs["rating"] == "unknown"
-    assert body["score"] == 100 and body["risk_level"] == "LOW"  # unknown PFS excluded, not counted as weak
     assert any("file name" in line for line in body["explanation"])
+
+
+def test_score_is_never_100_low_when_key_facts_are_unknown():
+    body = upload(os.path.join(SAMPLES, WEB)).json()
+    a = body["assessment"]
+    assert body["raw_score"] == 100                     # the facts that ARE known are all strong ...
+    assert a["completeness_pct"] < 69 and "Perfect Forward Secrecy" in a["unknown_facts"]
+    assert body["score"] == a["score_cap"] < 80 and body["risk_level"] == "MEDIUM"   # ... but the score is capped
+    assert a["score_capped"] is True
+    assert any("capped" in line for line in body["explanation"])
 
 
 def test_weak_config_gets_worse_score_than_strong():
@@ -58,12 +67,33 @@ def test_weak_config_gets_worse_score_than_strong():
     assert weak["mode"] == "transport" and weak["dh_group"].startswith("Group 2 ")
 
 
-def test_unknown_filename_gives_unknown_risk_not_a_guess():
+def test_without_a_declared_config_the_app_still_infers_from_packet_sizes():
+    """Same bytes, an unrelated file name: nothing can be declared, but cipher family and mode are INFERRED from
+    the packets (never from the name), the DH group stays unknown, and the score stays capped."""
     body = upload(os.path.join(SAMPLES, WEB), name="capture.pcap").json()
     assert validate_response(body) == []
+    assert body["sources"] == {"cipher": "inferred", "dh_group": "unknown", "pfs": "unknown", "mode": "inferred"}
+    assert body["mode"] == "tunnel" and "GCM" in body["cipher"] and "key length unknown" in body["cipher"]
+    assert body["confidence"]["cipher"] >= 0.9 and body["confidence"]["mode"] >= 0.75
+    assert body["score_basis"] == "inferred" and body["risk_level"] != "LOW" and body["score"] <= body["assessment"]["score_cap"]
+    assert body["traffic"] is not None
+
+
+def test_nothing_known_gives_unknown_risk_not_a_guess():
+    """A real ping capture (constant packet size) under an unrelated name: nothing about the cipher can be inferred."""
+    body = upload(os.path.join(SAMPLES, "aes128gcm16-dh19-tunnel-pfs-on__icmp_run1.pcap"), name="capture.pcap").json()
+    assert validate_response(body) == []
+    assert body["sources"]["cipher"] == "unknown" and body["sources"]["dh_group"] == "unknown"
     assert body["score"] is None and body["risk_level"] == "UNKNOWN" and body["score_basis"] == "none"
-    assert body["cipher"] == "unknown" and body["mode"] == "unknown" and body["dh_group"] == "unknown"
-    assert body["traffic"] is not None  # the ML half still works
+    assert body["cipher"] == "unknown" and body["dh_group"] == "unknown"
+
+
+def test_inferred_fields_do_not_depend_on_the_file_name():
+    a = upload(os.path.join(SAMPLES, WEB)).json()
+    b = upload(os.path.join(SAMPLES, WEB), name="zz_unrelated_name.pcap").json()
+    assert a["details"]["esp_fingerprint"] == b["details"]["esp_fingerprint"]
+    assert a["details"]["esp_sequence"] == b["details"]["esp_sequence"]
+    assert a["mode"] == b["mode"] and a["confidence"]["mode"] == b["confidence"]["mode"]
 
 
 def test_synthetic_ike_sa_init_is_reported_as_observed():

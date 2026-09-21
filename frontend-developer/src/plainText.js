@@ -19,6 +19,24 @@ const PLAIN = {
     weak: "If one key leaks, every past conversation could be read.",
     unknown: "This capture cannot show whether past conversations stay safe if a key leaks.",
   },
+  Integrity: {
+    strong: "Tampering with the data would be noticed automatically.",
+    medium: "Tampering is checked by a separate mechanism; the details could not be confirmed.",
+    weak: "Tampering may go unnoticed.",
+    unknown: "We could not tell how tampering would be detected.",
+  },
+  "Key lifetime": {
+    strong: "The keys are replaced often, which limits the damage if one leaks.",
+    medium: "The keys are replaced, but not very often.",
+    weak: "The keys stay in use for a very long time.",
+    unknown: "This capture is too short to show how often the keys are replaced.",
+  },
+  "Replay protection": {
+    strong: "Copied-and-resent packets would be rejected.",
+    medium: "The sender numbers its packets, which is what protects against replays; whether the receiver enforces it cannot be seen.",
+    weak: "Repeated packet numbers were seen, which may mean packets were replayed.",
+    unknown: "We could not check whether replayed packets would be rejected.",
+  },
   Mode: {
     strong: "The entire package is hidden, not just what's inside it.",
     medium: "Only the contents are hidden; the addresses on the outside stay visible.",

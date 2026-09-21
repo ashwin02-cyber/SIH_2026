@@ -1,0 +1,35 @@
+.status {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+.status--observed { color: var(--risk-low); border-color: var(--risk-low); }
+.status--inferred { color: var(--accent); border-color: var(--accent); }
+.status--declared { color: var(--risk-medium); border-color: var(--risk-medium); }
+
+.meter { height: 10px; background: var(--surface-raised); border: 1px solid var(--border); border-radius: 5px; overflow: hidden; }
+.meter--thin { height: 6px; margin: 4px 0; }
+.meter__fill { height: 100%; background: var(--accent); }
+.meter__fill--warn { background: var(--risk-medium); }
+
+.assess__lead { margin: 12px 0; font-size: 13px; line-height: 1.5; }
+.assess__warn { margin: 10px 0; padding: 8px 10px; font-size: 12px; line-height: 1.4; border: 1px solid var(--risk-medium); border-radius: 4px; color: var(--risk-medium); }
+
+.findings, .exposure, .checks { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.findings__head, .exposure__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 13px; }
+.findings__title { font-weight: 600; }
+.findings__value { margin: 2px 0 0; font-family: var(--font-mono); font-size: 12px; }
+.findings__evidence { margin: 2px 0 0; font-size: 11px; line-height: 1.4; color: var(--text-muted); }
+.exposure__pts { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
+.checks__item { display: flex; gap: 10px; align-items: flex-start; }
+.checks__req { margin: 0; font-size: 12px; line-height: 1.4; }
+.result { flex-shrink: 0; min-width: 92px; text-align: center; font-family: var(--font-mono); font-size: 10px; padding: 2px 6px; border: 1px solid; border-radius: 3px; }
+.result--meets { color: var(--risk-low); }
+.result--does_not_meet { color: var(--risk-high); }
+.result--cannot_assess { color: var(--text-muted); }

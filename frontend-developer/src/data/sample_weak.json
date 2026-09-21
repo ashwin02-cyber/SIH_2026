@@ -1,7 +1,8 @@
 {
- "schema_version": "1.0",
+ "schema_version": "1.1",
  "filename": "aes128-dh2-transport-pfs-off__icmp_run1.pcap",
  "score": 30,
+ "raw_score": 30,
  "risk_level": "HIGH",
  "score_basis": "declared",
  "cipher": "AES-CBC-128",
@@ -14,6 +15,7 @@
   "pfs": "unknown",
   "mode": "declared"
  },
+ "confidence": {},
  "breakdown": [
   {
    "factor": "Cipher",
@@ -46,8 +48,352 @@
    "weight": 0.0,
    "source": "declared",
    "reason": "Transport mode leaves the original IP header visible; only the payload is encrypted."
+  },
+  {
+   "factor": "Integrity",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "not observable from packet sizes for this stream (for AEAD ciphers the 8/12/16-byte tag does not change the 4-byte alignment)"
+  },
+  {
+   "factor": "Key lifetime",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "not observable in this capture (no rekey - a new SPI in the same direction - was seen)"
+  },
+  {
+   "factor": "Replay protection",
+   "value": "sender uses a strictly increasing sequence counter",
+   "rating": "medium",
+   "weight": 0.0,
+   "source": "inferred",
+   "reason": "all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)"
   }
  ],
+ "assessment": {
+  "completeness_pct": 34.2,
+  "completeness_detail": [
+   {
+    "fact": "ike_version",
+    "label": "IKE version",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "protocol",
+    "label": "IPsec protocol (ESP / AH)",
+    "weight": 5,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "mode",
+    "label": "Tunnel or transport mode",
+    "weight": 10,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "cipher",
+    "label": "Cipher (algorithm / family)",
+    "weight": 15,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "key_length",
+    "label": "Key length",
+    "weight": 10,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "integrity",
+    "label": "Integrity protection",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "dh_group",
+    "label": "Key exchange (DH group)",
+    "weight": 15,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "pfs",
+    "label": "Perfect Forward Secrecy",
+    "weight": 15,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "auth_method",
+    "label": "Authentication method",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "key_lifetime",
+    "label": "SA / key lifetime",
+    "weight": 8,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "replay",
+    "label": "Replay protection",
+    "weight": 7,
+    "status": "inferred",
+    "known_fraction": 0.6
+   }
+  ],
+  "raw_score": 30,
+  "score_cap": 57,
+  "score_capped": false,
+  "adjustments": [],
+  "unknown_facts": [
+   "IKE version",
+   "Integrity protection",
+   "Perfect Forward Secrecy",
+   "Authentication method",
+   "SA / key lifetime"
+  ],
+  "findings": [
+   {
+    "id": "ike_version",
+    "title": "IKE version",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "no IKE_SA_INIT in this capture (encrypted IKE messages only, or none)"
+   },
+   {
+    "id": "protocol",
+    "title": "IPsec protocol (ESP / AH)",
+    "value": "ESP",
+    "status": "observed",
+    "confidence": 1.0,
+    "rating": "info",
+    "weight": 5,
+    "evidence": "18 ESP packets seen"
+   },
+   {
+    "id": "mode",
+    "title": "Tunnel or transport mode",
+    "value": "transport",
+    "status": "declared",
+    "confidence": null,
+    "rating": "medium",
+    "weight": 10,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "cipher",
+    "title": "Cipher (algorithm / family)",
+    "value": "AES-CBC-128",
+    "status": "declared",
+    "confidence": null,
+    "rating": "medium",
+    "weight": 15,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "key_length",
+    "title": "Key length",
+    "value": "128 bits",
+    "status": "declared",
+    "confidence": null,
+    "rating": "info",
+    "weight": 10,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "integrity",
+    "title": "Integrity protection",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "not observable from packet sizes for this stream (for AEAD ciphers the 8/12/16-byte tag does not change the 4-byte alignment)"
+   },
+   {
+    "id": "dh_group",
+    "title": "Key exchange (DH group)",
+    "value": "Group 2 (1024-bit MODP)",
+    "status": "declared",
+    "confidence": null,
+    "rating": "weak",
+    "weight": 15,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "pfs",
+    "title": "Perfect Forward Secrecy",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 15,
+    "evidence": "negotiated inside encrypted IKE messages; not observable passively"
+   },
+   {
+    "id": "auth_method",
+    "title": "Authentication method",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "pre-shared key vs certificate is negotiated in the encrypted IKE_AUTH exchange; not observable passively"
+   },
+   {
+    "id": "key_lifetime",
+    "title": "SA / key lifetime",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 8,
+    "evidence": "not observable in this capture (no rekey - a new SPI in the same direction - was seen)"
+   },
+   {
+    "id": "replay",
+    "title": "Replay protection",
+    "value": "sender uses a strictly increasing sequence counter",
+    "status": "inferred",
+    "confidence": 0.6,
+    "rating": "medium",
+    "weight": 7,
+    "evidence": "all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)",
+    "note": "receiver-side enforcement of the anti-replay window is not observable"
+   }
+  ],
+  "metadata_exposure": {
+   "score": 80,
+   "level": "HIGH",
+   "scale": "0 = an eavesdropper learns nothing, 100 = learns everything listed",
+   "items": [
+    {
+     "what": "Traffic type",
+     "weight": 30,
+     "exposed_fraction": 1.0,
+     "points": 30.0,
+     "learned": "ICMP (ping) (model confidence 100%)",
+     "why": "packet sizes and timing reveal what the tunnel is used for, even though the payload is encrypted"
+    },
+    {
+     "what": "Tunnel vs transport mode",
+     "weight": 10,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "undetermined",
+     "why": "extra inner IP header changes every packet size"
+    },
+    {
+     "what": "Cipher family",
+     "weight": 10,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "undetermined",
+     "why": "padding granularity (CBC vs AEAD) shows in the packet lengths"
+    },
+    {
+     "what": "Packet-size distribution",
+     "weight": 15,
+     "exposed_fraction": 1.0,
+     "points": 15.0,
+     "learned": "always visible",
+     "why": "ESP does not hide packet lengths unless padding is added"
+    },
+    {
+     "what": "Timing and volume",
+     "weight": 20,
+     "exposed_fraction": 1.0,
+     "points": 20.0,
+     "learned": "always visible",
+     "why": "packet times and byte counts are visible on the wire"
+    },
+    {
+     "what": "Communicating endpoints",
+     "weight": 15,
+     "exposed_fraction": 1.0,
+     "points": 15.0,
+     "learned": "the actual hosts",
+     "why": "outer IP addresses are always in clear; tunnel mode hides the real endpoints behind the gateways"
+    }
+   ],
+   "note": "IPsec cannot hide timing, volume or outer addresses; padding and dummy traffic reduce the traffic-type leak (see the defence simulation)."
+  },
+  "compliance": {
+   "label": "Guideline mapping against published guidance - NOT a certification or audit result",
+   "checks": [
+    {
+     "id": "nist-131a-tdea",
+     "guideline": "NIST SP 800-131A Rev. 2",
+     "requirement": "Three-key TDEA (3DES) is not acceptable for encryption after 2023",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "nist-aes",
+     "guideline": "NIST FIPS 197 / SP 800-38",
+     "requirement": "Use an approved block cipher (AES) and mode",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "nist-112bit-kex",
+     "guideline": "NIST SP 800-131A Rev. 2 / SP 800-57",
+     "requirement": "Key establishment with at least 112 bits of security strength (finite-field DH of at least 2048 bits)",
+     "result": "does_not_meet",
+     "evidence": "Group 2 (1024-bit MODP) is below 2048 bits",
+     "input_status": "declared"
+    },
+    {
+     "id": "rfc8221-esp-alg",
+     "guideline": "RFC 8221",
+     "requirement": "ESP encryption algorithm is one of the mandatory-to-implement AES-CBC or AES-GCM-16",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "rfc8247-group14",
+     "guideline": "RFC 8247",
+     "requirement": "IKEv2 MODP group 14 (2048-bit) is a mandatory-to-implement group",
+     "result": "cannot_assess",
+     "evidence": "only evaluated when group 14 is the negotiated group",
+     "input_status": "declared"
+    }
+   ],
+   "summary": {
+    "meets": 3,
+    "does_not_meet": 1,
+    "cannot_assess": 1
+   },
+   "not_evaluated": [
+    "NIST SP 800-77 Rev. 1 (Guide to IPsec VPNs): used as general background only; no individual requirement is encoded here.",
+    "RFC 8247 is encoded for one item only (IKEv2 group 14); other group requirement levels are not evaluated.",
+    "FIPS 140 module validation, key management, authentication strength and certificate policy are outside what a capture can show."
+   ]
+  },
+  "score_after_cap": 30,
+  "cap_rule": "score <= 35 + 65 x completeness (LOW needs a score of at least 80, i.e. completeness of at least 69%)",
+  "consistency_checks": []
+ },
  "traffic": {
   "class": "icmp",
   "label": "ICMP (ping)",
@@ -78,11 +424,11 @@
  "model_confidence": 1.0,
  "explanation": [
   "Overall security score 30/100 - high risk.",
-  "This rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
+  "Only 34% of the security facts that matter could be established from this capture.",
+  "The rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
   "Cipher - AES-CBC-128 - is rated medium. AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
   "DH group - Group 2 (1024-bit MODP) - is rated weak. 1024-bit MODP is considered too small against modern computing power.",
-  "Mode - transport - is rated medium. Transport mode leaves the original IP header visible; only the payload is encrypted.",
-  "Not determinable from this capture: PFS. These are left out of the score instead of being counted as weak.",
+  "Not determinable from this capture: PFS. They are left out of the raw score instead of being counted as weak, but they lower the completeness.",
   "The encrypted traffic looks like icmp (ping) (model confidence 100%).",
   "Largest packet size (typically 140) pushed the prediction towards 'icmp'.",
   "Variation in packet sizes (typically 0) pushed the prediction towards 'icmp'.",

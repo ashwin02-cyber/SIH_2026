@@ -19,6 +19,8 @@
       <p>
       {% if a.score is none %}
         This capture does not reveal how the VPN was configured, so its security cannot be rated from the traffic alone.
+      {% elif a.assessment.score_capped and a.raw_score is not none and a.raw_score >= 80 %}
+        The settings that could be checked are strong, but too little could be established from this capture to call the VPN low-risk.
       {% elif a.risk_level == "LOW" %}
         The VPN uses strong settings for everything that could be checked.
       {% elif a.risk_level == "MEDIUM" %}
@@ -32,6 +34,12 @@
   </tr>
 </table>
 
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>Assessment completeness: {{ a.assessment.completeness_pct|round|int }}%.</b>
+  Only this share of the security facts that matter could be established from the capture.
+  {% if a.assessment.score_capped %}The score is therefore <b>capped at {{ a.assessment.score_cap }}</b>; the facts that are known would alone give {{ a.raw_score }}.{% endif %}
+  {% if a.assessment.unknown_facts %}Not determinable: {{ a.assessment.unknown_facts|join(", ") }}.{% endif %}
+</div>
 {% if a.score_basis in ["declared", "mixed"] %}
 <div class="notice">
   <b>Important:</b> {% if a.score_basis == "declared" %}the settings below come from the VPN configuration named in the capture's file name (declared by the test setup), not from the traffic itself,{% else %}some of the settings below come from the capture's file name rather than the traffic itself,{% endif %}
@@ -48,7 +56,7 @@
     <td><b>{{ b.factor }}</b></td>
     <td>{{ b.value }}</td>
     <td><span class="badge" style="background-color:{{ rating_color[b.rating] }};">{{ b.rating|upper }}</span></td>
-    <td>{% if b.source == "observed" %}Read from the capture{% elif b.source == "declared" %}Declared by file name{% else %}Not determinable{% endif %}</td>
+    <td>{% if b.source == "observed" %}Read from the capture{% elif b.source == "inferred" %}Inferred from packet sizes{% elif b.source == "declared" %}Declared by file name{% else %}Not determinable{% endif %}</td>
   </tr>
   <tr><td colspan="4" class="muted" style="border-top:none;">{{ b.reason }}</td></tr>
   {% endfor %}
@@ -76,7 +84,7 @@ Best match: <b>{{ a.traffic.label }}</b> (model confidence {{ (a.traffic.confide
 
 <h2>What this report cannot tell you</h2>
 <ul>
-  <li>An IPsec capture only shows the cipher and key-exchange group when the start of the VPN negotiation was captured. Whether forward secrecy is on, and tunnel versus transport mode, are negotiated in an encrypted step and are not visible to an observer.</li>
+  <li>An IPsec capture only shows the cipher and key-exchange group when the start of the VPN negotiation was captured. Whether forward secrecy is on is negotiated in an encrypted step and is not visible to an observer. Tunnel versus transport mode and the cipher family (CBC or GCM) can only be estimated statistically from packet sizes, and are marked "inferred" with a confidence.</li>
   <li>The traffic-type label is a statistical guess from packet sizes and timing, trained on five scripted traffic types. It is not proof of what users did.</li>
 </ul>
 {% endblock %}

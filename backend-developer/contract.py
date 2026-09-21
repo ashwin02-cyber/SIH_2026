@@ -1,41 +1,45 @@
 """
 contract.py
-Builds THE response of POST /analyze (schema_version 1.0) from the IKE parser
-output and the ML result, and validates that any dict has that shape.
+Builds THE response of POST /analyze (schema_version 1.1) from the IKE parser output, the passive ESP analysis and
+the ML result, and validates that any dict has that shape.
 
 One shape, always (also when parts fail - failures go into `errors`):
 
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "filename": str,
-  "score": int 0-100 | null,               # security score, higher = safer
+  "score": int 0-100 | null,        # final score = raw score capped by assessment completeness
+  "raw_score": int | null,          # score from the facts that ARE known, before the completeness cap
   "risk_level": "LOW" | "MEDIUM" | "HIGH" | "UNKNOWN",
-  "score_basis": "observed" | "declared" | "mixed" | "none",
+  "score_basis": "observed" | "inferred" | "declared" | "mixed" | "none",
   "cipher": str, "mode": str, "dh_group": str, "pfs": str,   # plain display strings
-  "sources": {"cipher","mode","dh_group","pfs": "observed"|"declared"|"unknown"},
-  "breakdown": [ {factor, value, rating, weight, source, reason} ],   # what makes up the score
-  "traffic": {"class": str, "label": str, "confidence": float|null,
-              "probabilities": [ {name, value} ]},
+  "sources": {"cipher","mode","dh_group","pfs": "observed"|"inferred"|"declared"|"unknown"},
+  "confidence": {"cipher": float|null, "mode": float|null, ...},   # for inferred values
+  "breakdown": [ {factor, value, rating, weight, source, reason} ],
+  "assessment": { completeness_pct, completeness_detail, score_cap, score_capped, adjustments, unknown_facts,
+                  findings[ {id,title,value,status,confidence,rating,evidence} ], metadata_exposure, compliance, ... },
+  "traffic": {"class", "label", "confidence", "probabilities": [...]} | null,
   "model_confidence": float | null,
-  "explanation": [str, ...],               # plain sentences for a non-expert
+  "explanation": [str, ...],
   "anomalies": [ {severity, name, description} ],
   "timeline": [ {window, start_sec, end_sec, class, label, confidence, packets, bytes} ],
-  "capture": {packets, bytes, span_sec, windows, window_sec, esp_only, truncated} | null,
-  "details": {"ike": <raw ike_parser output> | null, "esp_fingerprint": <passive ESP fingerprint> | null,
-                                                "esp_sequence": <SPI/sequence analysis> | null},
+  "capture": {...} | null,
+  "details": {"ike": ..., "esp_fingerprint": ..., "esp_sequence": ..., ...},
   "warnings": [str, ...],
   "errors": [str, ...]
 }
 """
 
+from assessment import assess
 from config_hint import declared_config_from_filename
 from ike_parser import DH_GROUP_LABELS
 from scoring_engine import FACTOR_WEIGHT, score_ike_facts
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 RISK_LEVELS = ("LOW", "MEDIUM", "HIGH", "UNKNOWN")
-RATINGS = ("strong", "medium", "weak", "unknown")
+RATINGS = ("strong", "medium", "weak", "unknown", "info")
 SEVERITIES = ("HIGH", "MEDIUM", "LOW")
+SOURCES = ("observed", "inferred", "declared", "unknown")
 
 TRAFFIC_LABELS = {
     "web_browsing": "Web browsing",
@@ -43,15 +47,22 @@ TRAFFIC_LABELS = {
     "voip": "VoIP",
     "file_transfer": "File transfer",
     "icmp": "ICMP (ping)",
+    "unrecognised": "Unrecognised traffic",
 }
 
 REQUIRED_KEYS = {
-    "schema_version": str, "filename": str, "score": (int, type(None)), "risk_level": str,
-    "score_basis": str, "cipher": str, "mode": str, "dh_group": str, "pfs": str, "sources": dict,
-    "breakdown": list, "traffic": (dict, type(None)), "model_confidence": (float, int, type(None)),
+    "schema_version": str, "filename": str, "score": (int, type(None)), "raw_score": (int, type(None)), "risk_level": str,
+    "score_basis": str, "cipher": str, "mode": str, "dh_group": str, "pfs": str, "sources": dict, "confidence": dict,
+    "breakdown": list, "assessment": dict, "traffic": (dict, type(None)), "model_confidence": (float, int, type(None)),
     "explanation": list, "anomalies": list, "timeline": list, "capture": (dict, type(None)),
     "details": dict, "warnings": list, "errors": list,
 }
+
+
+def risk_from_score(score):
+    if score is None:
+        return "UNKNOWN"
+    return "LOW" if score >= 80 else "MEDIUM" if score >= 50 else "HIGH"
 
 
 def traffic_label(cls):
@@ -82,13 +93,28 @@ def _mode_rating(mode):
     return "unknown", "Tunnel/transport mode is negotiated inside the encrypted exchange and was not observable."
 
 
-def merge_facts(filename, ike_facts):
-    """Choose, per property, the observed value if there is one, else the value declared
-    by the testbed file name, else unknown. Returns (facts_for_scoring, sources)."""
+_FAMILY_TO_CIPHER = {"CBC": "AES-CBC", "GCM": "AES-GCM-16"}
+
+
+def merge_facts(filename, ike_facts, esp_fp=None):
+    """Choose, per property, the best available source.
+
+        mode:            observed > inferred (packet sizes, with confidence) > declared (file name) > unknown
+        cipher:          observed > declared > inferred family (key length unknown) > unknown
+        DH group / PFS:  observed > declared > unknown   (not observable passively)
+
+    File names are used ONLY for the `declared` fallback; the inferred values come from packet sizes alone.
+    Returns (facts_for_scoring, sources); facts["_conf"] holds confidences for inferred values and
+    facts["_consistency"] the cross-checks between declared and inferred values.
+    """
     ike_facts = ike_facts or {}
     ike_sa = ike_facts.get("ike_sa") or {}
     esp_sa = ike_facts.get("esp_sa") or {}
     declared = declared_config_from_filename(filename) or {}
+    fp = esp_fp or {}
+    fam_fp, mode_fp = fp.get("cipher_family") or {}, fp.get("mode") or {}
+    inferred_family = next((f for f in ("CBC", "GCM") if str(fam_fp.get("value", "")).startswith(f)), None)
+    inferred_mode = mode_fp.get("value") if mode_fp.get("value") in ("tunnel", "transport") else None
 
     obs_cipher = esp_sa.get("cipher") or ike_sa.get("cipher")
     obs_bits = esp_sa.get("key_length_bits") or ike_sa.get("key_length_bits")
@@ -96,11 +122,14 @@ def merge_facts(filename, ike_facts):
     obs_pfs = esp_sa.get("pfs")
     obs_mode = ike_facts.get("mode", "unknown")
 
-    sources = {}
+    sources, conf = {}, {}
     if obs_cipher:
         cipher, bits, sources["cipher"] = obs_cipher, obs_bits, "observed"
     elif declared:
         cipher, bits, sources["cipher"] = declared["cipher"], declared["key_length_bits"], "declared"
+    elif inferred_family:
+        cipher, bits, sources["cipher"] = _FAMILY_TO_CIPHER[inferred_family], None, "inferred"
+        conf["cipher"] = fam_fp.get("confidence")
     else:
         cipher, bits, sources["cipher"] = None, None, "unknown"
 
@@ -120,10 +149,23 @@ def merge_facts(filename, ike_facts):
 
     if obs_mode in ("tunnel", "transport"):
         mode, sources["mode"] = obs_mode, "observed"
+    elif inferred_mode:
+        mode, sources["mode"] = inferred_mode, "inferred"
+        conf["mode"] = mode_fp.get("confidence")
     elif declared:
         mode, sources["mode"] = declared["mode"], "declared"
     else:
         mode, sources["mode"] = "unknown", "unknown"
+
+    # cross-check declared (file name) values against what the packet sizes say
+    consistency = []
+    if declared and inferred_family:
+        declared_family = "GCM" if declared["cipher"] == "AES-GCM-16" else "CBC"
+        consistency.append({"item": "cipher family", "declared": declared_family, "inferred": inferred_family,
+                            "agree": declared_family == inferred_family})
+    if declared and inferred_mode:
+        consistency.append({"item": "mode", "declared": declared["mode"], "inferred": inferred_mode,
+                            "agree": declared["mode"] == inferred_mode})
 
     facts = {
         "ike_version": ike_facts.get("ike_version", "unknown"),
@@ -131,73 +173,82 @@ def merge_facts(filename, ike_facts):
         "ike_sa": {"cipher": cipher, "key_length_bits": bits, "dh_group": dh},
         "esp_sa": {"pfs": pfs} if pfs is not None else None,
         "warnings": [],
+        "_conf": conf,
+        "_consistency": consistency,
     }
     return facts, sources
 
 
-def _score_basis(sources, breakdown):
+def _score_basis(breakdown):
     used = {b["source"] for b in breakdown if b["weight"] > 0 and b["rating"] != "unknown"}
     if not used:
         return "none"
-    if used == {"observed"}:
-        return "observed"
-    if used == {"declared"}:
-        return "declared"
-    return "mixed"
+    return next(iter(used)) if len(used) == 1 else "mixed"
 
 
-def build_explanation(score, risk, basis, breakdown, traffic, ml_explanation, sources):
+def build_explanation(score, raw, risk, basis, breakdown, traffic, ml_explanation, assessment, consistency):
     lines = []
     if score is None:
-        lines.append("A security score could not be calculated because the capture does not reveal "
-                     "the cipher or Diffie-Hellman group.")
+        lines.append("A security score could not be calculated because the capture does not reveal the cipher or Diffie-Hellman group.")
     else:
         lines.append(f"Overall security score {score}/100 - {risk.lower()} risk.")
+        lines.append(f"Only {assessment['completeness_pct']:.0f}% of the security facts that matter could be established from this capture"
+                     + (f", so the score is capped at {assessment['score_cap']} (the facts that are known alone would give {raw})."
+                        if assessment["score_capped"] else "."))
         if basis == "declared":
-            lines.append("This rating uses the VPN configuration named in the capture's file name "
-                         "(declared by the testbed), because the capture itself does not contain the "
-                         "readable IKE negotiation.")
+            lines.append("The rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture "
+                         "itself does not contain the readable IKE negotiation.")
+        elif basis == "inferred":
+            lines.append("The rating uses values inferred from packet sizes (see the confidence figures).")
         elif basis == "mixed":
-            lines.append("Some rated values were observed in the capture and others come from the "
-                         "testbed file name.")
+            lines.append("Rated values come from more than one source (observed, inferred from packet sizes, or declared by the testbed file name).")
     for b in breakdown:
-        if b["rating"] in ("weak", "medium"):
+        if b["weight"] > 0 and b["rating"] in ("weak", "medium"):
             lines.append(f"{b['factor']} - {b['value']} - is rated {b['rating']}. {b['reason']}")
     unknown = [b["factor"] for b in breakdown if b["rating"] == "unknown" and b["weight"] > 0]
     if unknown:
         lines.append(f"Not determinable from this capture: {', '.join(unknown)}. "
-                     "These are left out of the score instead of being counted as weak.")
+                     "They are left out of the raw score instead of being counted as weak, but they lower the completeness.")
+    for c in consistency:
+        if not c["agree"]:
+            lines.append(f"Warning: the file name declares {c['item']} = {c['declared']}, but the packet sizes suggest {c['inferred']}. "
+                         "The declared value may be wrong, or the inference may be.")
     if traffic:
-        lines.append(f"The encrypted traffic looks like {traffic['label'].lower()} "
-                     f"(model confidence {traffic['confidence']:.0%}).")
+        if traffic["class"] == "unrecognised":
+            lines.append(f"The traffic pattern does not match any of the trained traffic types well enough (closest: "
+                         f"{str(traffic.get('nearest_label', 'n/a')).lower()}, confidence {traffic['confidence']:.0%}), so it is reported as unrecognised.")
+        else:
+            lines.append(f"The encrypted traffic looks like {traffic['label'].lower()} (model confidence {traffic['confidence']:.0%}).")
     for item in ml_explanation or []:
         if isinstance(item, dict) and item.get("text"):
             lines.append(item["text"])
     return lines
 
 
-def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, esp=None):
-    """Assemble the contract response. Never raises; problems become `errors` / `warnings`."""
+def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, esp=None, extras=None):
+    """Assemble the contract response. Never raises; problems become `errors` / `warnings`.
+    `extras` (dict) is merged into `details` (e.g. the defence simulation)."""
     errors = list(errors or [])
     warnings = list(warnings or [])
+    esp = esp or {}
 
-    facts, sources = merge_facts(filename, ike_facts)
+    facts, sources = merge_facts(filename, ike_facts, esp.get("fingerprint"))
+    conf, consistency = facts["_conf"], facts["_consistency"]
     risk = score_ike_facts(facts)
     factors = risk["factors"]
 
     mode_rating, mode_reason = _mode_rating(facts["mode"])
+    cipher_value = _cipher_string(facts["ike_sa"]["cipher"], facts["ike_sa"]["key_length_bits"])
+    if sources["cipher"] == "inferred":
+        cipher_value = f"{cipher_value} family (key length unknown)"
     breakdown = [
-        {"factor": "Cipher", "value": _cipher_string(facts["ike_sa"]["cipher"], facts["ike_sa"]["key_length_bits"]),
-         "rating": factors["cipher"]["rating"], "weight": FACTOR_WEIGHT["cipher"],
+        {"factor": "Cipher", "value": cipher_value, "rating": factors["cipher"]["rating"], "weight": FACTOR_WEIGHT["cipher"],
          "source": sources["cipher"], "reason": factors["cipher"]["reason"]},
-        {"factor": "DH group", "value": _dh_string(facts["ike_sa"]["dh_group"]),
-         "rating": factors["dh_group"]["rating"], "weight": FACTOR_WEIGHT["dh_group"],
-         "source": sources["dh_group"], "reason": factors["dh_group"]["reason"]},
-        {"factor": "PFS", "value": _pfs_string((facts["esp_sa"] or {}).get("pfs")),
-         "rating": factors["pfs"]["rating"], "weight": FACTOR_WEIGHT["pfs"],
-         "source": sources["pfs"], "reason": factors["pfs"]["reason"]},
-        {"factor": "Mode", "value": facts["mode"], "rating": mode_rating, "weight": 0.0,
-         "source": sources["mode"], "reason": mode_reason},
+        {"factor": "DH group", "value": _dh_string(facts["ike_sa"]["dh_group"]), "rating": factors["dh_group"]["rating"],
+         "weight": FACTOR_WEIGHT["dh_group"], "source": sources["dh_group"], "reason": factors["dh_group"]["reason"]},
+        {"factor": "PFS", "value": _pfs_string((facts["esp_sa"] or {}).get("pfs")), "rating": factors["pfs"]["rating"],
+         "weight": FACTOR_WEIGHT["pfs"], "source": sources["pfs"], "reason": factors["pfs"]["reason"]},
+        {"factor": "Mode", "value": facts["mode"], "rating": mode_rating, "weight": 0.0, "source": sources["mode"], "reason": mode_reason},
     ]
 
     traffic = timeline = anomalies = capture = None
@@ -211,6 +262,10 @@ def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, e
                 ({"name": traffic_label(k), "value": v} for k, v in ml_result["class_probabilities"].items()),
                 key=lambda d: d["value"], reverse=True),
         }
+        if cls == "unrecognised":
+            traffic["nearest_class"] = ml_result.get("nearest_class")
+            traffic["nearest_label"] = traffic_label(ml_result.get("nearest_class"))
+            traffic["rejection_reason"] = ml_result.get("rejection_reason")
         model_confidence = ml_result["confidence"]
         ml_explanation = ml_result.get("explanation", [])
         anomalies = ml_result.get("anomalies", [])
@@ -222,37 +277,57 @@ def build_response(filename, ike_facts, ml_result, errors=None, warnings=None, e
         errors.append(f"Traffic classification: {ml_result['error']}")
 
     warnings += (ike_facts or {}).get("warnings", [])
-    basis = _score_basis(sources, breakdown)
+
+    ctx = {"facts": facts, "sources": sources, "conf": conf, "ike": ike_facts, "fp": esp.get("fingerprint"),
+           "seq": esp.get("sequence"), "traffic": traffic,
+           "ratings": {"cipher": factors["cipher"]["rating"], "dh_group": factors["dh_group"]["rating"], "pfs": factors["pfs"]["rating"]}}
+    assessment = assess(ctx, risk["overall_score"])
+    assessment["consistency_checks"] = consistency
+
+    # informational rows in the threat matrix (weight 0: shown, not scored)
+    by_id = {f["id"]: f for f in assessment["findings"]}
+    for fid, factor in (("integrity", "Integrity"), ("key_lifetime", "Key lifetime"), ("replay", "Replay protection")):
+        f = by_id[fid]
+        breakdown.append({"factor": factor, "value": f["value"], "rating": f["rating"], "weight": 0.0,
+                          "source": f["status"], "reason": f["evidence"]})
+
+    score = assessment["score_after_cap"]
+    basis = _score_basis(breakdown)
+    for c in consistency:
+        if not c["agree"]:
+            warnings.append(f"Declared {c['item']} ({c['declared']}) disagrees with the packet-size inference ({c['inferred']}).")
 
     return {
         "schema_version": SCHEMA_VERSION,
         "filename": filename,
-        "score": risk["overall_score"],
-        "risk_level": risk["risk_level"],
+        "score": score,
+        "raw_score": risk["overall_score"],
+        "risk_level": risk_from_score(score),
         "score_basis": basis,
         "cipher": breakdown[0]["value"],
         "mode": facts["mode"],
         "dh_group": breakdown[1]["value"],
         "pfs": breakdown[2]["value"],
         "sources": sources,
+        "confidence": {k: (round(v, 3) if v is not None else None) for k, v in conf.items()},
         "breakdown": breakdown,
+        "assessment": assessment,
         "traffic": traffic,
         "model_confidence": model_confidence,
-        "explanation": build_explanation(risk["overall_score"], risk["risk_level"], basis, breakdown,
-                                         traffic, ml_explanation, sources),
+        "explanation": build_explanation(score, risk["overall_score"], risk_from_score(score), basis, breakdown, traffic, ml_explanation,
+                                         assessment, consistency),
         "anomalies": anomalies or [],
         "timeline": timeline or [],
         "capture": capture,
-        "details": {"ike": ike_facts, "esp_fingerprint": (esp or {}).get("fingerprint"),
-                    "esp_sequence": (esp or {}).get("sequence")},
-        "warnings": list(dict.fromkeys(warnings)),  # de-duplicate, keep order
+        "details": {"ike": ike_facts, "esp_fingerprint": esp.get("fingerprint"), "esp_sequence": esp.get("sequence"), **(extras or {})},
+        "warnings": list(dict.fromkeys(warnings)),
         "errors": errors,
     }
 
 
 def validate_response(resp):
-    """Returns a list of problems (empty list = valid). Used by tests for the real
-    response AND for the bundled frontend mocks, so they cannot drift apart."""
+    """Returns a list of problems (empty list = valid). Used by tests for the real response AND for the
+    bundled frontend mocks, so they cannot drift apart."""
     problems = []
     if not isinstance(resp, dict):
         return ["response is not an object"]
@@ -272,21 +347,35 @@ def validate_response(resp):
         problems.append("score out of range")
     if (resp["score"] is None) != (resp["risk_level"] == "UNKNOWN"):
         problems.append("score/risk_level inconsistent")
+    if resp["score"] is not None and resp["raw_score"] is not None and resp["score"] > resp["raw_score"]:
+        problems.append("score exceeds raw_score (the completeness cap can only lower it)")
+    a = resp["assessment"]
+    for k in ("completeness_pct", "score_cap", "findings", "metadata_exposure", "compliance", "unknown_facts"):
+        if k not in a:
+            problems.append(f"assessment missing {k}")
+    if "completeness_pct" in a and resp["score"] is not None and a.get("score_cap") is not None and resp["score"] > a["score_cap"]:
+        problems.append("score exceeds the completeness cap")
+    if resp["risk_level"] == "LOW" and a.get("completeness_pct", 0) < 69:
+        problems.append("LOW risk with assessment completeness below 69%")
+    for f in a.get("findings", []):
+        if not {"id", "title", "value", "status", "confidence", "rating", "evidence"} <= set(f) or f["status"] not in SOURCES:
+            problems.append("bad finding")
     for k in ("cipher", "mode", "dh_group", "pfs"):
         if not resp[k]:
             problems.append(f"{k} is empty (use 'unknown')")
-    for k in ("cipher", "mode", "dh_group", "pfs"):
-        if resp["sources"].get(k) not in ("observed", "declared", "unknown"):
+        if resp["sources"].get(k) not in SOURCES:
             problems.append(f"bad source for {k}")
     for b in resp["breakdown"]:
         if not {"factor", "value", "rating", "weight", "source", "reason"} <= set(b):
             problems.append("breakdown item missing keys")
         elif b["rating"] not in RATINGS:
             problems.append("bad rating")
+        elif b["source"] not in SOURCES:
+            problems.append("bad breakdown source")
     if not all(isinstance(s, str) for s in resp["explanation"] + resp["warnings"] + resp["errors"]):
         problems.append("explanation/warnings/errors must be plain strings")
-    for a in resp["anomalies"]:
-        if not {"severity", "name", "description"} <= set(a) or a["severity"] not in SEVERITIES:
+    for a_ in resp["anomalies"]:
+        if not {"severity", "name", "description"} <= set(a_) or a_["severity"] not in SEVERITIES:
             problems.append("bad anomaly item")
     for seg in resp["timeline"]:
         if not {"window", "start_sec", "end_sec", "class", "label", "confidence"} <= set(seg):
