@@ -142,42 +142,72 @@ def compute_features(flow_packets):
 
 
 # ── Innovation 1: SHAP Explainability ────────────────────────────────────────
-def explain_prediction(feature_row_df):
+_explainer = None
+
+
+def _get_explainer():
+    global _explainer
+    if _explainer is None:
+        _explainer = shap.TreeExplainer(model)
+    return _explainer
+
+
+def shap_matrix(shap_values, n_features):
+    """Normalise whatever shap returns into an array of shape
+    (n_rows, n_features, n_classes).
+
+    Depending on the shap version / model, shap_values is either
+      * a list of n_classes arrays, each (n_rows, n_features), or
+      * one ndarray (n_rows, n_features, n_classes), or
+      * one ndarray (n_rows, n_classes, n_features), or
+      * one ndarray (n_rows, n_features) for a single output.
+    Getting the axes wrong silently pairs feature names with the wrong
+    numbers (the old code flattened a (1, 12, 5) array and zipped it with 12
+    names), so the feature axis is located explicitly here.
     """
-    Uses SHAP to explain which features most influenced the prediction.
-    Returns top 3 features with human-readable descriptions.
+    if isinstance(shap_values, list):
+        return np.stack([np.asarray(sv) for sv in shap_values], axis=-1)
+    arr = np.asarray(shap_values)
+    if arr.ndim == 2:
+        return arr[:, :, np.newaxis]
+    if arr.ndim != 3:
+        raise ValueError(f"Unexpected SHAP output shape {arr.shape}")
+    if arr.shape[1] == n_features:
+        return arr
+    if arr.shape[2] == n_features:
+        return np.transpose(arr, (0, 2, 1))
+    raise ValueError(f"SHAP output {arr.shape} does not match {n_features} features")
+
+
+def explain_prediction(feature_row_df, class_index=None, top_n=3):
+    """
+    Uses SHAP to explain which features pushed the model towards the
+    predicted class. `feature_row_df` is a one-row DataFrame whose columns
+    are the model's FEATURE_COLS. `class_index` is the position of the class
+    in model.classes_ (defaults to the model's own prediction).
+
+    Returns the top features, each with a signed SHAP value for that class:
+    positive = pushed towards the class, negative = pushed away.
     """
     try:
-        explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(feature_row_df)
+        cols = list(feature_row_df.columns)
+        sv = shap_matrix(_get_explainer().shap_values(feature_row_df), len(cols))
+        if class_index is None:
+            class_index = int(np.argmax(model.predict_proba(feature_row_df)[0]))
+        contrib = sv[0, :, class_index]
 
-        # shap_values shape: (n_classes, n_rows, n_features) for XGBoost
-        # Get absolute mean SHAP value per feature across all classes
-        if isinstance(shap_values, list):
-            mean_abs_shap = np.mean(
-                [np.abs(sv) for sv in shap_values], axis=0
-            ).flatten()
-        else:
-            mean_abs_shap = np.abs(shap_values).mean(axis=0).flatten()
-
-        # Rank features by importance
-        feature_importance = sorted(
-            zip(FEATURE_COLS, mean_abs_shap),
-            key=lambda x: x[1], reverse=True
-        )
-
-        # Build human-readable explanation
+        ranked = sorted(zip(cols, contrib), key=lambda x: abs(x[1]), reverse=True)
         explanation = []
-        for feature, importance in feature_importance[:3]:
-            value = float(feature_row_df[feature].iloc[0])
-            level = "high" if importance > 0.1 else "medium" if importance > 0.01 else "low"
+        for feature, c in ranked[:top_n]:
+            mag = abs(float(c))
             explanation.append({
                 "feature": feature,
-                "description": FEATURE_DESCRIPTIONS[feature],
-                "value": round(value, 4),
-                "influence": level
+                "description": FEATURE_DESCRIPTIONS.get(feature, feature),
+                "value": round(float(feature_row_df[feature].iloc[0]), 4),
+                "shap_value": round(float(c), 4),
+                "direction": "towards" if c >= 0 else "away from",
+                "influence": "high" if mag > 0.1 else "medium" if mag > 0.01 else "low",
             })
-
         return explanation
 
     except Exception as e:
@@ -274,7 +304,7 @@ def predict_from_pcap(pcap_path):
     dominant_idx = max(range(len(all_features)),
                        key=lambda i: all_features[i]['packet_count'])
     dominant_row = df.iloc[[dominant_idx]]
-    explanation = explain_prediction(dominant_row)
+    explanation = explain_prediction(dominant_row, class_index=class_index)
 
     # Anomaly detection on dominant flow
     anomalies = detect_anomalies(all_features[dominant_idx])
@@ -294,8 +324,20 @@ def predict_from_pcap(pcap_path):
 
 
 def predict_from_features(feature_dict):
-    """Simple single-row prediction for Backend Developer."""
+    """Simple single-row prediction for the Backend Developer.
+
+    feature_dict must contain every column in FEATURE_COLS.
+    Returns {"class": str, "confidence": float, "probabilities": {class: p}}.
+    """
+    missing = [c for c in FEATURE_COLS if c not in feature_dict]
+    if missing:
+        raise ValueError(f"Missing feature(s): {', '.join(missing)}")
     df = pd.DataFrame([feature_dict])[FEATURE_COLS]
-    prediction = model.predict(df)[0]
     probabilities = model.predict_proba(df)[0]
-    confidence = float(probabilities.max())
+    best = int(np.argmax(probabilities))
+    labels = le.inverse_transform(model.classes_).tolist()
+    return {
+        "class": labels[best],
+        "confidence": round(float(probabilities[best]), 4),
+        "probabilities": {lab: round(float(p), 4) for lab, p in zip(labels, probabilities)},
+    }
