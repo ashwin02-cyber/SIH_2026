@@ -15,6 +15,7 @@ then open http://127.0.0.1:8000/docs for the interactive Swagger UI.
 
 Environment variables (all optional):
     ALLOWED_ORIGINS   comma-separated CORS origins, default "*"  (set to your Vercel/Netlify URL when deployed)
+    ALLOWED_ORIGIN_REGEX  regex for origins not known in advance (VS Code port forwarding: https://.*[.]devtunnels[.]ms)
     MAX_UPLOAD_MB     upload size limit, default 50
     SIH_SAMPLES_DIR   folder with sample pcaps, default <repo>/data/samples
 """
@@ -52,13 +53,19 @@ ALLOWED_EXT = (".pcap", ".pcapng")
 
 app = FastAPI(title="IPsec VPN Analyzer API", version="1.0.0")
 
-_origins = [o.strip() for o in os.environ.get("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=_origins,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+def cors_settings(environ):
+    """CORS options from the environment.
+    ALLOWED_ORIGINS       comma-separated exact origins (default "*" = any)
+    ALLOWED_ORIGIN_REGEX  optional regular expression for origins whose name is not known in advance, e.g.
+                          VS Code port forwarding:  https://.*[.]devtunnels[.]ms
+    """
+    origins = [o.strip() for o in environ.get("ALLOWED_ORIGINS", "*").split(",") if o.strip()]
+    return {"allow_origins": origins, "allow_origin_regex": environ.get("ALLOWED_ORIGIN_REGEX") or None,
+            "allow_methods": ["*"], "allow_headers": ["*"]}
+
+
+app.add_middleware(CORSMiddleware, **cors_settings(os.environ))
 
 
 @app.get("/health")

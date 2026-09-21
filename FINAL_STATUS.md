@@ -16,7 +16,7 @@ Branch `finish-project`, one local commit per stage, **nothing pushed**. Everyth
 | 8 Packaging | Dockerfiles, root `docker-compose.yml`, `render.yaml`, `railway.json`, `vercel.json`, `netlify.toml`, `DEPLOY.md`, `data/samples` (10 real pcaps) + manifest. | fresh-venv API run from a Docker-like layout (see A7, `DEPLOY.md`) |
 | 9 Docs | Root README, technical documentation + architecture diagram, `integration-docs-lead/`, `.pptx` (12 slides, rendered in real PowerPoint and checked), video script, sample assessment from a real pcap. | `tests/test_docs.py` |
 
-**Automated tests: 95 passed, 0 failed** (`pytest tests`). Also passing: `npm run lint`, `npm run build`, `tools/e2e_check.py`.
+**Automated tests: 110 passed, 0 failed** (`pytest tests`). Also passing: `npm run lint`, `npm run build`, `tools/e2e_check.py`.
 
 ## 2. Real ML metrics (from `ml-engineer/metrics.json`)
 

@@ -49,7 +49,7 @@ Then upload a file from `data/samples/` or click a sample button. Or run both wi
 | `reports/` | Jinja2 templates + `report_builder.py` (HTML → PDF with xhtml2pdf) |
 | `docker/strongswan/`, `traffic-engineer/` | the two-peer VPN testbed and the capture orchestration |
 | `data/` | small real sample captures + manifest (the full 216-pcap dataset is not in git) |
-| `tests/` | 95 automated tests (`pytest`), synthetic IKE fixtures in `tests/fixtures/` (**labelled synthetic**) |
+| `tests/` | 110 automated tests (`pytest`), synthetic IKE fixtures in `tests/fixtures/` (**labelled synthetic**) |
 | `tools/` | e2e browser check, diagram/sample-report/deck generators |
 | `docs/` | technical documentation, architecture diagram, sample reports, video script, slides |
 | `integration-docs-lead/` | integration guide, test report, decisions log, run book |
@@ -64,7 +64,7 @@ Details: [backend-developer/api_contract.md](backend-developer/api_contract.md).
 ## Tests
 
 ```powershell
-.\venv\Scripts\python.exe -m pytest tests -q          # 95 tests
+.\venv\Scripts\python.exe -m pytest tests -q          # 110 tests
 cd frontend-developer; npm run lint; npm run build      # both pass
 .\venv\Scripts\python.exe tools\e2e_check.py           # real browser: upload → results → PDF download (needs requirements-dev.txt)
 ```

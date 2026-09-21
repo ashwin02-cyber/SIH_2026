@@ -109,7 +109,7 @@ Fixes made (not yet run against real containers — Docker was unavailable): PFS
 Uploads are size-capped and streamed to a temp file that is deleted in a `finally`; only `.pcap/.pcapng`; the parser never executes anything from the file and bounds-checks every read; report HTML is auto-escaped (tested with `<script>` in a file name); no data is persisted; error messages do not leak stack traces. Not implemented: authentication and rate limiting (add before exposing publicly at scale).
 
 ## 10. Testing
-95 pytest tests: IKE parser (synthetic fixtures, truncation, header validation), scoring, ML (SHAP shapes, windowing, ESP-only, no banned features), contract, API (real samples, declared-vs-observed, error cases, size limit), reports (real PDFs, text checked), testbed configs and orchestration order (fake Docker), docs. Plus `tools/e2e_check.py` (real Edge browser: upload → results → PDF download). Frontend: `npm run lint` and `npm run build` pass.
+110 pytest tests: IKE parser (synthetic fixtures, truncation, header validation), scoring, ML (SHAP shapes, windowing, ESP-only, no banned features), contract, API (real samples, declared-vs-observed, error cases, size limit), reports (real PDFs, text checked), testbed configs and orchestration order (fake Docker), docs. Plus `tools/e2e_check.py` (real Edge browser: upload → results → PDF download). Frontend: `npm run lint` and `npm run build` pass.
 
 ## 11. Future work
 Re-run the fixed testbed (real IKE_SA_INIT, real PFS labels, 30 s captures, multiple runs); add real-world/non-scripted traffic; live capture; IKEv1 decoding; authentication and rate limiting; retrain and re-evaluate after re-capture.

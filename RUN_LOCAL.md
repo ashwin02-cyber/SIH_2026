@@ -62,3 +62,60 @@ cd E:\SIH\SIH_2026\SIH_2026_full\frontend-developer; npm run build; cd ..
 .\venv\Scripts\python.exe tools\e2e_check.py      # needs: pip install -r requirements-dev.txt
 ```
 It starts its own servers on ports 8000/4173 — stop the ones above first.
+
+---
+
+## Share it with VS Code port forwarding
+
+VS Code can publish your two local servers on the internet (a "Dev Tunnel") so someone else can open the site
+in their browser. You share **one link: the forwarded 5173 address**. The site works out the forwarded 8000
+address (the API) by itself, so nothing needs to be typed into the code.
+
+### 1. Start the servers in "sharing mode" (replaces the two windows above)
+
+**Window 1 — backend** (allows the forwarded addresses in CORS)
+```powershell
+cd E:\SIH\SIH_2026\SIH_2026_full\backend-developer
+$env:ALLOWED_ORIGINS = "http://127.0.0.1:5173,http://localhost:5173"
+$env:ALLOWED_ORIGIN_REGEX = 'https://.*\.devtunnels\.ms|https://.*\.app\.github\.dev'
+..\venv\Scripts\python.exe -m uvicorn main:app --host 127.0.0.1 --port 8000
+```
+
+**Window 2 — website** (a production build is steadier through a tunnel than the dev server)
+```powershell
+cd E:\SIH\SIH_2026\SIH_2026_full\frontend-developer
+npm run build
+npm run preview -- --host 127.0.0.1 --port 5173 --strictPort
+```
+(Back to the live-reloading dev server later: stop this and run `npm run dev -- --host 127.0.0.1 --port 5173 --strictPort`.)
+
+### 2. Forward the two ports in VS Code
+1. Open the **Ports** tab (bottom panel; if you can't see it: menu **View → Terminal**, then the **PORTS** tab).
+2. Click **Forward a Port**, type `8000`, press Enter. Do the same for `5173`.
+   (VS Code may ask you to sign in with GitHub or Microsoft the first time.)
+3. **Make both public, otherwise your friend must log in to your account:** right-click each row →
+   **Port Visibility → Public**.
+4. In the **Forwarded Address** column of the **5173** row you will see an address like
+   `https://<random-name>-5173.<region>.devtunnels.ms`. **That is the link to share.**
+   (The 8000 row looks the same with `-8000`; you do not share that one.)
+
+### 3. Test it yourself first
+Open the 5173 forwarded address in a **private/incognito window** (so you see what your friend sees).
+* The first time, the tunnel may show a grey "Continue" warning page - click **Continue**.
+* The top right must say **● Analysis engine ready**. Then follow the 5-step checklist above.
+* Also open the **8000** forwarded address once and click **Continue** if a warning page appears (`.../health` should show `"status":"ok"`).
+
+### If it says "Analysis engine offline"
+* Both ports must be **Public** (step 2.3) and both servers must be running in sharing mode (step 1).
+* Refresh after the servers start. Check the backend window for errors.
+* Only if you want to force a specific API address: open `frontend-developer\.env.local` (git-ignored, local only),
+  paste `VITE_API_URL=<the 8000 forwarded address>`, run `npm run build` again and restart the preview.
+  **Never put that address in `.env`, `.env.example` or any committed file** - `.env.local` is never committed or deployed.
+
+### Check it without a real tunnel
+```powershell
+cd E:\SIH\SIH_2026\SIH_2026_full
+.\venv\Scripts\python.exe tools\tunnel_check.py     # servers must be running in sharing mode
+```
+It pretends the site is at a `...-5173...devtunnels.ms` address and checks, in a real browser, that the site finds the API,
+that CORS passes and that a sample analysis and the PDF download work.

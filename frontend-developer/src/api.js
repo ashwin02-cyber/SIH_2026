@@ -1,8 +1,19 @@
 // All communication with the FastAPI backend lives here.
 // The base URL comes from VITE_API_URL (see .env / .env.example). On Vercel/Netlify set it
 // in the project's environment-variable settings; it is baked in at build time.
+// When the site is opened through VS Code port forwarding, the API address is derived from the page
+// address instead (see apiUrl.js), so no rebuild is needed for a new forwarded hostname.
 
-export const API_URL = (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
+import { isTunnelHost, resolveApiUrl } from "./apiUrl";
+
+export const API_URL = resolveApiUrl(import.meta.env.VITE_API_URL, typeof window === "undefined" ? null : window.location);
+
+// Dev Tunnels (VS Code port forwarding) show a "you are about to visit a tunnel" warning page to browsers.
+// This header lets our API calls through it; it is only sent when the site itself is opened through a tunnel.
+const TUNNEL_HEADERS =
+  typeof window !== "undefined" && isTunnelHost(window.location.hostname)
+    ? { "X-Tunnel-Skip-AntiPhishing-Page": "true" }
+    : {};
 
 export class ApiError extends Error {
   constructor(message, status) {
@@ -15,7 +26,10 @@ export class ApiError extends Error {
 async function request(path, options) {
   let response;
   try {
-    response = await fetch(`${API_URL}${path}`, options);
+    response = await fetch(`${API_URL}${path}`, {
+      ...options,
+      headers: { ...TUNNEL_HEADERS, ...(options && options.headers) },
+    });
   } catch {
     throw new ApiError(
       `Cannot reach the analysis server at ${API_URL}. Is the backend running?`,
