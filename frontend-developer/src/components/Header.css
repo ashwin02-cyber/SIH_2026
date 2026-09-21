@@ -43,3 +43,13 @@
   background: var(--risk-low);
   box-shadow: 0 0 8px var(--risk-low);
 }
+
+.header__status-dot--wait {
+  background: var(--risk-medium);
+  box-shadow: 0 0 8px var(--risk-medium);
+}
+
+.header__status-dot--off {
+  background: var(--risk-high);
+  box-shadow: 0 0 8px var(--risk-high);
+}

@@ -1,20 +1,27 @@
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import "./TrafficChart.css";
 
-export default function TrafficChart({ classification }) {
-  const { class: predictedClass, confidence, flows_analyzed, breakdown } = classification;
+export default function TrafficChart({ traffic, capture }) {
+  if (!traffic) {
+    return (
+      <section className="panel">
+        <h2 className="panel__title">Traffic classification</h2>
+        <p className="chart-header__meta">The traffic type could not be determined for this capture.</p>
+      </section>
+    );
+  }
 
   return (
     <section className="panel">
       <div className="chart-header">
         <h2 className="panel__title">Traffic classification</h2>
         <p className="chart-header__meta">
-          {flows_analyzed} flows analyzed &middot; top guess{" "}
-          <strong>{predictedClass.replace("_", " ")}</strong> at {Math.round(confidence * 100)}%
+          {capture ? `${capture.windows} time windows analyzed` : "Analyzed"} &middot; top guess{" "}
+          <strong>{traffic.label}</strong> at {Math.round(traffic.confidence * 100)}% model confidence
         </p>
       </div>
       <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={breakdown} layout="vertical" margin={{ left: 8, right: 24 }}>
+        <BarChart data={traffic.probabilities} layout="vertical" margin={{ left: 8, right: 24 }}>
           <XAxis type="number" domain={[0, 1]} hide />
           <YAxis
             type="category"
@@ -34,11 +41,8 @@ export default function TrafficChart({ classification }) {
             }}
           />
           <Bar dataKey="value" radius={[0, 3, 3, 0]}>
-            {breakdown.map((entry, i) => (
-              <Cell
-                key={entry.name}
-                fill={i === 0 ? "var(--accent)" : "var(--accent-dim)"}
-              />
+            {traffic.probabilities.map((entry, i) => (
+              <Cell key={entry.name} fill={i === 0 ? "var(--accent)" : "var(--accent-dim)"} />
             ))}
           </Bar>
         </BarChart>

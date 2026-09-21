@@ -20,3 +20,7 @@ real_captures/*.pcap
 # build output
 frontend-developer/dist/
 reports/out/
+
+# frontend env: the committed .env only holds the default local API URL (no secrets)
+!frontend-developer/.env
+!frontend-developer/.env.example
