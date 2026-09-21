@@ -1,0 +1,363 @@
+{
+  "generated_utc": "2026-09-21T13:45:28+00:00",
+  "selected_model": "random_forest",
+  "classes": [
+    "file_transfer",
+    "icmp",
+    "video_streaming",
+    "voip",
+    "web_browsing"
+  ],
+  "features": [
+    "pkts_per_sec",
+    "bytes_per_sec",
+    "mean_size",
+    "std_size",
+    "min_size",
+    "max_size",
+    "median_size",
+    "mean_inter_arrival",
+    "std_inter_arrival",
+    "max_inter_arrival",
+    "fwd_packet_ratio",
+    "fwd_byte_ratio"
+  ],
+  "window_sec": 1.0,
+  "min_packets_per_window": 2,
+  "dropped_features": [
+    "duration_sec",
+    "packet_count",
+    "total_bytes"
+  ],
+  "data": {
+    "windows": 1027,
+    "captures": 180,
+    "vpn_configs": 36,
+    "windows_per_class": {
+      "file_transfer": 36,
+      "icmp": 266,
+      "video_streaming": 78,
+      "voip": 36,
+      "web_browsing": 611
+    },
+    "esp_only": true
+  },
+  "evaluation": {
+    "method": "StratifiedGroupKFold(n_splits=6), grouped by VPN config, seed 42; out-of-fold predictions",
+    "candidates": {
+      "random_forest": {
+        "window_level": {
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        "capture_level": {
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "macro_f1": 1.0
+        }
+      },
+      "xgboost": {
+        "window_level": {
+          "accuracy": 0.999,
+          "balanced_accuracy": 0.9974,
+          "macro_f1": 0.9985
+        },
+        "capture_level": {
+          "accuracy": 1.0,
+          "balanced_accuracy": 1.0,
+          "macro_f1": 1.0
+        }
+      }
+    },
+    "selected": {
+      "window_level": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "macro_f1": 1.0,
+        "per_class": {
+          "file_transfer": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "icmp": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 266.0
+          },
+          "video_streaming": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 78.0
+          },
+          "voip": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "web_browsing": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 611.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1027.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 1027.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            36,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            266,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            78,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            36,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            611
+          ]
+        ]
+      },
+      "capture_level": {
+        "accuracy": 1.0,
+        "balanced_accuracy": 1.0,
+        "macro_f1": 1.0,
+        "per_class": {
+          "file_transfer": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "icmp": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "video_streaming": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "voip": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "web_browsing": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 36.0
+          },
+          "accuracy": 1.0,
+          "macro avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 180.0
+          },
+          "weighted avg": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1-score": 1.0,
+            "support": 180.0
+          }
+        },
+        "confusion_matrix": [
+          [
+            36,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            36,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            36,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            36,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            36
+          ]
+        ]
+      },
+      "folds": [
+        {
+          "fold": 1,
+          "test_configs": 6,
+          "test_windows": 173,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        {
+          "fold": 2,
+          "test_configs": 6,
+          "test_windows": 170,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        {
+          "fold": 3,
+          "test_configs": 6,
+          "test_windows": 171,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        {
+          "fold": 4,
+          "test_configs": 6,
+          "test_windows": 172,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        {
+          "fold": 5,
+          "test_configs": 6,
+          "test_windows": 171,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        },
+        {
+          "fold": 6,
+          "test_configs": 6,
+          "test_windows": 170,
+          "accuracy": 1.0,
+          "macro_f1": 1.0
+        }
+      ],
+      "n_windows": 1027,
+      "n_captures": 180
+    },
+    "sanity_checks": {
+      "majority_class_window_accuracy": 0.5949,
+      "label_shuffled_window_accuracy": 0.4625,
+      "label_shuffled_capture_accuracy": 0.4889,
+      "without_rate_features": {
+        "window_accuracy": 1.0,
+        "window_macro_f1": 1.0,
+        "capture_accuracy": 1.0
+      },
+      "window_accuracy_by_packets_in_window": {
+        "2-3 packets": {
+          "windows": 264,
+          "accuracy": 1.0
+        },
+        "4-10 packets": {
+          "windows": 303,
+          "accuracy": 1.0
+        },
+        "11-50 packets": {
+          "windows": 370,
+          "accuracy": 1.0
+        },
+        ">50 packets": {
+          "windows": 90,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "top_features": [
+    {
+      "feature": "bytes_per_sec",
+      "importance": 0.1395
+    },
+    {
+      "feature": "pkts_per_sec",
+      "importance": 0.1265
+    },
+    {
+      "feature": "min_size",
+      "importance": 0.1245
+    },
+    {
+      "feature": "max_size",
+      "importance": 0.124
+    },
+    {
+      "feature": "std_size",
+      "importance": 0.1232
+    },
+    {
+      "feature": "mean_size",
+      "importance": 0.1173
+    }
+  ],
+  "caveats": [
+    "One capture per (config, class): 36 configs x 5 classes, generated by scripted tools in a Docker testbed.",
+    "Generators are synthetic (ping, scp, curl loops, ffmpeg range requests, SIPp signalling only, no RTP).",
+    "Captures were stopped by packet count, so file_transfer/voip/video are <2 s long: they yield 1-2 windows each.",
+    "Results say how well the model separates THESE five scripted traffic types on unseen VPN configs, not how it would do on real user traffic."
+  ],
+  "environment": {
+    "python": "3.12.10",
+    "scikit_learn": "1.9.1",
+    "xgboost": "3.4.1",
+    "numpy": "2.5.2",
+    "pandas": "3.0.5"
+  }
+}

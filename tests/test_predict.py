@@ -83,19 +83,43 @@ def test_predict_from_features_rejects_missing_columns():
 
 
 # ---- predict_from_pcap on real sample captures ------------------------------
+# NOTE: the samples in data/samples are part of the training data, so these are
+# smoke tests of the plumbing, NOT an accuracy measurement (see ml-engineer/metrics.json).
 
-@pytest.mark.parametrize("name", [
-    "aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap",
-    "aes128-dh2-transport-pfs-off__icmp_run1.pcap",
+@pytest.mark.parametrize("name,expected", [
+    ("aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap", "web_browsing"),
+    ("aes128-dh2-transport-pfs-off__icmp_run1.pcap", "icmp"),
+    ("aes128-dh2-transport-pfs-off__voip_run1.pcap", "voip"),
+    ("aes128-dh2-transport-pfs-off__video_run1.pcap", "video_streaming"),
 ])
-def test_predict_from_pcap_shape(name):
+def test_predict_from_pcap_shape_and_class(name, expected):
     out = predict.predict_from_pcap(os.path.join(SAMPLES, name))
     assert "error" not in out
-    assert out["class"] in predict.le.classes_
+    assert out["class"] == expected
     assert 0.0 <= out["confidence"] <= 1.0
-    assert out["timeline"], "timeline must not be empty"
-    assert all("class" in seg and "confidence" in seg for seg in out["timeline"])
+    assert sum(out["class_probabilities"].values()) == pytest.approx(1.0, abs=1e-3)
+    assert out["esp_only"] is True
+    assert out["windows_analyzed"] == len(out["timeline"]) >= 1
     assert all(e["feature"] in predict.FEATURE_COLS for e in out["explanation"] if "feature" in e)
+    assert all(isinstance(e["text"], str) and e["text"] for e in out["explanation"])
+
+
+def test_timeline_uses_fixed_time_windows():
+    out = predict.predict_from_pcap(os.path.join(SAMPLES, "aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap"))
+    tl = out["timeline"]
+    assert len(tl) > 5
+    for seg in tl:
+        assert seg["end_sec"] - seg["start_sec"] == pytest.approx(predict.WINDOW_SEC)
+        assert seg["start_sec"] == pytest.approx(round(seg["start_sec"]))  # window boundaries are whole seconds
+        assert seg["packets"] >= predict.MIN_PACKETS_PER_WINDOW
+    starts = [s["start_sec"] for s in tl]
+    assert starts == sorted(starts) and len(set(starts)) == len(starts)
+
+
+def test_model_does_not_use_capture_length_features():
+    for banned in ("packet_count", "total_bytes", "duration_sec"):
+        assert banned not in predict.FEATURE_COLS
+        assert banned not in list(predict.model.feature_names_in_)
 
 
 def test_predict_from_pcap_without_ip_traffic(tmp_path):
@@ -103,3 +127,8 @@ def test_predict_from_pcap_without_ip_traffic(tmp_path):
     p = tmp_path / "arp.pcap"
     wrpcap(str(p), [Ether() / ARP()])
     assert "error" in predict.predict_from_pcap(str(p))
+
+
+def test_predict_from_pcap_rejects_garbage(fixture_path):
+    with pytest.raises(ValueError):
+        predict.predict_from_pcap(fixture_path("SYNTHETIC_not_a_pcap.pcap"))

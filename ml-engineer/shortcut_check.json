@@ -1,0 +1,26 @@
+{
+  "captures": 180,
+  "accuracy_from_packet_count_alone_grouped_cv": 1.0,
+  "packet_count_range_per_class": {
+    "file_transfer": [
+      4998,
+      5000
+    ],
+    "icmp": [
+      18,
+      20
+    ],
+    "video_streaming": [
+      500,
+      500
+    ],
+    "voip": [
+      30,
+      40
+    ],
+    "web_browsing": [
+      300,
+      300
+    ]
+  }
+}
