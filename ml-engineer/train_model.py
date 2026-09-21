@@ -124,7 +124,7 @@ def evaluate(kind, df, cols, y, groups, classes, label=""):
 
 
 def plot_confusion(res, classes, path, title):
-    fig, axes = plt.subplots(1, 2, figsize=(14, 5.5))
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6.2))
     for ax, level, name in ((axes[0], "window_level", "Per 1-second window"),
                             (axes[1], "capture_level", "Per capture (windows combined)")):
         cm = np.array(res[level]["confusion_matrix"])
@@ -134,6 +134,7 @@ def plot_confusion(res, classes, path, title):
         ax.set_xlabel("Predicted")
         ax.set_ylabel("Actual")
         ax.tick_params(axis="x", rotation=30)
+        ax.tick_params(axis="y", rotation=0)
     fig.suptitle(title, fontsize=11)
     fig.tight_layout()
     fig.savefig(path, dpi=130)
@@ -143,7 +144,19 @@ def plot_confusion(res, classes, path, title):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", default=os.path.join(HERE, "features_windowed.csv"))
+    ap.add_argument("--plot-only", action="store_true",
+                    help="redraw confusion_matrix.png from metrics.json without retraining")
     args = ap.parse_args()
+
+    if args.plot_only:
+        with open(os.path.join(HERE, "metrics.json"), encoding="utf-8") as f:
+            saved = json.load(f)
+        sel = saved["evaluation"]["selected"]
+        plot_confusion(sel, saved["classes"], os.path.join(HERE, "confusion_matrix.png"),
+                       f"{saved['selected_model']} - grouped {N_SPLITS}-fold CV by VPN config (out-of-fold predictions; "
+                       f"{sel['n_windows']} windows / {sel['n_captures']} captures)")
+        print("Redrew confusion_matrix.png from metrics.json")
+        return
 
     df = pd.read_csv(args.csv)
     print(f"Loaded {len(df)} windows from {df['filename'].nunique()} captures, "
