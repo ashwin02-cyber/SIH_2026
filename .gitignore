@@ -5,3 +5,5 @@ ml-engineer/*.pkl
 */venv/
 */__pycache__/
 *.pcap
+echo "__pycache__/" >> .gitignore
+real_captures_dataset.zip
