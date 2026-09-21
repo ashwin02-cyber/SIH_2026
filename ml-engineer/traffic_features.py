@@ -84,13 +84,17 @@ def read_packets(pcap_path):
     Raises ValueError if the file is not a readable capture.
     """
     try:
-        reader = PcapReader(pcap_path)
-    except Exception as e:  # scapy raises several types for bad headers
-        raise ValueError(f"Not a readable pcap/pcapng file: {e}") from e
+        fh = open(pcap_path, "rb")
+    except OSError as e:
+        raise ValueError(f"Cannot read capture file: {e}") from e
 
     esp, other = [], []
     truncated = False
     try:
+        try:
+            reader = PcapReader(fh)
+        except Exception as e:  # scapy raises several types for bad headers
+            raise ValueError(f"Not a readable pcap/pcapng file: {e}") from e
         while True:
             try:
                 pkt = reader.read_packet()
@@ -109,7 +113,7 @@ def read_packets(pcap_path):
             elif not _is_ike(pkt):
                 other.append(rec)
     finally:
-        reader.close()
+        fh.close()  # Scapy leaks the handle on bad headers; Windows then cannot delete the file
 
     if esp:
         packets, esp_only = esp, True

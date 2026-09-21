@@ -1,0 +1,239 @@
+{
+ "schema_version": "1.0",
+ "filename": "aes128-dh2-transport-pfs-off__icmp_run1.pcap",
+ "score": 30,
+ "risk_level": "HIGH",
+ "score_basis": "declared",
+ "cipher": "AES-CBC-128",
+ "mode": "transport",
+ "dh_group": "Group 2 (1024-bit MODP)",
+ "pfs": "unknown",
+ "sources": {
+  "cipher": "declared",
+  "dh_group": "declared",
+  "pfs": "unknown",
+  "mode": "declared"
+ },
+ "breakdown": [
+  {
+   "factor": "Cipher",
+   "value": "AES-CBC-128",
+   "rating": "medium",
+   "weight": 0.4,
+   "source": "declared",
+   "reason": "AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues."
+  },
+  {
+   "factor": "DH group",
+   "value": "Group 2 (1024-bit MODP)",
+   "rating": "weak",
+   "weight": 0.4,
+   "source": "declared",
+   "reason": "1024-bit MODP is considered too small against modern computing power."
+  },
+  {
+   "factor": "PFS",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.2,
+   "source": "unknown",
+   "reason": "Whether Perfect Forward Secrecy is enabled could not be determined from this capture."
+  },
+  {
+   "factor": "Mode",
+   "value": "transport",
+   "rating": "medium",
+   "weight": 0.0,
+   "source": "declared",
+   "reason": "Transport mode leaves the original IP header visible; only the payload is encrypted."
+  }
+ ],
+ "traffic": {
+  "class": "icmp",
+  "label": "ICMP (ping)",
+  "confidence": 1.0,
+  "probabilities": [
+   {
+    "name": "ICMP (ping)",
+    "value": 1.0
+   },
+   {
+    "name": "File transfer",
+    "value": 0.0
+   },
+   {
+    "name": "Video streaming",
+    "value": 0.0
+   },
+   {
+    "name": "VoIP",
+    "value": 0.0
+   },
+   {
+    "name": "Web browsing",
+    "value": 0.0
+   }
+  ]
+ },
+ "model_confidence": 1.0,
+ "explanation": [
+  "Overall security score 30/100 - high risk.",
+  "This rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
+  "Cipher (AES-CBC-128) is rated medium: AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
+  "DH group (Group 2 (1024-bit MODP)) is rated weak: 1024-bit MODP is considered too small against modern computing power.",
+  "Mode (transport) is rated medium: Transport mode leaves the original IP header visible; only the payload is encrypted.",
+  "Not determinable from this capture: PFS. These are left out of the score instead of being counted as weak.",
+  "The encrypted traffic looks like icmp (ping) (model confidence 100%).",
+  "Largest packet size (typically 140) pushed the prediction towards 'icmp'.",
+  "Variation in packet sizes (typically 0) pushed the prediction towards 'icmp'.",
+  "How many packets per second (typically 2) pushed the prediction towards 'icmp'."
+ ],
+ "anomalies": [],
+ "timeline": [
+  {
+   "window": 1,
+   "start_sec": 0.0,
+   "end_sec": 1.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 2,
+   "start_sec": 1.0,
+   "end_sec": 2.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 3,
+   "start_sec": 2.0,
+   "end_sec": 3.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 4,
+   "start_sec": 3.0,
+   "end_sec": 4.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 5,
+   "start_sec": 4.0,
+   "end_sec": 5.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 6,
+   "start_sec": 5.0,
+   "end_sec": 6.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 7,
+   "start_sec": 6.0,
+   "end_sec": 7.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 8,
+   "start_sec": 7.0,
+   "end_sec": 8.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  },
+  {
+   "window": 9,
+   "start_sec": 8.0,
+   "end_sec": 9.0,
+   "class": "icmp",
+   "confidence": 1.0,
+   "packets": 2,
+   "bytes": 280,
+   "packets_per_sec": 2.0,
+   "bytes_per_sec": 280.0,
+   "label": "ICMP (ping)"
+  }
+ ],
+ "capture": {
+  "packets": 18,
+  "bytes": 2520,
+  "span_sec": 8.152,
+  "truncated": false,
+  "windows_dropped": 0,
+  "windows": 9,
+  "window_sec": 1.0,
+  "esp_only": true
+ },
+ "details": {
+  "ike": {
+   "ike_version": "unknown",
+   "mode": "unknown",
+   "ike_sa": null,
+   "esp_sa": null,
+   "handshake": {
+    "ike_sa_init_seen": false,
+    "sa_source": null,
+    "ike_packets": 2,
+    "encrypted_ike_packets": 2,
+    "esp_packets": 18,
+    "truncated": false
+   },
+   "warnings": [
+    "2 IKEv2 packet(s) were seen but they are encrypted IKE_AUTH/INFORMATIONAL messages; the cleartext IKE_SA_INIT exchange was not captured (start the capture before the tunnel comes up), so cipher and DH group cannot be read from this file.",
+    "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+    "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+   ]
+  }
+ },
+ "warnings": [
+  "2 IKEv2 packet(s) were seen but they are encrypted IKE_AUTH/INFORMATIONAL messages; the cleartext IKE_SA_INIT exchange was not captured (start the capture before the tunnel comes up), so cipher and DH group cannot be read from this file.",
+  "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+  "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+ ],
+ "errors": []
+}

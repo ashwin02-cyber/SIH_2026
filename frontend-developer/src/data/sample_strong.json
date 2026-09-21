@@ -1,0 +1,296 @@
+{
+ "schema_version": "1.0",
+ "filename": "aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap",
+ "score": 100,
+ "risk_level": "LOW",
+ "score_basis": "declared",
+ "cipher": "AES-GCM-16-128",
+ "mode": "tunnel",
+ "dh_group": "Group 19 (256-bit random ECP)",
+ "pfs": "unknown",
+ "sources": {
+  "cipher": "declared",
+  "dh_group": "declared",
+  "pfs": "unknown",
+  "mode": "declared"
+ },
+ "breakdown": [
+  {
+   "factor": "Cipher",
+   "value": "AES-GCM-16-128",
+   "rating": "strong",
+   "weight": 0.4,
+   "source": "declared",
+   "reason": "AES-GCM-16-128 is an AEAD cipher \u2014 confidentiality and integrity in one, no separate HMAC needed."
+  },
+  {
+   "factor": "DH group",
+   "value": "Group 19 (256-bit random ECP)",
+   "rating": "strong",
+   "weight": 0.4,
+   "source": "declared",
+   "reason": "256-bit ECP gives strong security."
+  },
+  {
+   "factor": "PFS",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.2,
+   "source": "unknown",
+   "reason": "Whether Perfect Forward Secrecy is enabled could not be determined from this capture."
+  },
+  {
+   "factor": "Mode",
+   "value": "tunnel",
+   "rating": "strong",
+   "weight": 0.0,
+   "source": "declared",
+   "reason": "Tunnel mode encrypts the whole original packet, including its IP header."
+  }
+ ],
+ "traffic": {
+  "class": "web_browsing",
+  "label": "Web browsing",
+  "confidence": 1.0,
+  "probabilities": [
+   {
+    "name": "Web browsing",
+    "value": 1.0
+   },
+   {
+    "name": "File transfer",
+    "value": 0.0
+   },
+   {
+    "name": "ICMP (ping)",
+    "value": 0.0
+   },
+   {
+    "name": "Video streaming",
+    "value": 0.0
+   },
+   {
+    "name": "VoIP",
+    "value": 0.0
+   }
+  ]
+ },
+ "model_confidence": 1.0,
+ "explanation": [
+  "Overall security score 100/100 - low risk.",
+  "This rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
+  "Not determinable from this capture: PFS. These are left out of the score instead of being counted as weak.",
+  "The encrypted traffic looks like web browsing (model confidence 100%).",
+  "Data rate (bytes per second) (typically 3356) pushed the prediction towards 'web browsing'.",
+  "Average packet size (typically 202.8) pushed the prediction towards 'web browsing'.",
+  "Share of packets sent in the first direction (typically 0.6) pushed the prediction towards 'web browsing'."
+ ],
+ "anomalies": [],
+ "timeline": [
+  {
+   "window": 1,
+   "start_sec": 0.0,
+   "end_sec": 1.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 2,
+   "start_sec": 1.0,
+   "end_sec": 2.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 3,
+   "start_sec": 2.0,
+   "end_sec": 3.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 4,
+   "start_sec": 3.0,
+   "end_sec": 4.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 5,
+   "start_sec": 4.0,
+   "end_sec": 5.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 6,
+   "start_sec": 5.0,
+   "end_sec": 6.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 7,
+   "start_sec": 6.0,
+   "end_sec": 7.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 8,
+   "start_sec": 7.0,
+   "end_sec": 8.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 9,
+   "start_sec": 8.0,
+   "end_sec": 9.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 10,
+   "start_sec": 9.0,
+   "end_sec": 10.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 11,
+   "start_sec": 10.0,
+   "end_sec": 11.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 12,
+   "start_sec": 11.0,
+   "end_sec": 12.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 10,
+   "bytes": 2028,
+   "packets_per_sec": 10.0,
+   "bytes_per_sec": 2028.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 13,
+   "start_sec": 12.0,
+   "end_sec": 13.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 20,
+   "bytes": 4056,
+   "packets_per_sec": 20.0,
+   "bytes_per_sec": 4056.0,
+   "label": "Web browsing"
+  },
+  {
+   "window": 14,
+   "start_sec": 13.0,
+   "end_sec": 14.0,
+   "class": "web_browsing",
+   "confidence": 1.0,
+   "packets": 15,
+   "bytes": 2656,
+   "packets_per_sec": 15.0,
+   "bytes_per_sec": 2656.0,
+   "label": "Web browsing"
+  }
+ ],
+ "capture": {
+  "packets": 215,
+  "bytes": 43216,
+  "span_sec": 13.914,
+  "truncated": false,
+  "windows_dropped": 0,
+  "windows": 14,
+  "window_sec": 1.0,
+  "esp_only": true
+ },
+ "details": {
+  "ike": {
+   "ike_version": "unknown",
+   "mode": "unknown",
+   "ike_sa": null,
+   "esp_sa": null,
+   "handshake": {
+    "ike_sa_init_seen": false,
+    "sa_source": null,
+    "ike_packets": 0,
+    "encrypted_ike_packets": 0,
+    "esp_packets": 215,
+    "truncated": false
+   },
+   "warnings": [
+    "No IKE_SA_INIT exchange was found in this pcap, so cipher and DH group cannot be read from it (it may contain only ESP data).",
+    "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+    "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+   ]
+  }
+ },
+ "warnings": [
+  "No IKE_SA_INIT exchange was found in this pcap, so cipher and DH group cannot be read from it (it may contain only ESP data).",
+  "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+  "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+ ],
+ "errors": []
+}

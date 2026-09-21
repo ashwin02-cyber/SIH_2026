@@ -301,19 +301,24 @@ def _summarize_proposal(proposal: dict) -> dict:
 
 
 def _read_packets(pcap_path: str):
-    """Yield packets from a pcap/pcapng. Returns (list_of_packets, truncated).
+    """Read packets from a pcap/pcapng. Returns (list_of_packets, truncated).
     A truncated file yields the packets that could be read. A file that is
-    not a capture at all raises ValueError."""
+    not a capture at all raises ValueError. The file handle is always closed
+    (Scapy leaks it when the header is invalid, which blocks deleting the
+    file on Windows)."""
     packets = []
     truncated = False
     try:
-        reader = PcapReader(pcap_path)
-    except (Scapy_Exception, struct.error, EOFError) as e:
-        raise ValueError(f"Not a readable pcap/pcapng file: {e}") from e
+        fh = open(pcap_path, "rb")
     except OSError as e:
         raise ValueError(f"Cannot read capture file: {e}") from e
 
     try:
+        try:
+            reader = PcapReader(fh)
+        except (Scapy_Exception, struct.error, EOFError, OSError) as e:
+            raise ValueError(f"Not a readable pcap/pcapng file: {e}") from e
+
         while True:
             try:
                 pkt = reader.read_packet()
@@ -326,7 +331,7 @@ def _read_packets(pcap_path: str):
                 break
             packets.append(pkt)
     finally:
-        reader.close()
+        fh.close()
     return packets, truncated
 
 

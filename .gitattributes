@@ -1,0 +1,12 @@
+# Files that run inside Linux containers / shells must keep LF line endings on Windows checkouts.
+*.conf text eol=lf
+*.secrets text eol=lf
+*.sh text eol=lf
+*.j2 text eol=lf
+Dockerfile text eol=lf
+*.pcap binary
+*.pcapng binary
+*.pkl binary
+*.png binary
+*.pdf binary
+*.pptx binary
