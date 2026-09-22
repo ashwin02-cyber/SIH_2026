@@ -132,12 +132,13 @@ def main():
 
     # 3 solution
     s = d.slide("What we built", "Walk through the four capabilities and the dashboard.")
-    d.bullets(s, ["Security score 0-100||  with LOW / MEDIUM / HIGH risk and a per-factor threat matrix",
-                  "Traffic classification||  Random Forest on 1-second windows of encrypted ESP packets",
-                  "Explainability||  SHAP: which traffic features drove the decision; anomaly flags; time-window timeline",
-                  "Reports||  executive summary and technical report, HTML and PDF, generated on demand",
-                  "Plain-English mode||  every finding rewritten for non-experts"],
-             0.7, 1.7, 12, 4.8, size=22)
+    d.bullets(s, ["Security score 0-100||  LOW / MEDIUM / HIGH, capped by assessment completeness so unknowns never read as 100 / LOW",
+                  "Passive ESP fingerprint||  cipher family, integrity-tag candidates, tunnel vs transport, replay and rekey evidence - from sizes and sequence numbers only",
+                  "Traffic classification||  Random Forest on 1-second windows, calibrated confidence, 'unrecognised' for unknown traffic",
+                  "Recommendations||  prioritised fixes, a generated strongSwan snippet (unverified), before / after score",
+                  "What-if + replay||  defence simulator; replay of a capture file (not live sniffing)",
+                  "Reports||  executive summary and technical report, HTML and PDF; plain-English mode"],
+             0.7, 1.6, 12, 5.2, size=20)
 
     # 4 architecture
     s = d.slide("Architecture", "Offline: testbed to pcaps to features to a trained model. Online: React talks to FastAPI; the backend combines the IKE parser, scoring, the ML model and the report builder behind one API contract.")
@@ -145,15 +146,15 @@ def main():
 
     # 5 security score
     s = d.slide("How the security score works",
-                "The parser walks the IKE_SA_INIT exchange by hand from RFC 7296 and validates every header. Values that are not visible stay unknown and are excluded from the score - they are never counted as weak.")
+                "The parser walks the IKE_SA_INIT exchange by hand from RFC 7296 and validates every header. Values that are not visible stay unknown: excluded from the base score (never counted as weak) but they lower the completeness percentage and therefore the cap.")
     d.table(s, [["Factor", "Weight", "Strong", "Medium", "Weak"],
                 ["Cipher", "0.4", "AES-GCM, AES-256", "AES-CBC-128", "3DES"],
                 ["DH group", "0.4", "19, 20, 21, 31, 16", "14, 15", "1, 2, 5"],
                 ["PFS", "0.2", "fresh DH", "-", "none"]],
             0.7, 1.7, 12, [2.2, 1.4, 3.2, 2.6, 2.6], size=16)
-    d.bullets(s, ["Score = weighted average of the rated factors; risk: >= 80 LOW, >= 50 MEDIUM, else HIGH",
-                  "Mode (tunnel / transport) is shown but not scored; it is never assumed - it is encrypted",
-                  "Real finding: none of our 216 captures contains a readable IKE_SA_INIT, so their settings are labelled 'declared by file name'"],
+    d.bullets(s, ["Base score = weighted average of the rated factors; risk: >= 80 LOW, >= 50 MEDIUM, else HIGH",
+                  "Assessment completeness: every finding is observed / inferred / declared / unknown; the final score is capped at 35 + 65 x completeness",
+                  "Real finding: none of our 216 captures contains a readable IKE_SA_INIT, so a real testbed file reads 64 / MEDIUM (44 % complete), not 100 / LOW"],
              0.7, 3.8, 12, 3.2, size=19)
 
     # 6 ML
@@ -190,6 +191,39 @@ def main():
                   "Fixed testbed not yet re-run||  Docker was unavailable; command order is tested with a fake Docker"],
              0.7, 1.7, 12, 5.2, size=20)
 
+    fpm = load_json("ml-engineer", "esp_fingerprint_metrics.json")
+    osm = load_json("ml-engineer", "open_set_metrics.json")
+    dfm = load_json("ml-engineer", "defence_metrics.json")
+    ru, md = fpm["cipher_family_rule"]["overall"], fpm["tunnel_vs_transport"]
+
+    # 8b passive fingerprint
+    s = d.slide("New: passive ESP fingerprinting from sizes only",
+                "No file names, no keys. The ESP length modulo 16 separates CBC (one residue) from GCM (several). The rule abstains on constant-size streams such as ICMP instead of guessing. Say clearly what is not observable: AES-128 vs 256, PFS, authentication method, lifetime unless a rekey is seen.")
+    d.table(s, [["Passive inference (grouped CV, 180 captures)", "Result"],
+                ["Cipher family: answered / correct when answered", f"{ru['committed']} / {ru['correct_when_committed']}  ({pct(ru['accuracy_when_committed'])})"],
+                ["Cipher family: abstains (all ICMP, constant size)", f"{ru['captures'] - ru['committed']} captures"],
+                ["Tunnel vs transport: accuracy (all)", pct(md["accuracy"])],
+                ["Tunnel vs transport: when it commits (coverage)", f"{pct(md['accuracy_when_committed'])}  ({pct(md['coverage_at_threshold'])})"],
+                ["Shuffled-label control (chance 50 %)", pct(md["shuffled_label_accuracy"]["mean"])]],
+            0.5, 1.5, 7.6, [5.2, 2.4], size=14)
+    d.bullets(s, ["Also||  SPI / sequence analysis: replay evidence, gaps, duplicates, reordering, rekeys",
+                  "Not observable||  AES-128 vs 256, PFS, auth method, SA lifetime without a rekey: reported unknown",
+                  "Lab data||  scripted traffic, one strongSwan version"],
+             8.3, 1.5, 4.7, 4.5, size=16)
+
+    # 8c confidence + defences
+    s = d.slide("New: honest confidence, and a defence what-if",
+                "Calibration can only soften confidence (temperature floored at 1). Open-set test: each traffic class was held out entirely and shown as unknown traffic. The defence table is a simulation: padding and dummy traffic fool a naive attacker, but an attacker who retrains is back to about 100 percent on this data.")
+    rows = [["Defence (simulated)", "Naive attacker", "Adaptive", "Extra bandwidth"]]
+    for k in ("pad_buckets", "pad_mtu", "dummy", "delay", "combined"):
+        b = dfm["defences"][k]
+        rows.append([b["label"], pct(b["non_adaptive_capture_accuracy"]), pct(b["adaptive_capture_accuracy"]), f"+{b['cost']['bandwidth_overhead_pct_median']:.0f} %"])
+    d.table(s, rows, 0.5, 1.5, 7.9, [3.2, 1.6, 1.4, 1.7], size=13)
+    d.bullets(s, [f"Unrecognised traffic||  {pct(osm['mean_unknown_rejection'])} of held-out-class captures rejected; {pct(osm['mean_known_accepted'])} of known accepted",
+                  "Lab limit||  five very different classes; real unknowns will be harder",
+                  "Defences||  no defence stopped an adaptive attacker here"],
+             8.6, 1.5, 4.4, 4.5, size=15)
+
     # 9 dashboard
     s = d.slide("The dashboard", "Live demo: upload a capture, read the gauge, threat matrix, traffic chart and timeline. The yellow badges show which values came from the file name.")
     d.image(s, img["dashboard"], 0.4, 1.3, 12.5, 6.0)
@@ -205,8 +239,8 @@ def main():
     # 11 quality + deployment
     s = d.slide("Quality and deployment",
                 "Everything runs locally and in Docker; deployment configs are provided. Deploying needs the team's own Vercel and Render logins, and we say so.")
-    d.bullets(s, ["Automated tests||  pytest suite (IKE parser on synthetic fixtures, scoring, ML, API, reports, testbed) + real-browser end-to-end check",
-                  "One API contract||  score, risk, cipher, mode, DH group, PFS, breakdown, explanation, anomalies, timeline, confidence",
+    d.bullets(s, ["Automated tests||  243 pytest tests (synthetic IKE / ESP / IPv6 / AH fixtures, scoring, ML, API, replay, reports, testbed) + real-browser end-to-end check",
+                  "One API contract||  schema 1.1: score + cap, findings with status, recommendations, fingerprint, sequence, defence simulation",
                   "Packaging||  Dockerfiles, docker-compose, Render / Railway / Vercel / Netlify configs, click-by-click DEPLOY.md",
                   "Measured||  ~320 MB RAM for the API after an analysis plus a PDF report"],
              0.7, 1.7, 12, 5, size=20)
@@ -214,7 +248,8 @@ def main():
     # 12 limits / next
     s = d.slide("Limitations and next steps", "Be upfront: this is a lab dataset. The next milestone is re-running the fixed testbed.")
     d.bullets(s, ["Limits||  one capture per config and class; scripted traffic; short captures for file transfer, VoIP, video; SIP only for VoIP",
-                  "IKE parser||  only tested on synthetic IKE_SA_INIT (none exists in the data yet)",
+                  "Synthetic only||  IKE_SA_INIT, IPv6, AH and rekey behaviour are tested on hand-built fixtures; strongSwan snippet not run (no Docker)",
+                  "Replay, not live||  replay mode streams a capture file; live sniffing is not implemented",
                   "Next||  re-run the fixed testbed (real handshakes, real PFS labels, 30 s captures, repeats)",
                   "Next||  non-scripted traffic, IKEv1, authentication and rate limiting for a public deployment"],
              0.7, 1.7, 12, 5, size=21)

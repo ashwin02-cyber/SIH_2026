@@ -47,3 +47,6 @@ The backend finds the ML code via `sys.path` (`../ml-engineer`) — keep the fol
 | `data/samples/` (10 small real captures) + `data/manifest.csv` | repo | yes | one file is an excerpt (marked in the manifest) |
 | `ml-engineer/features_windowed.csv` | repo | yes | 1,027 windows, regenerable |
 | `tests/fixtures/SYNTHETIC_*.pcap` | repo | yes | hand-built IKE messages, regenerable with `tests/make_fixtures.py` |
+
+## 5. Schema 1.1 (innovations branch)
+The response gained `raw_score`, `confidence`, `assessment`, `recommendations` and `details.esp_fingerprint` / `esp_sequence` / `defence_simulation` (nothing removed). Two more endpoints stream a replay: `POST /replay` and `POST /replay/sample/{name}` (NDJSON). Rule 5 above (fixtures say SYNTHETIC) now also covers the IPv6, AH, NAT-T and ESP-sequence fixtures. See [../backend-developer/api_contract.md](../backend-developer/api_contract.md) and [../docs/PS_COMPLIANCE.md](../docs/PS_COMPLIANCE.md).

@@ -37,12 +37,14 @@
 
 
 <h1>VPN Security Assessment - Technical Report</h1>
-<p class="muted">Capture: <b>aes128-dh2-transport-pfs-off__web_run1.pcap</b> &nbsp;|&nbsp; Generated: 2026-09-21 14:32 UTC &nbsp;|&nbsp; API schema 1.0</p>
+<p class="muted">Capture: <b>aes128-dh2-transport-pfs-off__web_run1.pcap</b> &nbsp;|&nbsp; Generated: 2026-09-22 12:45 UTC &nbsp;|&nbsp; API schema 1.1</p>
 
 <h2>1. Result</h2>
 <table>
   <tr><th style="width:30%;">Risk level</th><td><span class="badge" style="background-color:#c62828;">HIGH</span></td></tr>
   <tr><th>Security score</th><td>30 / 100</td></tr>
+  <tr><th>Raw score / cap</th><td>30 from the known facts; capped at 62
+    by assessment completeness (41.7%). Rule: score &lt;= 35 + 65 x completeness (LOW needs a score of at least 80, i.e. completeness of at least 69%)</td></tr>
   <tr><th>Score basis</th><td>declared
      - cipher/DH/mode taken from the testbed naming convention in the capture file name, not observed in the capture</td></tr>
   <tr><th>Traffic class (ML)</th><td>Web browsing (100.0% model confidence)</td></tr>
@@ -83,15 +85,83 @@
   <tr>
     <td><b>Mode</b></td><td>transport</td>
     <td><span class="badge" style="background-color:#b26a00;">medium</span></td>
-    <td>declared</td><td class="num">0.0</td>
+    <td>inferred</td><td class="num">0.0</td>
     <td class="num">-</td>
     <td class="num">-</td>
   </tr>
   <tr><td colspan="7" class="muted" style="border-top:none;">Transport mode leaves the original IP header visible; only the payload is encrypted.</td></tr>
   
+  <tr>
+    <td><b>Integrity</b></td><td>separate HMAC, tag length 16 B or 32 B</td>
+    <td><span class="badge" style="background-color:#b26a00;">medium</span></td>
+    <td>inferred</td><td class="num">0.0</td>
+    <td class="num">-</td>
+    <td class="num">-</td>
+  </tr>
+  <tr><td colspan="7" class="muted" style="border-top:none;">length mod 16 = 8 =&gt; ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)</td></tr>
+  
+  <tr>
+    <td><b>Key lifetime</b></td><td>unknown</td>
+    <td><span class="badge" style="background-color:#616161;">unknown</span></td>
+    <td>unknown</td><td class="num">0.0</td>
+    <td class="num">-</td>
+    <td class="num">-</td>
+  </tr>
+  <tr><td colspan="7" class="muted" style="border-top:none;">not observable in this capture (no rekey - a new SPI in the same direction - was seen)</td></tr>
+  
+  <tr>
+    <td><b>Replay protection</b></td><td>sender uses a strictly increasing sequence counter</td>
+    <td><span class="badge" style="background-color:#b26a00;">medium</span></td>
+    <td>inferred</td><td class="num">0.0</td>
+    <td class="num">-</td>
+    <td class="num">-</td>
+  </tr>
+  <tr><td colspan="7" class="muted" style="border-top:none;">all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)</td></tr>
+  
 </table>
 <p class="muted">Points: strong = 100, medium = 60, weak = 0. Score = sum(points x weight) / sum(weights of rated factors), rounded.
 Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;= 50 MEDIUM, otherwise HIGH.</p>
+
+<h2>2b. Findings and their status</h2>
+<p class="muted">Every finding is tagged: observed = read from the capture; inferred = deduced from packet sizes or sequence numbers (with a confidence, never from file names);
+declared = stated by the testbed file name (unverified); unknown = not determinable from this capture.</p>
+<table>
+  <tr><th>Finding</th><th>Value</th><th>Status</th><th class="num">Confidence</th><th>Evidence</th></tr>
+  
+  <tr><td><b>IKE version</b></td><td>unknown</td><td>unknown</td>
+      <td class="num">-</td><td class="muted">no IKE_SA_INIT in this capture (encrypted IKE messages only, or none)</td></tr>
+  
+  <tr><td><b>IPsec protocol (ESP / AH)</b></td><td>ESP</td><td>observed</td>
+      <td class="num">100%</td><td class="muted">300 ESP packets seen</td></tr>
+  
+  <tr><td><b>Tunnel or transport mode</b></td><td>transport</td><td>inferred</td>
+      <td class="num">100%</td><td class="muted">learned from packet-size statistics (tunnel mode adds an inner IP header to every packet); trained on scripted lab traffic</td></tr>
+  
+  <tr><td><b>Cipher (algorithm / family)</b></td><td>AES-CBC-128</td><td>declared</td>
+      <td class="num">-</td><td class="muted">from the testbed file name (unverified)</td></tr>
+  
+  <tr><td><b>Key length</b></td><td>128 bits</td><td>declared</td>
+      <td class="num">-</td><td class="muted">from the testbed file name (unverified)</td></tr>
+  
+  <tr><td><b>Integrity protection</b></td><td>separate HMAC, tag length 16 B or 32 B</td><td>inferred</td>
+      <td class="num">50%</td><td class="muted">length mod 16 = 8 =&gt; ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)</td></tr>
+  
+  <tr><td><b>Key exchange (DH group)</b></td><td>Group 2 (1024-bit MODP)</td><td>declared</td>
+      <td class="num">-</td><td class="muted">from the testbed file name (unverified)</td></tr>
+  
+  <tr><td><b>Perfect Forward Secrecy</b></td><td>unknown</td><td>unknown</td>
+      <td class="num">-</td><td class="muted">negotiated inside encrypted IKE messages; not observable passively</td></tr>
+  
+  <tr><td><b>Authentication method</b></td><td>unknown</td><td>unknown</td>
+      <td class="num">-</td><td class="muted">pre-shared key vs certificate is negotiated in the encrypted IKE_AUTH exchange; not observable passively</td></tr>
+  
+  <tr><td><b>SA / key lifetime</b></td><td>unknown</td><td>unknown</td>
+      <td class="num">-</td><td class="muted">not observable in this capture (no rekey - a new SPI in the same direction - was seen)</td></tr>
+  
+  <tr><td><b>Replay protection</b></td><td>sender uses a strictly increasing sequence counter</td><td>inferred</td>
+      <td class="num">60%</td><td class="muted">all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)</td></tr>
+  
+</table>
 
 <h2>3. IKE handshake analysis</h2>
 
@@ -206,6 +276,95 @@ Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;
 <h2>8. Notes and warnings</h2>
 <ul><li>No IKE_SA_INIT exchange was found in this pcap, so cipher and DH group cannot be read from it (it may contain only ESP data).</li><li>Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as &#39;unknown&#39;.</li><li>The ESP SA&#39;s own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown.</li></ul>
 
+<h2>8b. Metadata exposure (what an eavesdropper learns)</h2>
+<p>Exposure score <b>99 / 100 (HIGH)</b> - 0 = an eavesdropper learns nothing, 100 = learns everything listed.</p>
+<table>
+  <tr><th>What</th><th class="num">Points</th><th>What is learned</th></tr>
+  <tr><td>Traffic type</td><td class="num">30.0 / 30</td><td>Web browsing (model confidence 100%). <span class="muted">packet sizes and timing reveal what the tunnel is used for, even though the payload is encrypted.</span></td></tr><tr><td>Tunnel vs transport mode</td><td class="num">10.0 / 10</td><td>transport. <span class="muted">extra inner IP header changes every packet size.</span></td></tr><tr><td>Cipher family</td><td class="num">9.4 / 10</td><td>CBC-like (16-byte block aligned). <span class="muted">padding granularity (CBC vs AEAD) shows in the packet lengths.</span></td></tr><tr><td>Packet-size distribution</td><td class="num">15.0 / 15</td><td>always visible. <span class="muted">ESP does not hide packet lengths unless padding is added.</span></td></tr><tr><td>Timing and volume</td><td class="num">20.0 / 20</td><td>always visible. <span class="muted">packet times and byte counts are visible on the wire.</span></td></tr><tr><td>Communicating endpoints</td><td class="num">15.0 / 15</td><td>the actual hosts. <span class="muted">outer IP addresses are always in clear; tunnel mode hides the real endpoints behind the gateways.</span></td></tr>
+</table>
+
+<h2>8c. Guideline mapping</h2>
+<div class="notice">Guideline mapping against published guidance - NOT a certification or audit result</div>
+<table>
+  <tr><th>Guideline</th><th>Requirement</th><th>Result</th><th>Evidence</th></tr>
+  <tr><td>NIST SP 800-131A Rev. 2</td><td>Three-key TDEA (3DES) is not acceptable for encryption after 2023</td><td><b>meets</b></td><td class="muted">cipher is AES-CBC (declared)</td></tr><tr><td>NIST FIPS 197 / SP 800-38</td><td>Use an approved block cipher (AES) and mode</td><td><b>meets</b></td><td class="muted">cipher is AES-CBC (declared)</td></tr><tr><td>NIST SP 800-131A Rev. 2 / SP 800-57</td><td>Key establishment with at least 112 bits of security strength (finite-field DH of at least 2048 bits)</td><td><b>does not meet</b></td><td class="muted">Group 2 (1024-bit MODP) is below 2048 bits (declared)</td></tr><tr><td>RFC 8221</td><td>ESP encryption algorithm is one of the mandatory-to-implement AES-CBC or AES-GCM-16</td><td><b>meets</b></td><td class="muted">cipher is AES-CBC (declared)</td></tr><tr><td>RFC 8247</td><td>IKEv2 MODP group 14 (2048-bit) is a mandatory-to-implement group</td><td><b>cannot assess</b></td><td class="muted">only evaluated when group 14 is the negotiated group (declared)</td></tr>
+</table>
+<ul><li class="muted">NIST SP 800-77 Rev. 1 (Guide to IPsec VPNs): used as general background only; no individual requirement is encoded here.</li><li class="muted">RFC 8247 is encoded for one item only (IKEv2 group 14); other group requirement levels are not evaluated.</li><li class="muted">FIPS 140 module validation, key management, authentication strength and certificate policy are outside what a capture can show.</li></ul>
+
+<h2>8d. Recommendations and secure configuration</h2>
+
+<table>
+  <tr><th>#</th><th>Priority</th><th>Action</th><th>Why</th><th>Based on</th></tr>
+  <tr><td>1</td><td><b>High</b></td><td><b>Replace the weak Diffie-Hellman group.</b> Change the key-exchange group from Group 2 (1024-bit MODP) to an elliptic-curve group (19 or 20) or MODP 3072-bit or larger.</td><td class="muted">Groups below 2048 bits give less than 112 bits of security strength.</td><td>declared</td></tr><tr><td>2</td><td><b>Medium</b></td><td><b>Prefer an AEAD cipher (AES-256-GCM) over AES-CBC.</b> Use aes256gcm16 for IKE and ESP: it protects integrity and confidentiality in one step and needs no separate HMAC.</td><td class="muted">Removes padding-oracle style risks of CBC + HMAC and gives a 256-bit key.</td><td>declared</td></tr><tr><td>3</td><td><b>Medium</b></td><td><b>Verify that Perfect Forward Secrecy is enabled.</b> PFS is negotiated inside encrypted IKE messages and cannot be seen in a capture. Confirm the ESP proposal contains a DH group (for strongSwan: esp=...-ecp384!) with `ipsec statusall`.</td><td class="muted">It carries 15% of the assessment.</td><td>unknown</td></tr><tr><td>4</td><td><b>Medium</b></td><td><b>Capture from before the tunnel comes up.</b> Start the capture, then bring the tunnel up (for example `tcpdump -w` first, then `ipsec up`), so IKE_SA_INIT is included.</td><td class="muted">It is the only place the cipher and DH group are visible; without it the assessment stays incomplete.</td><td>unknown</td></tr><tr><td>5</td><td><b>Medium</b></td><td><b>Reduce the traffic-type leak.</b> An eavesdropper can tell this traffic is web browsing (100%). Padding packets to fixed sizes and adding dummy traffic reduces this; see the defence simulation for the effect measured on this project&#39;s dataset.</td><td class="muted">IPsec encrypts payloads but not packet sizes or timing.</td><td>inferred</td></tr><tr><td>6</td><td><b>Low</b></td><td><b>Use tunnel mode unless host-to-host transport mode is required.</b> Tunnel mode encrypts the original IP header and hides the real endpoints behind the gateways.</td><td class="muted">Reduces what an eavesdropper learns about who talks to whom.</td><td>inferred</td></tr><tr><td>7</td><td><b>Low</b></td><td><b>Set and verify a short SA lifetime.</b> Set keylife=1h and ikelifetime=4h, then verify with a capture at least twice as long as keylife so a rekey is observed.</td><td class="muted">The lifetime cannot be observed unless a rekey happens inside the capture.</td><td>unknown</td></tr>
+</table>
+
+
+<div class="notice">Standard strongSwan syntax, but NOT verified against a running strongSwan in this project (Docker was unavailable). Test it in a lab first; replace every &lt;placeholder&gt;.</div>
+<pre class="mono"># Generated by the IPsec VPN Analyzer - a starting point, NOT a tested production config.
+# Replace the &lt;placeholders&gt;, then test in a lab (ipsec statusall, tcpdump) before using it.
+config setup
+    charondebug=&#34;ike 1, esp 1&#34;
+
+conn secure-vpn
+    keyexchange=ikev2
+    left=&lt;THIS_GATEWAY_IP&gt;
+    right=&lt;PEER_GATEWAY_IP&gt;
+    type=tunnel
+    authby=pubkey                 # certificates; if you must use a pre-shared key: authby=secret with 20+ random characters
+    leftcert=&lt;THIS_GATEWAY_CERT&gt;
+    ike=aes256gcm16-prfsha384-ecp384!             # AES-256-GCM, SHA-384 PRF, ECP-384 (group 20)
+    esp=aes256gcm16-ecp384!             # AES-256-GCM; the ecp384 group here enables Perfect Forward Secrecy
+    ikelifetime=4h
+    keylife=1h
+    rekeymargin=9m
+    dpdaction=restart
+    dpddelay=30s
+    auto=start
+</pre>
+
+
+<p><b>Before / after (Projection - what the tool would report if the recommended configuration were applied (not a measurement)):</b> before 30;
+after a new passive capture 80 (completeness 69.0%);
+after a direct configuration review 100.</p>
+
+
+
+<h2>8e. Defence what-if (SIMULATION)</h2>
+<div class="notice"><b>SIMULATION.</b> SIMULATION - the packets of this capture were rewritten at the feature level; nothing was re-sent and no gateway was configured. The classifier shown is the one trained on clean traffic (a non-adaptive attacker).</div>
+<p>Without a defence the classifier says <b>web_browsing</b> (100%).</p>
+<table>
+  <tr><th>Defence</th><th>Classifier then says</th><th class="num">Bandwidth</th><th class="num">Delay</th></tr>
+  <tr><td>Pad packets to size buckets<br><span class="muted">every packet padded up to the next of (128, 256, 512, 1024, 1500) bytes</span></td>
+    <td>web_browsing (100%)</td>
+    <td class="num">+15.7%</td><td class="num">0.0 ms</td></tr><tr><td>Pad every packet to full size<br><span class="muted">every packet padded to 1500 bytes</span></td>
+    <td>unrecognised (48%) - <b>changed</b></td>
+    <td class="num">+653.0%</td><td class="num">0.0 ms</td></tr><tr><td>Constant-rate dummy traffic<br><span class="muted">40 dummy packets per second of 600 bytes</span></td>
+    <td>unrecognised (41%) - <b>changed</b></td>
+    <td class="num">+778.1%</td><td class="num">0.0 ms</td></tr><tr><td>Random delay (timing jitter)<br><span class="muted">each packet delayed by |N(0, 100 ms)|</span></td>
+    <td>unrecognised (96%) - <b>changed</b></td>
+    <td class="num">+0.0%</td><td class="num">83.2 ms</td></tr><tr><td>Timing shaping<br><span class="muted">packets held until the next 100 ms slot</span></td>
+    <td>unrecognised (94%) - <b>changed</b></td>
+    <td class="num">+0.0%</td><td class="num">55.7 ms</td></tr><tr><td>Combined<br><span class="muted">size buckets + dummy traffic + random delay</span></td>
+    <td>unrecognised (43%) - <b>changed</b></td>
+    <td class="num">+793.8%</td><td class="num">78.6 ms</td></tr>
+</table>
+
+<p><b>Across the 180 lab captures (unseen VPN configurations).</b> Naive attacker = classifier trained on clean traffic; adaptive attacker = retrained on defended traffic. Chance level 20%.</p>
+<table>
+  <tr><th>Defence</th><th class="num">Naive attacker</th><th class="num">Adaptive attacker</th><th class="num">Median bandwidth</th></tr>
+  <tr><td>No defence</td><td class="num">100.0%</td><td class="num">-</td><td class="num">0%</td></tr>
+  <tr><td>Pad packets to size buckets</td><td class="num">100.0%</td>
+    <td class="num">100.0%</td><td class="num">+10.2%</td></tr><tr><td>Pad every packet to full size</td><td class="num">42.8%</td>
+    <td class="num">100.0%</td><td class="num">+223.4%</td></tr><tr><td>Constant-rate dummy traffic</td><td class="num">60.0%</td>
+    <td class="num">100.0%</td><td class="num">+71.9%</td></tr><tr><td>Random delay (timing jitter)</td><td class="num">99.4%</td>
+    <td class="num">100.0%</td><td class="num">+0.0%</td></tr><tr><td>Timing shaping</td><td class="num">100.0%</td>
+    <td class="num">100.0%</td><td class="num">+0.0%</td></tr><tr><td>Combined</td><td class="num">60.0%</td>
+    <td class="num">100.0%</td><td class="num">+119.2%</td></tr>
+</table>
+<ul><li class="muted">Feature-level simulation on scripted lab traffic: real padding/dummy-traffic implementations differ in detail.</li><li class="muted">The adaptive attacker uses the same 12 window features; a stronger attacker (sequence models, longer windows) may do better.</li><li class="muted">Captures are short (file transfer, VoIP and video &lt; 2 s), which limits how well dummy traffic and shaping can be judged.</li><li class="muted">Costs are per capture and depend on how busy the capture is: padding a ping stream costs a lot, padding a bulk transfer almost nothing.</li></ul>
+
+
+
 <h2>9. Model validation and limits</h2>
 
 
@@ -220,7 +379,7 @@ Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;
 
 
 <div id="footer_content" class="muted" style="text-align:center;">
-  IPsec VPN Analyzer - aes128-dh2-transport-pfs-off__web_run1.pcap - generated 2026-09-21 14:32 UTC - page <pdf:pagenumber> of <pdf:pagecount>
+  IPsec VPN Analyzer - aes128-dh2-transport-pfs-off__web_run1.pcap - generated 2026-09-22 12:45 UTC - page <pdf:pagenumber> of <pdf:pagecount>
 </div>
 </body>
 </html>

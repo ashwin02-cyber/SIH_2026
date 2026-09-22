@@ -49,7 +49,18 @@ python tests\make_fixtures.py           # SYNTHETIC IKE fixtures
 python tools\make_data_samples.py --pcap-dir "D:\path\to\pcaps"
 ```
 
+## Regenerate the newer models and their numbers (needs the raw pcaps; no Docker)
+```powershell
+cd ml-engineer
+python train_esp_fingerprint.py      # -> models/esp_mode_classifier.pkl, esp_fingerprint_metrics.json
+python train_open_set.py             # -> models/open_set.pkl, open_set_metrics.json
+python evaluate_defences.py          # -> defence_metrics.json
+cd ..; python tools\accuracy_addendum.py    # -> ACCURACY_ADDENDUM.md (formats the JSON files)
+python tests\make_esp_fixtures.py; python tests\make_ipv6_ah_fixtures.py   # SYNTHETIC fixtures
+python tools\make_test_report.py     # integration-docs-lead/test-report.md from a real pytest run
+```
+
 ## Push (only you do this)
 ```powershell
-git push -u origin finish-project
+git push -u origin innovations
 ```

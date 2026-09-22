@@ -28,6 +28,14 @@ COVERS = {
     "test_testbed_configs": "Generated strongSwan configs: PFS DH group in esp=, GCM syntax, committed files match generator",
     "test_orchestrate": "Testbed orchestration with a fake Docker: tcpdump before teardown, time-based capture, manifest upsert",
     "test_docs": "Video script timing, sample reports are real PDFs, slide deck integrity",
+    "test_esp_fingerprint": "Passive cipher family (CBC vs GCM), integrity-tag candidates, tunnel vs transport from sizes only; abstains on constant-size streams; file names never used",
+    "test_esp_sequence": "SPI / sequence analysis on SYNTHETIC fixtures (clean, gaps, duplicates, out-of-order, rekey, parallel SAs) and real captures; lifetime only from an observed rekey",
+    "test_assessment": "Status-tagged findings, completeness, score cap (never 100 / LOW when facts are unknown), metadata exposure, guideline mapping",
+    "test_recommendations": "Prioritised items, generated strongSwan snippet parsed back, before / after score computed from the snippet, snippet labelled unverified",
+    "test_open_set": "Calibration (softening only) and open-set rejection, incl. holding out one traffic class entirely",
+    "test_defence_sim": "Padding / dummy traffic / delay / shaping simulation, naive vs adaptive attacker, labelled a simulation",
+    "test_replay": "Replay stream: NDJSON events in time order, running verdict, final analysis equals /analyze, labelled replay not live sniffing",
+    "test_ipv6_ah": "IPv6, AH, ESP-in-UDP/4500 parsing and analysis on SYNTHETIC fixtures; AH-only reported as unencrypted; IPv4 regression",
 }
 
 
@@ -68,6 +76,8 @@ def main():
         "* Real Docker containers (strongSwan testbed, `docker compose up`) — Docker was not running; command order is tested with a fake Docker only.",
         "* Deployment to Render/Railway/Vercel/Netlify — needs the owner's logins; configs are syntax-checked only.",
         "* The IKE parser has never seen a *real* `IKE_SA_INIT` (none exists in the captured data); it is tested on synthetic fixtures built from RFC 7296.",
+        "* IPv6, AH, NAT-T and rekey behaviour are tested on hand-built SYNTHETIC captures only; the generated strongSwan snippet was never run against a live strongSwan.",
+        "* Replay mode streams a capture file; live sniffing is not implemented and not tested.",
     ]
     with open(OUT, "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")

@@ -1,7 +1,8 @@
 {
- "schema_version": "1.0",
+ "schema_version": "1.1",
  "filename": "aes128-dh2-transport-pfs-off__web_run1.pcap",
  "score": 30,
+ "raw_score": 30,
  "risk_level": "HIGH",
  "score_basis": "declared",
  "cipher": "AES-CBC-128",
@@ -12,7 +13,10 @@
   "cipher": "declared",
   "dh_group": "declared",
   "pfs": "unknown",
-  "mode": "declared"
+  "mode": "inferred"
+ },
+ "confidence": {
+  "mode": 1.0
  },
  "breakdown": [
   {
@@ -44,10 +48,511 @@
    "value": "transport",
    "rating": "medium",
    "weight": 0.0,
-   "source": "declared",
+   "source": "inferred",
    "reason": "Transport mode leaves the original IP header visible; only the payload is encrypted."
+  },
+  {
+   "factor": "Integrity",
+   "value": "separate HMAC, tag length 16 B or 32 B",
+   "rating": "medium",
+   "weight": 0.0,
+   "source": "inferred",
+   "reason": "length mod 16 = 8 => ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)"
+  },
+  {
+   "factor": "Key lifetime",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "not observable in this capture (no rekey - a new SPI in the same direction - was seen)"
+  },
+  {
+   "factor": "Replay protection",
+   "value": "sender uses a strictly increasing sequence counter",
+   "rating": "medium",
+   "weight": 0.0,
+   "source": "inferred",
+   "reason": "all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)"
   }
  ],
+ "assessment": {
+  "completeness_pct": 41.7,
+  "completeness_detail": [
+   {
+    "fact": "ike_version",
+    "label": "IKE version",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "protocol",
+    "label": "IPsec protocol (ESP / AH)",
+    "weight": 5,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "mode",
+    "label": "Tunnel or transport mode",
+    "weight": 10,
+    "status": "inferred",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "cipher",
+    "label": "Cipher (algorithm / family)",
+    "weight": 15,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "key_length",
+    "label": "Key length",
+    "weight": 10,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "integrity",
+    "label": "Integrity protection",
+    "weight": 5,
+    "status": "inferred",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "dh_group",
+    "label": "Key exchange (DH group)",
+    "weight": 15,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "pfs",
+    "label": "Perfect Forward Secrecy",
+    "weight": 15,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "auth_method",
+    "label": "Authentication method",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "key_lifetime",
+    "label": "SA / key lifetime",
+    "weight": 8,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "replay",
+    "label": "Replay protection",
+    "weight": 7,
+    "status": "inferred",
+    "known_fraction": 0.6
+   }
+  ],
+  "raw_score": 30,
+  "score_cap": 62,
+  "score_capped": false,
+  "adjustments": [],
+  "unknown_facts": [
+   "IKE version",
+   "Perfect Forward Secrecy",
+   "Authentication method",
+   "SA / key lifetime"
+  ],
+  "findings": [
+   {
+    "id": "ike_version",
+    "title": "IKE version",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "no IKE_SA_INIT in this capture (encrypted IKE messages only, or none)"
+   },
+   {
+    "id": "protocol",
+    "title": "IPsec protocol (ESP / AH)",
+    "value": "ESP",
+    "status": "observed",
+    "confidence": 1.0,
+    "rating": "info",
+    "weight": 5,
+    "evidence": "300 ESP packets seen"
+   },
+   {
+    "id": "mode",
+    "title": "Tunnel or transport mode",
+    "value": "transport",
+    "status": "inferred",
+    "confidence": 1.0,
+    "rating": "medium",
+    "weight": 10,
+    "evidence": "learned from packet-size statistics (tunnel mode adds an inner IP header to every packet); trained on scripted lab traffic"
+   },
+   {
+    "id": "cipher",
+    "title": "Cipher (algorithm / family)",
+    "value": "AES-CBC-128",
+    "status": "declared",
+    "confidence": null,
+    "rating": "medium",
+    "weight": 15,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "key_length",
+    "title": "Key length",
+    "value": "128 bits",
+    "status": "declared",
+    "confidence": null,
+    "rating": "info",
+    "weight": 10,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "integrity",
+    "title": "Integrity protection",
+    "value": "separate HMAC, tag length 16 B or 32 B",
+    "status": "inferred",
+    "confidence": 0.5,
+    "rating": "medium",
+    "weight": 5,
+    "evidence": "length mod 16 = 8 => ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)"
+   },
+   {
+    "id": "dh_group",
+    "title": "Key exchange (DH group)",
+    "value": "Group 2 (1024-bit MODP)",
+    "status": "declared",
+    "confidence": null,
+    "rating": "weak",
+    "weight": 15,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "pfs",
+    "title": "Perfect Forward Secrecy",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 15,
+    "evidence": "negotiated inside encrypted IKE messages; not observable passively"
+   },
+   {
+    "id": "auth_method",
+    "title": "Authentication method",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "pre-shared key vs certificate is negotiated in the encrypted IKE_AUTH exchange; not observable passively"
+   },
+   {
+    "id": "key_lifetime",
+    "title": "SA / key lifetime",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 8,
+    "evidence": "not observable in this capture (no rekey - a new SPI in the same direction - was seen)"
+   },
+   {
+    "id": "replay",
+    "title": "Replay protection",
+    "value": "sender uses a strictly increasing sequence counter",
+    "status": "inferred",
+    "confidence": 0.6,
+    "rating": "medium",
+    "weight": 7,
+    "evidence": "all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)",
+    "note": "receiver-side enforcement of the anti-replay window is not observable"
+   }
+  ],
+  "metadata_exposure": {
+   "score": 99,
+   "level": "HIGH",
+   "scale": "0 = an eavesdropper learns nothing, 100 = learns everything listed",
+   "items": [
+    {
+     "what": "Traffic type",
+     "weight": 30,
+     "exposed_fraction": 1.0,
+     "points": 30.0,
+     "learned": "Web browsing (model confidence 100%)",
+     "why": "packet sizes and timing reveal what the tunnel is used for, even though the payload is encrypted"
+    },
+    {
+     "what": "Tunnel vs transport mode",
+     "weight": 10,
+     "exposed_fraction": 1.0,
+     "points": 10.0,
+     "learned": "transport",
+     "why": "extra inner IP header changes every packet size"
+    },
+    {
+     "what": "Cipher family",
+     "weight": 10,
+     "exposed_fraction": 0.94,
+     "points": 9.4,
+     "learned": "CBC-like (16-byte block aligned)",
+     "why": "padding granularity (CBC vs AEAD) shows in the packet lengths"
+    },
+    {
+     "what": "Packet-size distribution",
+     "weight": 15,
+     "exposed_fraction": 1.0,
+     "points": 15.0,
+     "learned": "always visible",
+     "why": "ESP does not hide packet lengths unless padding is added"
+    },
+    {
+     "what": "Timing and volume",
+     "weight": 20,
+     "exposed_fraction": 1.0,
+     "points": 20.0,
+     "learned": "always visible",
+     "why": "packet times and byte counts are visible on the wire"
+    },
+    {
+     "what": "Communicating endpoints",
+     "weight": 15,
+     "exposed_fraction": 1.0,
+     "points": 15.0,
+     "learned": "the actual hosts",
+     "why": "outer IP addresses are always in clear; tunnel mode hides the real endpoints behind the gateways"
+    }
+   ],
+   "note": "IPsec cannot hide timing, volume or outer addresses; padding and dummy traffic reduce the traffic-type leak (see the defence simulation)."
+  },
+  "compliance": {
+   "label": "Guideline mapping against published guidance - NOT a certification or audit result",
+   "checks": [
+    {
+     "id": "nist-131a-tdea",
+     "guideline": "NIST SP 800-131A Rev. 2",
+     "requirement": "Three-key TDEA (3DES) is not acceptable for encryption after 2023",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "nist-aes",
+     "guideline": "NIST FIPS 197 / SP 800-38",
+     "requirement": "Use an approved block cipher (AES) and mode",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "nist-112bit-kex",
+     "guideline": "NIST SP 800-131A Rev. 2 / SP 800-57",
+     "requirement": "Key establishment with at least 112 bits of security strength (finite-field DH of at least 2048 bits)",
+     "result": "does_not_meet",
+     "evidence": "Group 2 (1024-bit MODP) is below 2048 bits",
+     "input_status": "declared"
+    },
+    {
+     "id": "rfc8221-esp-alg",
+     "guideline": "RFC 8221",
+     "requirement": "ESP encryption algorithm is one of the mandatory-to-implement AES-CBC or AES-GCM-16",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "declared"
+    },
+    {
+     "id": "rfc8247-group14",
+     "guideline": "RFC 8247",
+     "requirement": "IKEv2 MODP group 14 (2048-bit) is a mandatory-to-implement group",
+     "result": "cannot_assess",
+     "evidence": "only evaluated when group 14 is the negotiated group",
+     "input_status": "declared"
+    }
+   ],
+   "summary": {
+    "meets": 3,
+    "does_not_meet": 1,
+    "cannot_assess": 1
+   },
+   "not_evaluated": [
+    "NIST SP 800-77 Rev. 1 (Guide to IPsec VPNs): used as general background only; no individual requirement is encoded here.",
+    "RFC 8247 is encoded for one item only (IKEv2 group 14); other group requirement levels are not evaluated.",
+    "FIPS 140 module validation, key management, authentication strength and certificate policy are outside what a capture can show."
+   ]
+  },
+  "score_after_cap": 30,
+  "cap_rule": "score <= 35 + 65 x completeness (LOW needs a score of at least 80, i.e. completeness of at least 69%)",
+  "consistency_checks": [
+   {
+    "item": "cipher family",
+    "declared": "CBC",
+    "inferred": "CBC",
+    "agree": true
+   },
+   {
+    "item": "mode",
+    "declared": "transport",
+    "inferred": "transport",
+    "agree": true
+   }
+  ]
+ },
+ "recommendations": {
+  "items": [
+   {
+    "id": "dh",
+    "priority": "High",
+    "title": "Replace the weak Diffie-Hellman group",
+    "action": "Change the key-exchange group from Group 2 (1024-bit MODP) to an elliptic-curve group (19 or 20) or MODP 3072-bit or larger.",
+    "why": "Groups below 2048 bits give less than 112 bits of security strength.",
+    "based_on": {
+     "status": "declared",
+     "confidence": null
+    },
+    "standards": [
+     "NIST SP 800-131A Rev. 2",
+     "NIST SP 800-57"
+    ],
+    "config_hint": "ike=...-ecp384!  (and the same group in esp= for PFS)",
+    "rank": 1
+   },
+   {
+    "id": "cipher",
+    "priority": "Medium",
+    "title": "Prefer an AEAD cipher (AES-256-GCM) over AES-CBC",
+    "action": "Use aes256gcm16 for IKE and ESP: it protects integrity and confidentiality in one step and needs no separate HMAC.",
+    "why": "Removes padding-oracle style risks of CBC + HMAC and gives a 256-bit key.",
+    "based_on": {
+     "status": "declared",
+     "confidence": null
+    },
+    "standards": [
+     "RFC 8221 (AES-GCM-16 is mandatory to implement)"
+    ],
+    "config_hint": "esp=aes256gcm16-ecp384!",
+    "rank": 2
+   },
+   {
+    "id": "pfs",
+    "priority": "Medium",
+    "title": "Verify that Perfect Forward Secrecy is enabled",
+    "action": "PFS is negotiated inside encrypted IKE messages and cannot be seen in a capture. Confirm the ESP proposal contains a DH group (for strongSwan: esp=...-ecp384!) with `ipsec statusall`.",
+    "why": "It carries 15% of the assessment.",
+    "based_on": {
+     "status": "unknown",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": "esp=aes256gcm16-ecp384!",
+    "rank": 3
+   },
+   {
+    "id": "capture",
+    "priority": "Medium",
+    "title": "Capture from before the tunnel comes up",
+    "action": "Start the capture, then bring the tunnel up (for example `tcpdump -w` first, then `ipsec up`), so IKE_SA_INIT is included.",
+    "why": "It is the only place the cipher and DH group are visible; without it the assessment stays incomplete.",
+    "based_on": {
+     "status": "unknown",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": null,
+    "rank": 4
+   },
+   {
+    "id": "metadata",
+    "priority": "Medium",
+    "title": "Reduce the traffic-type leak",
+    "action": "An eavesdropper can tell this traffic is web browsing (100%). Padding packets to fixed sizes and adding dummy traffic reduces this; see the defence simulation for the effect measured on this project's dataset.",
+    "why": "IPsec encrypts payloads but not packet sizes or timing.",
+    "based_on": {
+     "status": "inferred",
+     "confidence": 1.0
+    },
+    "standards": [],
+    "config_hint": "(not an ipsec.conf option - needs padding support, e.g. ESP TFC padding, or an overlay)",
+    "rank": 5
+   },
+   {
+    "id": "mode",
+    "priority": "Low",
+    "title": "Use tunnel mode unless host-to-host transport mode is required",
+    "action": "Tunnel mode encrypts the original IP header and hides the real endpoints behind the gateways.",
+    "why": "Reduces what an eavesdropper learns about who talks to whom.",
+    "based_on": {
+     "status": "inferred",
+     "confidence": 1.0
+    },
+    "standards": [],
+    "config_hint": "type=tunnel",
+    "rank": 6
+   },
+   {
+    "id": "lifetime",
+    "priority": "Low",
+    "title": "Set and verify a short SA lifetime",
+    "action": "Set keylife=1h and ikelifetime=4h, then verify with a capture at least twice as long as keylife so a rekey is observed.",
+    "why": "The lifetime cannot be observed unless a rekey happens inside the capture.",
+    "based_on": {
+     "status": "unknown",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": "keylife=1h",
+    "rank": 7
+   }
+  ],
+  "secure_config": {
+   "format": "strongSwan ipsec.conf",
+   "text": "# Generated by the IPsec VPN Analyzer - a starting point, NOT a tested production config.\n# Replace the <placeholders>, then test in a lab (ipsec statusall, tcpdump) before using it.\nconfig setup\n    charondebug=\"ike 1, esp 1\"\n\nconn secure-vpn\n    keyexchange=ikev2\n    left=<THIS_GATEWAY_IP>\n    right=<PEER_GATEWAY_IP>\n    type=tunnel\n    authby=pubkey                 # certificates; if you must use a pre-shared key: authby=secret with 20+ random characters\n    leftcert=<THIS_GATEWAY_CERT>\n    ike=aes256gcm16-prfsha384-ecp384!             # AES-256-GCM, SHA-384 PRF, ECP-384 (group 20)\n    esp=aes256gcm16-ecp384!             # AES-256-GCM; the ecp384 group here enables Perfect Forward Secrecy\n    ikelifetime=4h\n    keylife=1h\n    rekeymargin=9m\n    dpdaction=restart\n    dpddelay=30s\n    auto=start\n",
+   "verified": false,
+   "note": "Standard strongSwan syntax, but NOT verified against a running strongSwan in this project (Docker was unavailable). Test it in a lab first; replace every <placeholder>."
+  },
+  "before_after": {
+   "label": "Projection - what the tool would report if the recommended configuration were applied (not a measurement)",
+   "configuration": {
+    "recommended": {
+     "cipher": "AES-GCM-16",
+     "key_length_bits": 256,
+     "dh_group": 20,
+     "pfs": true,
+     "mode": "tunnel"
+    }
+   },
+   "before": {
+    "score": 30,
+    "raw_score": 30,
+    "risk_level": "HIGH",
+    "completeness_pct": 41.7
+   },
+   "after_passive_capture": {
+    "score": 80,
+    "raw_score": 100,
+    "risk_level": "LOW",
+    "completeness_pct": 69.0,
+    "assumption": "a new capture that includes the cleartext IKE_SA_INIT; PFS, authentication and key lifetime stay invisible to a passive capture, which is why even a perfect configuration cannot reach 100 from a capture alone"
+   },
+   "after_config_review": {
+    "score": 100,
+    "raw_score": 100,
+    "risk_level": "LOW",
+    "completeness_pct": 100.0,
+    "assumption": "the gateway configuration is read directly, so every fact is known"
+   }
+  }
+ },
  "traffic": {
   "class": "web_browsing",
   "label": "Web browsing",
@@ -78,11 +583,11 @@
  "model_confidence": 1.0,
  "explanation": [
   "Overall security score 30/100 - high risk.",
-  "This rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
+  "Only 42% of the security facts that matter could be established from this capture.",
+  "The rating uses the VPN configuration named in the capture's file name (declared by the testbed), because the capture itself does not contain the readable IKE negotiation.",
   "Cipher - AES-CBC-128 - is rated medium. AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
   "DH group - Group 2 (1024-bit MODP) - is rated weak. 1024-bit MODP is considered too small against modern computing power.",
-  "Mode - transport - is rated medium. Transport mode leaves the original IP header visible; only the payload is encrypted.",
-  "Not determinable from this capture: PFS. These are left out of the score instead of being counted as weak.",
+  "Not determinable from this capture: PFS. They are left out of the raw score instead of being counted as weak, but they lower the completeness.",
   "The encrypted traffic looks like web browsing (model confidence 100%).",
   "Data rate (bytes per second) (typically 1992) pushed the prediction towards 'web browsing'.",
   "Average packet size (typically 199.2) pushed the prediction towards 'web browsing'.",
@@ -353,6 +858,7 @@
     "ike_packets": 0,
     "encrypted_ike_packets": 0,
     "esp_packets": 300,
+    "ah_packets": 0,
     "truncated": false
    },
    "warnings": [
@@ -360,6 +866,344 @@
     "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
     "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
    ]
+  },
+  "esp_fingerprint": {
+   "esp_packets": 300,
+   "distinct_sizes": 3,
+   "residues_mod16": {
+    "8": 300
+   },
+   "cipher_family": {
+    "value": "CBC-like (16-byte block aligned)",
+    "confidence": 0.941,
+    "evidence": "all 300 packets have length = 8 (mod 16) over 3 distinct sizes; an AEAD cipher would show several classes (heuristic likelihood, assumes even spread of padding)",
+    "leaning": null
+   },
+   "integrity_tag": {
+    "value": null,
+    "candidates": [
+     {
+      "bytes": 16,
+      "algorithm": "HMAC-SHA2-256-128"
+     },
+     {
+      "bytes": 32,
+      "algorithm": "HMAC-SHA2-512-256"
+     }
+    ],
+    "evidence": "length mod 16 = 8 => ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)"
+   },
+   "mode": {
+    "value": "transport",
+    "confidence": 1.0,
+    "evidence": "learned from packet-size statistics (tunnel mode adds an inner IP header to every packet); trained on scripted lab traffic"
+   },
+   "not_observable": [
+    "AES-128 vs AES-256 (key length does not change packet sizes)",
+    "Diffie-Hellman group (only visible in the cleartext IKE_SA_INIT)",
+    "Perfect Forward Secrecy (negotiated inside encrypted IKE messages)",
+    "Authentication method (pre-shared key vs certificate: encrypted IKE_AUTH)",
+    "Receiver's anti-replay window setting"
+   ],
+   "method": "packet sizes only (no file names, no keys, no IKE)",
+   "protocols": {
+    "ESP": 300,
+    "AH": 0,
+    "IPv6": 0
+   },
+   "ah_only": false
+  },
+  "esp_sequence": {
+   "esp_packets": 300,
+   "capture_span_sec": 19.376,
+   "sas": [
+    {
+     "spi": "0xc17daa21",
+     "protocol": "ESP",
+     "direction": "10.10.0.10 -> 10.10.0.20",
+     "packets": 180,
+     "first_seq": 7583,
+     "last_seq": 7762,
+     "starts_at_beginning": false,
+     "first_time": 1789613931.881212,
+     "last_time": 1789613951.257111,
+     "monotonic": true,
+     "duplicates": 0,
+     "out_of_order": 0,
+     "gap_events": 0,
+     "rollovers": 0,
+     "never_seen_sequence_numbers": 0
+    },
+    {
+     "spi": "0xc9fd48f6",
+     "protocol": "ESP",
+     "direction": "10.10.0.20 -> 10.10.0.10",
+     "packets": 120,
+     "first_seq": 849,
+     "last_seq": 968,
+     "starts_at_beginning": false,
+     "first_time": 1789613931.881552,
+     "last_time": 1789613951.25698,
+     "monotonic": true,
+     "duplicates": 0,
+     "out_of_order": 0,
+     "gap_events": 0,
+     "rollovers": 0,
+     "never_seen_sequence_numbers": 0
+    }
+   ],
+   "replay_protection": {
+    "status": "evidence_present",
+    "evidence": "all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)",
+    "limits": [
+     "Whether the receiver enforces the anti-replay window (and its size) is a receiver-side setting and is not observable.",
+     "Only the sender's sequence counter can be checked; a capture point can also see duplicates/reordering that never reached the receiver.",
+     "The configured SA lifetime is not observable; only the interval between successive SAs seen in this capture."
+    ]
+   },
+   "rekey_events": [],
+   "sa_lifetime": {
+    "observable": false,
+    "estimate_seconds": null,
+    "lower_bound_seconds": null,
+    "basis": null,
+    "note": "not observable in this capture (no rekey - a new SPI in the same direction - was seen)"
+   }
+  },
+  "defence_simulation": {
+   "available": true,
+   "label": "SIMULATION - the packets of this capture were rewritten at the feature level; nothing was re-sent and no gateway was configured. The classifier shown is the one trained on clean traffic (a non-adaptive attacker).",
+   "baseline": {
+    "class": "web_browsing",
+    "nearest_class": "web_browsing",
+    "confidence": 1.0,
+    "rejected": false,
+    "windows": 20
+   },
+   "defences": [
+    {
+     "id": "pad_buckets",
+     "label": "Pad packets to size buckets",
+     "description": "every packet padded up to the next of (128, 256, 512, 1024, 1500) bytes",
+     "cost": {
+      "bandwidth_overhead_pct": 15.7,
+      "extra_packets": 0,
+      "mean_added_delay_ms": 0.0
+     },
+     "result": {
+      "class": "web_browsing",
+      "nearest_class": "web_browsing",
+      "confidence": 1.0,
+      "rejected": false,
+      "windows": 20
+     },
+     "changes_answer": false
+    },
+    {
+     "id": "pad_mtu",
+     "label": "Pad every packet to full size",
+     "description": "every packet padded to 1500 bytes",
+     "cost": {
+      "bandwidth_overhead_pct": 653.0,
+      "extra_packets": 0,
+      "mean_added_delay_ms": 0.0
+     },
+     "result": {
+      "class": "unrecognised",
+      "nearest_class": "voip",
+      "confidence": 0.483,
+      "rejected": true,
+      "windows": 20
+     },
+     "changes_answer": true
+    },
+    {
+     "id": "dummy",
+     "label": "Constant-rate dummy traffic",
+     "description": "40 dummy packets per second of 600 bytes",
+     "cost": {
+      "bandwidth_overhead_pct": 778.1,
+      "extra_packets": 775,
+      "mean_added_delay_ms": 0.0
+     },
+     "result": {
+      "class": "unrecognised",
+      "nearest_class": "voip",
+      "confidence": 0.41,
+      "rejected": true,
+      "windows": 20
+     },
+     "changes_answer": true
+    },
+    {
+     "id": "delay",
+     "label": "Random delay (timing jitter)",
+     "description": "each packet delayed by |N(0, 100 ms)|",
+     "cost": {
+      "bandwidth_overhead_pct": 0.0,
+      "extra_packets": 0,
+      "mean_added_delay_ms": 83.2
+     },
+     "result": {
+      "class": "unrecognised",
+      "nearest_class": "web_browsing",
+      "confidence": 0.964,
+      "rejected": true,
+      "windows": 20
+     },
+     "changes_answer": true
+    },
+    {
+     "id": "shape",
+     "label": "Timing shaping",
+     "description": "packets held until the next 100 ms slot",
+     "cost": {
+      "bandwidth_overhead_pct": 0.0,
+      "extra_packets": 0,
+      "mean_added_delay_ms": 55.7
+     },
+     "result": {
+      "class": "unrecognised",
+      "nearest_class": "web_browsing",
+      "confidence": 0.936,
+      "rejected": true,
+      "windows": 20
+     },
+     "changes_answer": true
+    },
+    {
+     "id": "combined",
+     "label": "Combined",
+     "description": "size buckets + dummy traffic + random delay",
+     "cost": {
+      "bandwidth_overhead_pct": 793.8,
+      "extra_packets": 0,
+      "mean_added_delay_ms": 78.6
+     },
+     "result": {
+      "class": "unrecognised",
+      "nearest_class": "voip",
+      "confidence": 0.432,
+      "rejected": true,
+      "windows": 20
+     },
+     "changes_answer": true
+    }
+   ],
+   "population": {
+    "what": "SIMULATED traffic-analysis defences at the feature level (not a measurement on a real gateway)",
+    "attackers": {
+     "non_adaptive": "classifier trained on clean traffic of other configs, shown defended traffic of unseen configs",
+     "adaptive": "classifier retrained on defended traffic of other configs (knows the defence), tested on unseen configs"
+    },
+    "chance_level_capture_accuracy": 0.2,
+    "captures": 180,
+    "configs": 36,
+    "baseline": {
+     "non_adaptive_capture_accuracy": 1.0,
+     "non_adaptive_window_accuracy": 1.0,
+     "captures_classified": 180,
+     "windows": 1027
+    },
+    "defences": {
+     "pad_buckets": {
+      "label": "Pad packets to size buckets",
+      "description": "every packet padded up to the next of (128, 256, 512, 1024, 1500) bytes",
+      "non_adaptive_capture_accuracy": 1.0,
+      "non_adaptive_window_accuracy": 0.9980525803310614,
+      "captures_classified": 180,
+      "windows": 1027,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 25.8,
+       "bandwidth_overhead_pct_median": 10.2,
+       "mean_added_delay_ms": 0.0
+      }
+     },
+     "pad_mtu": {
+      "label": "Pad every packet to full size",
+      "description": "every packet padded to 1500 bytes",
+      "non_adaptive_capture_accuracy": 0.42777777777777776,
+      "non_adaptive_window_accuracy": 0.11100292112950341,
+      "captures_classified": 180,
+      "windows": 1027,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9990262901655307,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 389.2,
+       "bandwidth_overhead_pct_median": 223.4,
+       "mean_added_delay_ms": 0.0
+      }
+     },
+     "dummy": {
+      "label": "Constant-rate dummy traffic",
+      "description": "40 dummy packets per second of 600 bytes",
+      "non_adaptive_capture_accuracy": 0.6,
+      "non_adaptive_window_accuracy": 0.1563106796116505,
+      "captures_classified": 180,
+      "windows": 1030,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 1666.3,
+       "bandwidth_overhead_pct_median": 71.9,
+       "mean_added_delay_ms": 0.0
+      }
+     },
+     "delay": {
+      "label": "Random delay (timing jitter)",
+      "description": "each packet delayed by |N(0, 100 ms)|",
+      "non_adaptive_capture_accuracy": 0.9944444444444445,
+      "non_adaptive_window_accuracy": 0.9836065573770492,
+      "captures_classified": 180,
+      "windows": 1037,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9932497589199615,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 0.0,
+       "bandwidth_overhead_pct_median": 0.0,
+       "mean_added_delay_ms": 79.4
+      }
+     },
+     "shape": {
+      "label": "Timing shaping",
+      "description": "packets held until the next 100 ms slot",
+      "non_adaptive_capture_accuracy": 1.0,
+      "non_adaptive_window_accuracy": 1.0,
+      "captures_classified": 180,
+      "windows": 1050,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 1.0,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 0.0,
+       "bandwidth_overhead_pct_median": 0.0,
+       "mean_added_delay_ms": 59.5
+      }
+     },
+     "combined": {
+      "label": "Combined",
+      "description": "size buckets + dummy traffic + random delay",
+      "non_adaptive_capture_accuracy": 0.6,
+      "non_adaptive_window_accuracy": 0.19205298013245034,
+      "captures_classified": 180,
+      "windows": 1057,
+      "adaptive_capture_accuracy": 1.0,
+      "adaptive_window_accuracy": 0.9962157048249763,
+      "cost": {
+       "bandwidth_overhead_pct_mean": 1692.0,
+       "bandwidth_overhead_pct_median": 119.2,
+       "mean_added_delay_ms": 79.7
+      }
+     }
+    },
+    "caveats": [
+     "Feature-level simulation on scripted lab traffic: real padding/dummy-traffic implementations differ in detail.",
+     "The adaptive attacker uses the same 12 window features; a stronger attacker (sequence models, longer windows) may do better.",
+     "Captures are short (file transfer, VoIP and video < 2 s), which limits how well dummy traffic and shaping can be judged.",
+     "Costs are per capture and depend on how busy the capture is: padding a ping stream costs a lot, padding a bulk transfer almost nothing."
+    ]
+   }
   }
  },
  "warnings": [

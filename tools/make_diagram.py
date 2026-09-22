@@ -47,24 +47,24 @@ def main():
     arrow(ax, 9.9, 5.37, 10.4, 5.37)
 
     # ---- online: the app ----------------------------------------------------------------------
-    ax.text(0.2, 4.1, "ONLINE: analyse an uploaded capture", fontsize=9.5, color=MUTED, fontweight="bold")
-    box(ax, 0.2, 0.35, 3.1, 3.4, "React dashboard", ["Upload .pcap / try a sample", "Risk gauge, threat matrix", "Traffic chart + timeline", "Plain-English toggle",
-                                                     "Report download", "(Vercel / Netlify)"], BLUE)
+    ax.text(0.2, 4.1, "ONLINE: analyse an uploaded capture (or replay it window by window)", fontsize=9.5, color=MUTED, fontweight="bold")
+    box(ax, 0.2, 0.35, 3.1, 3.4, "React dashboard", ["Upload / sample / replay", "Risk gauge + completeness", "Findings: observed / inferred /", "declared / unknown", "Threat matrix, exposure, fixes",
+                                                     "Defence what-if, reports", "(Vercel / Netlify)"], BLUE)
     ax.add_patch(FancyBboxPatch((4.4, 0.35), 8.4, 3.4, boxstyle="round,pad=0.02,rounding_size=0.12", fc="white", ec="#7a8aa8", lw=1.2, ls="--"))
-    ax.text(8.6, 3.55, "FastAPI backend  (Render / Railway)", ha="center", va="top", fontsize=10.5, fontweight="bold", color=INK)
-    box(ax, 4.6, 1.95, 2.5, 1.2, "ike_parser", ["IKE_SA_INIT: cipher, DH,", "observed vs unknown"], GREEN)
-    box(ax, 7.4, 1.95, 2.3, 1.2, "scoring_engine", ["0-100 score, LOW/MED/HIGH"], GREEN)
-    box(ax, 10.0, 1.95, 2.6, 1.2, "predict (ML)", ["traffic class, SHAP,", "anomalies, timeline"], PURPLE)
-    box(ax, 4.6, 0.5, 4.0, 1.1, "contract.py", ["ONE response shape; every value tagged", "observed / declared / unknown"], AMBER)
-    box(ax, 8.9, 0.5, 3.7, 1.1, "report_builder", ["Jinja2 -> HTML -> PDF", "executive + technical"], BLUE)
+    ax.text(6.6, 3.55, "FastAPI backend  (Render / Railway)", ha="center", va="top", fontsize=10.5, fontweight="bold", color=INK)
+    box(ax, 4.55, 2.05, 2.0, 1.15, "ike_parser", ["IKE_SA_INIT (IPv4/6)"], GREEN)
+    box(ax, 6.65, 2.05, 2.05, 1.15, "ESP / AH analysis", ["sizes -> cipher family,", "mode; sequence, rekeys"], GREEN)
+    box(ax, 8.8, 2.05, 1.95, 1.15, "predict (ML)", ["class, calibrated,", "open-set, SHAP"], PURPLE)
+    box(ax, 10.85, 2.05, 1.85, 1.15, "defence_sim", ["what-if (simulation)"], PURPLE)
+    box(ax, 4.55, 0.5, 2.6, 1.2, "assessment", ["score + completeness cap,", "exposure, guideline map"], AMBER)
+    box(ax, 7.25, 0.5, 2.6, 1.2, "recommendations", ["fixes, strongSwan snippet,", "before / after"], AMBER)
+    box(ax, 9.95, 0.5, 2.75, 1.2, "contract + reports", ["schema 1.1, HTML / PDF", "replay stream (NDJSON)"], BLUE)
     arrow(ax, 3.3, 2.0, 4.4, 2.0, "POST /analyze", both=True)
-    arrow(ax, 6.1, 1.95, 6.1, 1.6)
-    arrow(ax, 8.55, 1.95, 7.6, 1.6)
-    arrow(ax, 11.3, 1.95, 8.3, 1.45, rad=0.15)
-    arrow(ax, 8.6, 1.05, 8.9, 1.05)
+    for x in (5.55, 7.7, 9.8):
+        arrow(ax, x, 2.05, x, 1.72)
 
     # models feed the backend
-    arrow(ax, 11.6, 4.55, 11.3, 3.15, "models", rad=-0.1)
+    arrow(ax, 11.6, 4.55, 9.9, 3.2, "models", rad=-0.1)
 
     fig.savefig(OUT, dpi=140, bbox_inches="tight", facecolor="white")
     print("wrote", OUT)

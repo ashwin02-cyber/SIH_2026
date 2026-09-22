@@ -36,7 +36,7 @@
 <body>
 
 <h1>VPN Security Assessment - Executive Summary</h1>
-<p class="muted">Capture: <b>aes128-dh2-transport-pfs-off__web_run1.pcap</b> &nbsp;|&nbsp; Generated: 2026-09-21 14:32 UTC</p>
+<p class="muted">Capture: <b>aes128-dh2-transport-pfs-off__web_run1.pcap</b> &nbsp;|&nbsp; Generated: 2026-09-22 12:45 UTC</p>
 
 <table style="margin-top:8pt;">
   <tr>
@@ -60,6 +60,12 @@
   </tr>
 </table>
 
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>Assessment completeness: 42%.</b>
+  Only this share of the security facts that matter could be established from the capture.
+  
+  Not determinable: IKE version, Perfect Forward Secrecy, Authentication method, SA / key lifetime.
+</div>
 
 <div class="notice">
   <b>Important:</b> the settings below come from the VPN configuration named in the capture's file name (declared by the test setup), not from the traffic itself,
@@ -100,9 +106,33 @@
     <td><b>Mode</b></td>
     <td>transport</td>
     <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
-    <td>Declared by file name</td>
+    <td>Inferred from packet sizes</td>
   </tr>
   <tr><td colspan="4" class="muted" style="border-top:none;">Transport mode leaves the original IP header visible; only the payload is encrypted.</td></tr>
+  
+  <tr>
+    <td><b>Integrity</b></td>
+    <td>separate HMAC, tag length 16 B or 32 B</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Inferred from packet sizes</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">length mod 16 = 8 =&gt; ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)</td></tr>
+  
+  <tr>
+    <td><b>Key lifetime</b></td>
+    <td>unknown</td>
+    <td><span class="badge" style="background-color:#616161;">UNKNOWN</span></td>
+    <td>Not determinable</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">not observable in this capture (no rekey - a new SPI in the same direction - was seen)</td></tr>
+  
+  <tr>
+    <td><b>Replay protection</b></td>
+    <td>sender uses a strictly increasing sequence counter</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Inferred from packet sizes</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)</td></tr>
   
 </table>
 <p class="muted">The score is a weighted average of the rated settings (cipher 40%, key exchange 40%, forward secrecy 20%).
@@ -112,17 +142,31 @@ Settings that cannot be determined are left out instead of being counted as weak
 <table>
   <tr><th style="width:12%;">Priority</th><th>Action</th></tr>
   
-  <tr><td><b>High</b></td><td>The key-exchange group, Group 2 (1024-bit MODP), is too small for modern threats. Switch to DH group 14 at minimum, preferably an elliptic-curve group (19, 20 or 21).</td></tr>
+  <tr><td><b>High</b></td><td>Replace the weak Diffie-Hellman group. Change the key-exchange group from Group 2 (1024-bit MODP) to an elliptic-curve group (19 or 20) or MODP 3072-bit or larger.</td></tr>
   
-  <tr><td><b>Medium</b></td><td>Prefer an AES-GCM cipher over AES-CBC-128: it protects integrity as well as confidentiality and needs no separate HMAC.</td></tr>
+  <tr><td><b>Medium</b></td><td>Prefer an AEAD cipher (AES-256-GCM) over AES-CBC. Use aes256gcm16 for IKE and ESP: it protects integrity and confidentiality in one step and needs no separate HMAC.</td></tr>
   
-  <tr><td><b>Medium</b></td><td>Confirm in the VPN gateway configuration that Perfect Forward Secrecy is enabled. It cannot be seen in a passive capture.</td></tr>
+  <tr><td><b>Medium</b></td><td>Verify that Perfect Forward Secrecy is enabled. PFS is negotiated inside encrypted IKE messages and cannot be seen in a capture. Confirm the ESP proposal contains a DH group (for strongSwan: esp=...-ecp384!) with `ipsec statusall`.</td></tr>
   
-  <tr><td><b>Low</b></td><td>Transport mode leaves the original IP header visible. Use tunnel mode for gateway-to-gateway links unless transport mode is required.</td></tr>
+  <tr><td><b>Medium</b></td><td>Capture from before the tunnel comes up. Start the capture, then bring the tunnel up (for example `tcpdump -w` first, then `ipsec up`), so IKE_SA_INIT is included.</td></tr>
   
-  <tr><td><b>Medium</b></td><td>Repeat the analysis with a capture that includes the IKE negotiation (start the capture before the tunnel comes up), so the settings are read from the traffic itself instead of from the file name.</td></tr>
+  <tr><td><b>Medium</b></td><td>Reduce the traffic-type leak. An eavesdropper can tell this traffic is web browsing (100%). Padding packets to fixed sizes and adding dummy traffic reduces this; see the defence simulation for the effect measured on this project&#39;s dataset.</td></tr>
+  
+  <tr><td><b>Low</b></td><td>Use tunnel mode unless host-to-host transport mode is required. Tunnel mode encrypts the original IP header and hides the real endpoints behind the gateways.</td></tr>
+  
+  <tr><td><b>Low</b></td><td>Set and verify a short SA lifetime. Set keylife=1h and ikelifetime=4h, then verify with a capture at least twice as long as keylife so a rekey is observed.</td></tr>
   
 </table>
+
+
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>If the recommended configuration were applied (projection, not a measurement):</b>
+  score now 30 (HIGH);
+  from a new passive capture 80 (LOW);
+  with the gateway configuration reviewed directly 100 (LOW).
+  <span class="muted">A capture alone cannot show forward secrecy or the authentication method, so it cannot reach 100.</span>
+</div>
+
 
 
 <h2>What is travelling through the tunnel</h2>
@@ -133,12 +177,12 @@ Best match: <b>Web browsing</b> (model confidence 100%).</p>
 
 <h2>What this report cannot tell you</h2>
 <ul>
-  <li>An IPsec capture only shows the cipher and key-exchange group when the start of the VPN negotiation was captured. Whether forward secrecy is on, and tunnel versus transport mode, are negotiated in an encrypted step and are not visible to an observer.</li>
+  <li>An IPsec capture only shows the cipher and key-exchange group when the start of the VPN negotiation was captured. Whether forward secrecy is on is negotiated in an encrypted step and is not visible to an observer. Tunnel versus transport mode and the cipher family (CBC or GCM) can only be estimated statistically from packet sizes, and are marked "inferred" with a confidence.</li>
   <li>The traffic-type label is a statistical guess from packet sizes and timing, trained on five scripted traffic types. It is not proof of what users did.</li>
 </ul>
 
 <div id="footer_content" class="muted" style="text-align:center;">
-  IPsec VPN Analyzer - aes128-dh2-transport-pfs-off__web_run1.pcap - generated 2026-09-21 14:32 UTC - page <pdf:pagenumber> of <pdf:pagecount>
+  IPsec VPN Analyzer - aes128-dh2-transport-pfs-off__web_run1.pcap - generated 2026-09-22 12:45 UTC - page <pdf:pagenumber> of <pdf:pagecount>
 </div>
 </body>
 </html>
