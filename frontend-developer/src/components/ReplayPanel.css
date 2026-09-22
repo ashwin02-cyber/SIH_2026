@@ -1,0 +1,14 @@
+.replay-toggle {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.replay-toggle input {
+  margin-top: 2px;
+}

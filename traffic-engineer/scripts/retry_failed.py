@@ -1,5 +1,6 @@
 import sys
-sys.path.insert(0, r"E:\SIH_2026\traffic-engineer\scripts")
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from orchestrate import run_combo
 
 failed_combos = [

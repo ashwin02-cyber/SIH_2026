@@ -1,13 +1,23 @@
-scapy==2.5.0
-pyshark==0.6
-pandas==2.2.0
-numpy==1.26.0
-scikit-learn==1.4.0
-xgboost==2.0.3
-fastapi==0.110.0
-uvicorn==0.29.0
-streamlit==1.32.0
-jinja2==3.1.3
-weasyprint==61.2
-matplotlib==3.8.3
-plotly==5.20.0
+# One environment for the whole project (backend, ML, reports, tests).
+# Versions are pinned to what the models in ml-engineer/models were trained with
+# (scikit-learn 1.9.1, xgboost 3.4.1, ...). Python 3.12 is recommended.
+numpy==2.5.2
+pandas==3.0.5
+scipy==1.18.1
+scikit-learn==1.9.1
+xgboost==3.4.1
+shap==0.52.0
+joblib==1.5.3
+matplotlib==3.11.1
+seaborn==0.13.2
+scapy==2.7.0
+fastapi==0.141.1
+uvicorn==0.53.0
+python-multipart==0.0.32
+Jinja2==3.1.6
+xhtml2pdf==0.2.20
+reportlab==5.0.1
+python-pptx==1.0.2
+httpx==0.28.1
+pytest==9.1.1
+pypdf==6.19.0

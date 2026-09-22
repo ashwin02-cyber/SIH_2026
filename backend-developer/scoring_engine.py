@@ -18,17 +18,32 @@ down, and a fabricated "weak" would misrepresent the tunnel.
 """
 
 CIPHER_RATING = {
-    "AES-CBC": {128: "medium", 256: "strong"},   # CBC needs a separate HMAC for integrity
+    "NONE": {None: "weak"},                        # AH only: authenticates packets but does not encrypt them
+    "3DES": {None: "weak"},                        # 64-bit blocks, deprecated
+    "AES-CBC": {128: "medium", 256: "strong"},     # CBC needs a separate HMAC for integrity
+    "AES-CTR": {128: "medium", 256: "strong"},
     "AES-GCM-16": {128: "strong", 256: "strong"},  # AEAD — confidentiality + integrity in one
+    "ChaCha20-Poly1305": {256: "strong"},
 }
 
 DH_GROUP_RATING = {
+    1: "weak",     # 768-bit MODP
     2: "weak",     # 1024-bit MODP — considered too small for modern threat models
+    5: "weak",     # 1536-bit MODP
     14: "medium",  # 2048-bit MODP — acceptable, no long-term safety margin
+    15: "medium",  # 3072-bit MODP
+    16: "strong",  # 4096-bit MODP
     19: "strong",  # 256-bit ECP — modern, efficient, strong
+    20: "strong",
+    21: "strong",
+    31: "strong",  # Curve25519
 }
 
-DH_GROUP_LABELS = {2: "1024-bit MODP", 14: "2048-bit MODP", 19: "256-bit ECP"}
+DH_GROUP_LABELS = {
+    1: "768-bit MODP", 2: "1024-bit MODP", 5: "1536-bit MODP", 14: "2048-bit MODP",
+    15: "3072-bit MODP", 16: "4096-bit MODP", 19: "256-bit ECP", 20: "384-bit ECP",
+    21: "521-bit ECP", 31: "Curve25519",
+}
 
 RATING_SCORE = {"weak": 0, "medium": 60, "strong": 100}
 FACTOR_WEIGHT = {"cipher": 0.4, "dh_group": 0.4, "pfs": 0.2}
@@ -41,13 +56,26 @@ def _rate_cipher(cipher_name, key_length_bits):
     if table is None:
         return "unknown", f"'{cipher_name}' isn't in this project's known rating table yet."
 
-    rating = table.get(key_length_bits, table[max(table.keys())])
+    if key_length_bits in table:
+        rating = table[key_length_bits]
+    elif key_length_bits is None and None not in table:
+        # Key length not stated: don't assume the strongest variant.
+        rating = min(table.values(), key=lambda r: RATING_SCORE[r])
+    else:
+        rating = "unknown"
     label = cipher_name + (f"-{key_length_bits}" if key_length_bits else "")
-    if cipher_name == "AES-CBC":
+    if cipher_name == "NONE":
+        reason = ("No encryption: AH authenticates packets but does not encrypt them, so the payload is readable "
+                  "by anyone on the path.")
+    elif cipher_name == "3DES":
+        reason = f"{label} is deprecated: its 64-bit blocks make it vulnerable to birthday attacks."
+    elif cipher_name == "AES-CBC":
         reason = (f"{label} provides confidentiality only — it needs a separate HMAC "
                    "for integrity, and mis-set integrity checking can open padding-oracle-style issues.")
-    else:
+    elif cipher_name in ("AES-GCM-16", "ChaCha20-Poly1305"):
         reason = f"{label} is an AEAD cipher — confidentiality and integrity in one, no separate HMAC needed."
+    else:
+        reason = f"{label} is acceptable but needs a separate integrity algorithm."
     return rating, reason
 
 
@@ -59,7 +87,7 @@ def _rate_dh_group(dh_group):
     reasons = {
         "weak": f"{label} is considered too small against modern computing power.",
         "medium": f"{label} is currently acceptable but has no long-term safety margin.",
-        "strong": f"{label} (elliptic curve) gives strong security with a smaller key size.",
+        "strong": f"{label} gives strong security.",
         "unknown": f"{label} isn't in this project's known rating table yet.",
     }
     return rating, reasons[rating]

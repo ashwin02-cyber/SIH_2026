@@ -1,0 +1,18 @@
+# Runtime-only dependencies of the API (used by backend-developer/Dockerfile and the Render/Railway deploys).
+# Same pinned versions as requirements.txt, minus training/test/slides tooling
+# (xgboost, seaborn, pytest, httpx, python-pptx) to keep the image small and memory use low.
+numpy==2.5.2
+pandas==3.0.5
+scipy==1.18.1
+scikit-learn==1.9.1
+shap==0.52.0
+joblib==1.5.3
+matplotlib==3.11.1
+scapy==2.7.0
+fastapi==0.141.1
+uvicorn==0.53.0
+python-multipart==0.0.32
+Jinja2==3.1.6
+xhtml2pdf==0.2.20
+reportlab==5.0.1
+pypdf==6.19.0

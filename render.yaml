@@ -1,0 +1,16 @@
+# Render "Blueprint": New + > Blueprint > pick this repo. Creates the API (see DEPLOY.md).
+services:
+  - type: web
+    name: ipsec-analyzer-api
+    runtime: docker
+    dockerfilePath: ./backend-developer/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      # After deploying the website, paste its address here, e.g. https://ipsec-analyzer.vercel.app
+      - key: ALLOWED_ORIGINS
+        sync: false
+      # Free instances have 512 MB RAM: keep uploads modest.
+      - key: MAX_UPLOAD_MB
+        value: "20"

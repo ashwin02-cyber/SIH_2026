@@ -1,0 +1,175 @@
+{% extends "base.html.j2" %}
+{% block title %}Technical report{% endblock %}
+{% block body %}
+{% set ike = a.details.ike %}
+<h1>VPN Security Assessment - Technical Report</h1>
+<p class="muted">Capture: <b>{{ a.filename }}</b> &nbsp;|&nbsp; Generated: {{ generated }} &nbsp;|&nbsp; API schema {{ a.schema_version }}</p>
+
+<h2>1. Result</h2>
+<table>
+  <tr><th style="width:30%;">Risk level</th><td><span class="badge" style="background-color:{{ risk_color }};">{{ a.risk_level }}</span></td></tr>
+  <tr><th>Security score</th><td>{% if a.score is not none %}{{ a.score }} / 100{% else %}not calculable{% endif %}</td></tr>
+  <tr><th>Raw score / cap</th><td>{{ a.raw_score if a.raw_score is not none else "n/a" }} from the known facts; capped at {{ a.assessment.score_cap if a.assessment.score_cap is not none else "n/a" }}
+    by assessment completeness ({{ a.assessment.completeness_pct }}%). Rule: {{ a.assessment.cap_rule }}</td></tr>
+  <tr><th>Score basis</th><td>{{ a.score_basis }}
+    {% if a.score_basis == "declared" %} - cipher/DH/mode taken from the testbed naming convention in the capture file name, not observed in the capture{% endif %}</td></tr>
+  <tr><th>Traffic class (ML)</th><td>{% if a.traffic %}{{ a.traffic.label }} ({{ (a.traffic.confidence * 100)|round(1) }}% model confidence){% else %}not available{% endif %}</td></tr>
+</table>
+{% if a.errors %}<div class="error"><b>Errors:</b><ul>{% for e in a.errors %}<li>{{ e }}</li>{% endfor %}</ul></div>{% endif %}
+
+<h2>2. Score breakdown</h2>
+<table>
+  <tr><th>Factor</th><th>Value</th><th>Rating</th><th>Source</th><th class="num">Weight</th><th class="num">Points</th><th class="num">Contribution</th></tr>
+  {% for r in score_rows %}
+  <tr>
+    <td><b>{{ r.factor }}</b></td><td>{{ r.value }}</td>
+    <td><span class="badge" style="background-color:{{ rating_color[r.rating] }};">{{ r.rating }}</span></td>
+    <td>{{ r.source }}</td><td class="num">{{ r.weight }}</td>
+    <td class="num">{{ r.points if r.points is not none else "-" }}</td>
+    <td class="num">{{ r.contribution if r.contribution is not none else "-" }}</td>
+  </tr>
+  <tr><td colspan="7" class="muted" style="border-top:none;">{{ r.reason }}</td></tr>
+  {% endfor %}
+</table>
+<p class="muted">Points: strong = 100, medium = 60, weak = 0. Score = sum(points x weight) / sum(weights of rated factors), rounded.
+Unknown factors and Mode (weight 0) are excluded. Risk: score &gt;= 80 LOW, &gt;= 50 MEDIUM, otherwise HIGH.</p>
+
+<h2>2b. Findings and their status</h2>
+<p class="muted">Every finding is tagged: observed = read from the capture; inferred = deduced from packet sizes or sequence numbers (with a confidence, never from file names);
+declared = stated by the testbed file name (unverified); unknown = not determinable from this capture.</p>
+<table>
+  <tr><th>Finding</th><th>Value</th><th>Status</th><th class="num">Confidence</th><th>Evidence</th></tr>
+  {% for f in a.assessment.findings %}
+  <tr><td><b>{{ f.title }}</b></td><td>{{ f.value }}</td><td>{{ f.status }}</td>
+      <td class="num">{{ (f.confidence * 100)|round|int ~ "%" if f.confidence is not none else "-" }}</td><td class="muted">{{ f.evidence }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>3. IKE handshake analysis</h2>
+{% if ike %}
+<table>
+  <tr><th style="width:30%;">IKE version observed</th><td>{{ ike.ike_version }}</td></tr>
+  <tr><th>IKE_SA_INIT captured</th><td>{{ "yes" if ike.handshake.ike_sa_init_seen else "no" }}</td></tr>
+  <tr><th>IKE packets (encrypted / total)</th><td>{{ ike.handshake.encrypted_ike_packets }} / {{ ike.handshake.ike_packets }}</td></tr>
+  <tr><th>ESP packets seen</th><td>{{ ike.handshake.esp_packets }}</td></tr>
+  <tr><th>SA source</th><td>{{ ike.handshake.sa_source or "none" }}</td></tr>
+  <tr><th>IKE SA</th><td>{% if ike.ike_sa %}{{ ike.ike_sa.cipher }}{% if ike.ike_sa.key_length_bits %}-{{ ike.ike_sa.key_length_bits }}{% endif %}, PRF {{ ike.ike_sa.prf or "n/a" }}, integrity {{ ike.ike_sa.integrity or "n/a (AEAD or not offered)" }}, DH {{ ike.ike_sa.dh_group_label or "n/a" }}{% else %}not observed{% endif %}</td></tr>
+  <tr><th>Mode observed</th><td>{{ ike.mode }}</td></tr>
+  <tr><th>Truncated</th><td>{{ "yes" if ike.handshake.truncated else "no" }}</td></tr>
+</table>
+<p class="muted">Only IKE_SA_INIT is sent in clear. The child (ESP) SA, PFS and tunnel/transport mode are negotiated inside the encrypted IKE_AUTH / CREATE_CHILD_SA exchanges (RFC 7296) and cannot be read from a passive capture.</p>
+{% else %}<p>The IKE analysis did not run for this file.</p>{% endif %}
+
+{% if a.capture %}
+<h2>4. Capture summary</h2>
+<table>
+  <tr><th style="width:30%;">Packets analysed</th><td>{{ a.capture.packets }} {{ "(ESP only)" if a.capture.esp_only else "(no ESP found: all IP traffic)" }}</td></tr>
+  <tr><th>Bytes</th><td>{{ a.capture.bytes }}</td></tr>
+  <tr><th>Time span</th><td>{{ a.capture.span_sec }} s</td></tr>
+  <tr><th>Time windows</th><td>{{ a.capture.windows }} x {{ a.capture.window_sec }} s ({{ a.capture.windows_dropped }} dropped: fewer than 2 packets)</td></tr>
+</table>
+{% endif %}
+
+{% if a.traffic %}
+<h2>5. Traffic classification</h2>
+<p>Random Forest on 12 fixed-window features of the ESP packets (sizes, rates, inter-arrival times, direction). The capture-level class is the class with the highest mean probability over all windows.</p>
+<table>
+  <tr><th>Class</th><th class="num">Mean probability</th></tr>
+  {% for p in a.traffic.probabilities %}<tr><td>{{ p.name }}</td><td class="num">{{ (p.value * 100)|round(1) }}%</td></tr>{% endfor %}
+</table>
+{% if prob_img %}<p><img src="{{ prob_img }}" style="width:11cm;"></p>{% endif %}
+
+<h3>Why (SHAP)</h3>
+<p class="muted">Average SHAP contribution of each feature towards the predicted class over the analysed windows.</p>
+<ul>{% for line in a.explanation if "pushed the prediction" in line %}<li>{{ line }}</li>{% endfor %}</ul>
+
+<h2>6. Timeline (fixed {{ a.capture.window_sec if a.capture else 1 }} s windows)</h2>
+{% if timeline_img %}<p><img src="{{ timeline_img }}" style="width:16cm;"></p>{% endif %}
+<table>
+  <tr><th>Window</th><th>Time</th><th>Class</th><th class="num">Confidence</th><th class="num">Packets</th><th class="num">Bytes</th></tr>
+  {% for t in a.timeline[:40] %}
+  <tr><td>{{ t.window }}</td><td>{{ t.start_sec }}-{{ t.end_sec }} s</td><td>{{ t.label }}</td>
+      <td class="num">{{ (t.confidence * 100)|round(1) }}%</td><td class="num">{{ t.packets }}</td><td class="num">{{ t.bytes }}</td></tr>
+  {% endfor %}
+</table>
+{% if a.timeline|length > 40 %}<p class="muted">First 40 of {{ a.timeline|length }} windows shown.</p>{% endif %}
+{% endif %}
+
+<h2>7. Anomalies</h2>
+{% if a.anomalies %}
+<table>
+  <tr><th>Severity</th><th>Rule</th><th>Description</th></tr>
+  {% for x in a.anomalies %}<tr><td>{{ x.severity }}</td><td>{{ x.name }}</td><td>{{ x.description }}</td></tr>{% endfor %}
+</table>
+{% else %}<p>No anomaly rule fired.</p>{% endif %}
+
+<h2>8. Notes and warnings</h2>
+<ul>{% for w in a.warnings %}<li>{{ w }}</li>{% else %}<li>None.</li>{% endfor %}</ul>
+
+<h2>8b. Metadata exposure (what an eavesdropper learns)</h2>
+<p>Exposure score <b>{{ a.assessment.metadata_exposure.score }} / 100 ({{ a.assessment.metadata_exposure.level }})</b> - {{ a.assessment.metadata_exposure.scale }}.</p>
+<table>
+  <tr><th>What</th><th class="num">Points</th><th>What is learned</th></tr>
+  {% for i in a.assessment.metadata_exposure["items"] %}<tr><td>{{ i.what }}</td><td class="num">{{ i.points }} / {{ i.weight }}</td><td>{{ i.learned }}. <span class="muted">{{ i.why }}.</span></td></tr>{% endfor %}
+</table>
+
+<h2>8c. Guideline mapping</h2>
+<div class="notice">{{ a.assessment.compliance.label }}</div>
+<table>
+  <tr><th>Guideline</th><th>Requirement</th><th>Result</th><th>Evidence</th></tr>
+  {% for c in a.assessment.compliance.checks %}<tr><td>{{ c.guideline }}</td><td>{{ c.requirement }}</td><td><b>{{ c.result|replace("_", " ") }}</b></td><td class="muted">{{ c.evidence }} ({{ c.input_status }})</td></tr>{% endfor %}
+</table>
+<ul>{% for n in a.assessment.compliance.not_evaluated %}<li class="muted">{{ n }}</li>{% endfor %}</ul>
+
+<h2>8d. Recommendations and secure configuration</h2>
+{% if a.recommendations and a.recommendations["items"] %}
+<table>
+  <tr><th>#</th><th>Priority</th><th>Action</th><th>Why</th><th>Based on</th></tr>
+  {% for r in a.recommendations["items"] %}<tr><td>{{ r.rank }}</td><td><b>{{ r.priority }}</b></td><td><b>{{ r.title }}.</b> {{ r.action }}</td><td class="muted">{{ r.why }}</td><td>{{ r.based_on.status }}</td></tr>{% endfor %}
+</table>
+{% else %}<p>No recommendation for the facts that could be checked.</p>{% endif %}
+{% if secure_config %}
+<div class="notice">{{ secure_config.note }}</div>
+<pre class="mono">{{ secure_config.text }}</pre>
+{% endif %}
+{% if before_after %}
+<p><b>Before / after ({{ before_after.label }}):</b> before {{ before_after.before.score if before_after.before.score is not none else "n/a" }};
+after a new passive capture {{ before_after.after_passive_capture.score }} (completeness {{ before_after.after_passive_capture.completeness_pct }}%);
+after a direct configuration review {{ before_after.after_config_review.score }}.</p>
+{% endif %}
+
+{% if defence and defence.available %}
+<h2>8e. Defence what-if (SIMULATION)</h2>
+<div class="notice"><b>SIMULATION.</b> {{ defence.label }}</div>
+<p>Without a defence the classifier says <b>{{ defence.baseline["class"] }}</b> ({{ (defence.baseline.confidence * 100)|round|int }}%).</p>
+<table>
+  <tr><th>Defence</th><th>Classifier then says</th><th class="num">Bandwidth</th><th class="num">Delay</th></tr>
+  {% for d in defence.defences %}<tr><td>{{ d.label }}<br><span class="muted">{{ d.description }}</span></td>
+    <td>{% if d.result %}{{ d.result["class"] }} ({{ (d.result.confidence * 100)|round|int }}%){% else %}too sparse{% endif %}{% if d.changes_answer %} - <b>changed</b>{% endif %}</td>
+    <td class="num">+{{ d.cost.bandwidth_overhead_pct }}%</td><td class="num">{{ d.cost.mean_added_delay_ms }} ms</td></tr>{% endfor %}
+</table>
+{% if defence.population %}
+<p><b>Across the {{ defence.population.captures }} lab captures (unseen VPN configurations).</b> Naive attacker = classifier trained on clean traffic; adaptive attacker = retrained on defended traffic. Chance level {{ (defence.population.chance_level_capture_accuracy * 100)|round|int }}%.</p>
+<table>
+  <tr><th>Defence</th><th class="num">Naive attacker</th><th class="num">Adaptive attacker</th><th class="num">Median bandwidth</th></tr>
+  <tr><td>No defence</td><td class="num">{{ (defence.population.baseline.non_adaptive_capture_accuracy * 100)|round(1) }}%</td><td class="num">-</td><td class="num">0%</td></tr>
+  {% for k, r in defence.population.defences.items() %}<tr><td>{{ r.label }}</td><td class="num">{{ (r.non_adaptive_capture_accuracy * 100)|round(1) }}%</td>
+    <td class="num">{{ (r.adaptive_capture_accuracy * 100)|round(1) }}%</td><td class="num">+{{ r.cost.bandwidth_overhead_pct_median }}%</td></tr>{% endfor %}
+</table>
+<ul>{% for c in defence.population.caveats %}<li class="muted">{{ c }}</li>{% endfor %}</ul>
+{% endif %}
+{% endif %}
+
+<h2>9. Model validation and limits</h2>
+{% if metrics %}
+{% set ev = metrics.evaluation.selected %}
+<table>
+  <tr><th style="width:40%;">Model</th><td>{{ metrics.selected_model }}, {{ metrics.features|length }} features, {{ metrics.window_sec }} s windows</td></tr>
+  <tr><th>Training data</th><td>{{ metrics.data.captures }} captures, {{ metrics.data.windows }} windows, {{ metrics.data.vpn_configs }} VPN configurations</td></tr>
+  <tr><th>Evaluation</th><td>{{ metrics.evaluation.method }}</td></tr>
+  <tr><th>Accuracy on unseen VPN configs</th><td>window level {{ (ev.window_level.accuracy * 100)|round(1) }}%, capture level {{ (ev.capture_level.accuracy * 100)|round(1) }}%</td></tr>
+  <tr><th>Sanity: label-shuffled accuracy</th><td>{{ (metrics.evaluation.sanity_checks.label_shuffled_window_accuracy * 100)|round(1) }}% (below the {{ (metrics.evaluation.sanity_checks.majority_class_window_accuracy * 100)|round(1) }}% majority-class baseline: with shuffled labels the model cannot beat guessing, so the real result is not a pipeline artefact)</td></tr>
+</table>
+<ul>{% for c in metrics.caveats %}<li>{{ c }}</li>{% endfor %}</ul>
+{% else %}<p class="muted">Model metrics file not available.</p>{% endif %}
+{% endblock %}

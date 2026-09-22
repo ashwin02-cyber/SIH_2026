@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Executive summary - aes128-dh2-transport-pfs-off__web_run1.pcap</title>
+<style>
+  @page {
+    size: a4 portrait;
+    margin: 1.6cm 1.8cm 2cm 1.8cm;
+    @frame footer_frame {
+      -pdf-frame-content: footer_content;
+      left: 1.8cm; width: 17.4cm; top: 27.7cm; height: 0.8cm;
+    }
+  }
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 10pt; color: #1d2433; line-height: 1.35; }
+  h1 { font-size: 20pt; margin: 0 0 2pt 0; color: #14203a; }
+  h2 { font-size: 13pt; margin: 14pt 0 4pt 0; color: #14203a; border-bottom: 1px solid #c9d1e0; padding-bottom: 2pt; }
+  h3 { font-size: 10.5pt; margin: 8pt 0 2pt 0; color: #14203a; }
+  p { margin: 3pt 0 5pt 0; }
+  .muted { color: #5b6479; font-size: 8.5pt; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background-color: #eef1f7; text-align: left; font-size: 9pt; padding: 4pt 5pt; border: 1px solid #c9d1e0; }
+  td { padding: 4pt 5pt; border: 1px solid #c9d1e0; vertical-align: top; font-size: 9.5pt; }
+  .num { text-align: right; }
+  .badge { color: #ffffff; font-weight: bold; padding: 1pt 5pt; font-size: 8.5pt; }
+  .risk { color: #ffffff; text-align: center; font-size: 22pt; font-weight: bold; padding: 8pt; }
+  .risk-sub { color: #ffffff; text-align: center; font-size: 9pt; padding-bottom: 6pt; }
+  .notice { border: 1px solid #b26a00; background-color: #fff6e5; padding: 6pt 8pt; margin: 6pt 0; font-size: 9pt; }
+  .error { border: 1px solid #c62828; background-color: #fdecec; padding: 6pt 8pt; margin: 6pt 0; font-size: 9pt; }
+  ul { margin: 2pt 0 4pt 0; padding-left: 14pt; }
+  li { margin-bottom: 2pt; }
+  .mono { font-family: Courier, monospace; font-size: 8.5pt; }
+  img { max-width: 100%; }
+</style>
+</head>
+<body>
+
+<h1>VPN Security Assessment - Executive Summary</h1>
+<p class="muted">Capture: <b>aes128-dh2-transport-pfs-off__web_run1.pcap</b> &nbsp;|&nbsp; Generated: 2026-09-22 12:45 UTC</p>
+
+<table style="margin-top:8pt;">
+  <tr>
+    <td style="width:34%; padding:0; border:none;">
+      <table>
+        <tr><td class="risk" style="background-color:#c62828;">HIGH RISK</td></tr>
+        <tr><td class="risk-sub" style="background-color:#c62828;">
+          Security score 30 / 100
+        </td></tr>
+      </table>
+    </td>
+    <td style="width:66%; border:none; padding-left:12pt;">
+      <h3 style="margin-top:0;">In one sentence</h3>
+      <p>
+      
+        The VPN uses settings that are weak by modern standards and should be changed.
+      
+      The encrypted traffic looks like <b>web browsing</b>.
+      </p>
+    </td>
+  </tr>
+</table>
+
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>Assessment completeness: 42%.</b>
+  Only this share of the security facts that matter could be established from the capture.
+  
+  Not determinable: IKE version, Perfect Forward Secrecy, Authentication method, SA / key lifetime.
+</div>
+
+<div class="notice">
+  <b>Important:</b> the settings below come from the VPN configuration named in the capture's file name (declared by the test setup), not from the traffic itself,
+  because the readable part of the VPN negotiation is not in this capture. Treat the rating as "what was configured", not "what was measured".
+</div>
+
+
+
+<h2>Security settings</h2>
+<table>
+  <tr><th>Setting</th><th>Value</th><th>Rating</th><th>Where the value comes from</th></tr>
+  
+  <tr>
+    <td><b>Cipher</b></td>
+    <td>AES-CBC-128</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Declared by file name</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">AES-CBC-128 provides confidentiality only — it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.</td></tr>
+  
+  <tr>
+    <td><b>DH group</b></td>
+    <td>Group 2 (1024-bit MODP)</td>
+    <td><span class="badge" style="background-color:#c62828;">WEAK</span></td>
+    <td>Declared by file name</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">1024-bit MODP is considered too small against modern computing power.</td></tr>
+  
+  <tr>
+    <td><b>PFS</b></td>
+    <td>unknown</td>
+    <td><span class="badge" style="background-color:#616161;">UNKNOWN</span></td>
+    <td>Not determinable</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">Whether Perfect Forward Secrecy is enabled could not be determined from this capture.</td></tr>
+  
+  <tr>
+    <td><b>Mode</b></td>
+    <td>transport</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Inferred from packet sizes</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">Transport mode leaves the original IP header visible; only the payload is encrypted.</td></tr>
+  
+  <tr>
+    <td><b>Integrity</b></td>
+    <td>separate HMAC, tag length 16 B or 32 B</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Inferred from packet sizes</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">length mod 16 = 8 =&gt; ICV mod 16 = 0 (assumes AES-CBC with a 16-byte IV)</td></tr>
+  
+  <tr>
+    <td><b>Key lifetime</b></td>
+    <td>unknown</td>
+    <td><span class="badge" style="background-color:#616161;">UNKNOWN</span></td>
+    <td>Not determinable</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">not observable in this capture (no rekey - a new SPI in the same direction - was seen)</td></tr>
+  
+  <tr>
+    <td><b>Replay protection</b></td>
+    <td>sender uses a strictly increasing sequence counter</td>
+    <td><span class="badge" style="background-color:#b26a00;">MEDIUM</span></td>
+    <td>Inferred from packet sizes</td>
+  </tr>
+  <tr><td colspan="4" class="muted" style="border-top:none;">all 2 SA(s) with enough packets use a strictly increasing sequence counter (no duplicates, no out-of-order packets, 0 sequence numbers never seen)</td></tr>
+  
+</table>
+<p class="muted">The score is a weighted average of the rated settings (cipher 40%, key exchange 40%, forward secrecy 20%).
+Settings that cannot be determined are left out instead of being counted as weak. Mode is shown for information and is not scored.</p>
+
+<h2>Recommended actions</h2>
+<table>
+  <tr><th style="width:12%;">Priority</th><th>Action</th></tr>
+  
+  <tr><td><b>High</b></td><td>Replace the weak Diffie-Hellman group. Change the key-exchange group from Group 2 (1024-bit MODP) to an elliptic-curve group (19 or 20) or MODP 3072-bit or larger.</td></tr>
+  
+  <tr><td><b>Medium</b></td><td>Prefer an AEAD cipher (AES-256-GCM) over AES-CBC. Use aes256gcm16 for IKE and ESP: it protects integrity and confidentiality in one step and needs no separate HMAC.</td></tr>
+  
+  <tr><td><b>Medium</b></td><td>Verify that Perfect Forward Secrecy is enabled. PFS is negotiated inside encrypted IKE messages and cannot be seen in a capture. Confirm the ESP proposal contains a DH group (for strongSwan: esp=...-ecp384!) with `ipsec statusall`.</td></tr>
+  
+  <tr><td><b>Medium</b></td><td>Capture from before the tunnel comes up. Start the capture, then bring the tunnel up (for example `tcpdump -w` first, then `ipsec up`), so IKE_SA_INIT is included.</td></tr>
+  
+  <tr><td><b>Medium</b></td><td>Reduce the traffic-type leak. An eavesdropper can tell this traffic is web browsing (100%). Padding packets to fixed sizes and adding dummy traffic reduces this; see the defence simulation for the effect measured on this project&#39;s dataset.</td></tr>
+  
+  <tr><td><b>Low</b></td><td>Use tunnel mode unless host-to-host transport mode is required. Tunnel mode encrypts the original IP header and hides the real endpoints behind the gateways.</td></tr>
+  
+  <tr><td><b>Low</b></td><td>Set and verify a short SA lifetime. Set keylife=1h and ikelifetime=4h, then verify with a capture at least twice as long as keylife so a rekey is observed.</td></tr>
+  
+</table>
+
+
+<div class="notice" style="border-color:#2b7bb9; background-color:#eef5fb;">
+  <b>If the recommended configuration were applied (projection, not a measurement):</b>
+  score now 30 (HIGH);
+  from a new passive capture 80 (LOW);
+  with the gateway configuration reviewed directly 100 (LOW).
+  <span class="muted">A capture alone cannot show forward secrecy or the authentication method, so it cannot reach 100.</span>
+</div>
+
+
+
+<h2>What is travelling through the tunnel</h2>
+<p>Without decrypting anything, the size and timing pattern of the encrypted packets was matched against five known traffic types.
+Best match: <b>Web browsing</b> (model confidence 100%).</p>
+<p>No unusual traffic patterns were flagged.</p>
+
+
+<h2>What this report cannot tell you</h2>
+<ul>
+  <li>An IPsec capture only shows the cipher and key-exchange group when the start of the VPN negotiation was captured. Whether forward secrecy is on is negotiated in an encrypted step and is not visible to an observer. Tunnel versus transport mode and the cipher family (CBC or GCM) can only be estimated statistically from packet sizes, and are marked "inferred" with a confidence.</li>
+  <li>The traffic-type label is a statistical guess from packet sizes and timing, trained on five scripted traffic types. It is not proof of what users did.</li>
+</ul>
+
+<div id="footer_content" class="muted" style="text-align:center;">
+  IPsec VPN Analyzer - aes128-dh2-transport-pfs-off__web_run1.pcap - generated 2026-09-22 12:45 UTC - page <pdf:pagenumber> of <pdf:pagecount>
+</div>
+</body>
+</html>

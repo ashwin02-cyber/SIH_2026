@@ -2,7 +2,14 @@ import PlainEnglishToggle from "./PlainEnglishToggle";
 import ExportReport from "./ExportReport";
 import "./Header.css";
 
-export default function Header({ plainEnglish, onTogglePlainEnglish }) {
+export default function Header({ plainEnglish, onTogglePlainEnglish, analysis, serverOnline, serverChecked }) {
+  const statusText = !serverChecked
+    ? "Checking analysis engine..."
+    : serverOnline
+      ? "Analysis engine ready"
+      : "Analysis engine offline";
+  const dotClass = !serverChecked ? "header__status-dot--wait" : serverOnline ? "" : "header__status-dot--off";
+
   return (
     <header className="header">
       <div>
@@ -11,10 +18,10 @@ export default function Header({ plainEnglish, onTogglePlainEnglish }) {
       </div>
       <div className="header__controls">
         <PlainEnglishToggle plainEnglish={plainEnglish} onChange={onTogglePlainEnglish} />
-        <ExportReport targetId="dashboard-content" />
-        <div className="header__status">
-          <span className="header__status-dot" />
-          Analysis engine ready
+        <ExportReport analysis={analysis} serverOnline={serverOnline} />
+        <div className="header__status" role="status">
+          <span className={`header__status-dot ${dotClass}`} />
+          {statusText}
         </div>
       </div>
     </header>

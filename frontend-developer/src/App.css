@@ -23,3 +23,51 @@
     padding: 24px 20px;
   }
 }
+
+.banner {
+  padding: 12px 16px;
+  border: 1px solid var(--accent-dim);
+  background: rgba(78, 168, 222, 0.08);
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.banner--error {
+  border-color: var(--risk-high);
+  background: rgba(248, 113, 113, 0.08);
+  color: var(--risk-high);
+}
+
+.empty p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.source {
+  display: inline-block;
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+
+.source--observed {
+  color: var(--risk-low);
+  border-color: var(--risk-low);
+}
+
+.source--declared {
+  color: var(--risk-medium);
+  border-color: var(--risk-medium);
+}
+
+.source--inferred {
+  color: var(--accent);
+  border-color: var(--accent);
+}

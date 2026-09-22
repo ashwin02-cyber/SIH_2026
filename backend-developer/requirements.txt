@@ -1,4 +1,1 @@
-fastapi
-uvicorn[standard]
-python-multipart
-scapy
+-r ../requirements.txt

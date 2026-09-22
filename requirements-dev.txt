@@ -1,0 +1,4 @@
+-r requirements.txt
+# only needed for tools/e2e_check.py (real-browser check) and PDF page previews
+playwright==1.63.0
+pymupdf==1.28.2

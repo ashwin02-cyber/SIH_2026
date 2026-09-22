@@ -14,15 +14,17 @@ export default function AnomaliesList({ anomalies }) {
         <p className="anomalies__empty">No anomalies found in this capture.</p>
       ) : (
         <ul className="anomalies">
-          {anomalies.map((a, i) => (
-            <li key={i} className="anomalies__item">
+          {anomalies.map((a) => (
+            <li key={a.name} className="anomalies__item">
               <span
                 className="anomalies__badge"
                 style={{ color: severityColor[a.severity], borderColor: severityColor[a.severity] }}
               >
                 {a.severity}
               </span>
-              <p className="anomalies__desc">{a.description}</p>
+              <p className="anomalies__desc">
+                <strong>{a.name}.</strong> {a.description}
+              </p>
             </li>
           ))}
         </ul>

@@ -1,0 +1,14 @@
+# Netlify: the repo root contains this file; the React app lives in frontend-developer/.
+[build]
+  base = "frontend-developer"
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Single-page app: always serve index.html
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

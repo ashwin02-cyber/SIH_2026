@@ -1,0 +1,144 @@
+{
+  "what": "passive ESP fingerprinting from packet sizes only",
+  "captures": 180,
+  "configs": 36,
+  "cipher_family_rule": {
+    "by_traffic": {
+      "file_transfer": {
+        "captures": 36,
+        "committed": 36,
+        "coverage": 1.0,
+        "correct_when_committed": 36,
+        "accuracy_when_committed": 1.0,
+        "wrong": []
+      },
+      "icmp": {
+        "captures": 36,
+        "committed": 0,
+        "coverage": 0.0,
+        "correct_when_committed": 0,
+        "accuracy_when_committed": 0.0,
+        "wrong": []
+      },
+      "video": {
+        "captures": 36,
+        "committed": 36,
+        "coverage": 1.0,
+        "correct_when_committed": 36,
+        "accuracy_when_committed": 1.0,
+        "wrong": []
+      },
+      "voip": {
+        "captures": 36,
+        "committed": 36,
+        "coverage": 1.0,
+        "correct_when_committed": 36,
+        "accuracy_when_committed": 1.0,
+        "wrong": []
+      },
+      "web": {
+        "captures": 36,
+        "committed": 36,
+        "coverage": 1.0,
+        "correct_when_committed": 36,
+        "accuracy_when_committed": 1.0,
+        "wrong": []
+      }
+    },
+    "overall": {
+      "captures": 180,
+      "committed": 144,
+      "coverage": 0.8,
+      "correct_when_committed": 144,
+      "accuracy_when_committed": 1.0,
+      "wrong": []
+    },
+    "icv": {
+      "cbc_captures_answered": 96,
+      "true_icv_16_in_candidates": 96,
+      "note": "every CBC config in the testbed uses HMAC-SHA2-256-128 (16-byte ICV)"
+    }
+  },
+  "tunnel_vs_transport": {
+    "classes": [
+      "transport",
+      "tunnel"
+    ],
+    "accuracy": 0.9666666666666667,
+    "confusion": [
+      [
+        90,
+        0
+      ],
+      [
+        6,
+        84
+      ]
+    ],
+    "coverage_at_threshold": 0.8944444444444445,
+    "threshold": 0.75,
+    "accuracy_when_committed": 1.0,
+    "by_traffic": {
+      "file_transfer": {
+        "accuracy": 1.0,
+        "captures": 36,
+        "coverage": 0.9722222222222222
+      },
+      "icmp": {
+        "accuracy": 0.8333333333333334,
+        "captures": 36,
+        "coverage": 0.5
+      },
+      "video": {
+        "accuracy": 1.0,
+        "captures": 36,
+        "coverage": 1.0
+      },
+      "voip": {
+        "accuracy": 1.0,
+        "captures": 36,
+        "coverage": 1.0
+      },
+      "web": {
+        "accuracy": 1.0,
+        "captures": 36,
+        "coverage": 1.0
+      }
+    },
+    "by_family": {
+      "CBC-like": {
+        "accuracy": 1.0,
+        "captures": 120
+      },
+      "GCM-like": {
+        "accuracy": 0.9,
+        "captures": 60
+      }
+    },
+    "shuffled_label_accuracy": {
+      "mean": 0.45444444444444443,
+      "runs": [
+        0.4444444444444444,
+        0.42777777777777776,
+        0.4444444444444444,
+        0.4444444444444444,
+        0.5111111111111111
+      ],
+      "chance": 0.5
+    },
+    "majority_baseline": 0.5
+  },
+  "not_observable_passively": [
+    "AES-128 vs AES-256 (key length does not change packet sizes)",
+    "Diffie-Hellman group (only visible in the cleartext IKE_SA_INIT)",
+    "Perfect Forward Secrecy (negotiated inside encrypted IKE messages)",
+    "Authentication method (pre-shared key vs certificate: encrypted IKE_AUTH)",
+    "Receiver's anti-replay window setting"
+  ],
+  "caveats": [
+    "Lab data: scripted traffic, one strongSwan version, all CBC configs use HMAC-SHA2-256-128, one capture per (config, class).",
+    "The tunnel/transport model learns lab-specific size patterns (the inner IP header adds 20 bytes); it is not a physical law for arbitrary traffic.",
+    "Constant-size streams (ping) carry no cipher-family evidence; the rule abstains on them.",
+    "Cipher family from residues assumes one SA and AES-CBC with a 16-byte IV."
+  ]
+}

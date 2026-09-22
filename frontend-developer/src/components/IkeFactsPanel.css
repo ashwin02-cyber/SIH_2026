@@ -54,3 +54,11 @@
   color: var(--text-muted);
   line-height: 1.4;
 }
+
+.ike-findings__rating {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}

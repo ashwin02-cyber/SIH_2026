@@ -1,0 +1,10 @@
+{
+ "label": "Weak reference example",
+ "note": "A fixed reference configuration (not a capture): AES-CBC-128, DH group 2, transport mode, PFS off.",
+ "score": 24,
+ "risk_level": "HIGH",
+ "cipher": "AES-CBC-128",
+ "mode": "transport",
+ "dh_group": "Group 2 (1024-bit MODP)",
+ "pfs": "disabled"
+}

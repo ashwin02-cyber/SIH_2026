@@ -1,9 +1,16 @@
+"""List the ISAKMP/IKE packets in a pcap.
+
+Usage: python check_handshak.py <path_to.pcap>
+"""
+import sys
+
 from scapy.all import rdpcap
 from scapy.layers.isakmp import ISAKMP
 
-path = r"E:\SIH_2026\real_captures\aes256-dh19-transport-pfs-off__handshake.pcap"
-pkts = rdpcap(path)
+if len(sys.argv) != 2:
+    sys.exit("Usage: python check_handshak.py <path_to.pcap>")
 
+pkts = rdpcap(sys.argv[1])
 print(f"Total packets in file: {len(pkts)}")
 
 isakmp_count = 0
