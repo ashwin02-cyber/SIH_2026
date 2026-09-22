@@ -72,7 +72,12 @@ export default function RecommendationsPanel({ recommendations }) {
         {ba.label}. {ba.after_passive_capture.assumption}.
       </p>
 
-      <h3 className="recs__sub">Generated strongSwan configuration</h3>
+      <h3 className="recs__sub">
+        Generated strongSwan configuration{" "}
+        <span className={`verified-badge ${cfg.verified ? "verified-badge--yes" : "verified-badge--no"}`}>
+          Verified: {cfg.verified ? "Yes" : "No"}
+        </span>
+      </h3>
       <p className="assess__warn">{cfg.note}</p>
       <pre className="conf">{cfg.text}</pre>
       <button className="panel__button" onClick={copy}>

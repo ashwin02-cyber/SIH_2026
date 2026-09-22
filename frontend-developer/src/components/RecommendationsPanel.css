@@ -14,4 +14,8 @@
 
 .conf { margin: 0; padding: 12px; overflow-x: auto; font-family: var(--font-mono); font-size: 11px; line-height: 1.45; background: var(--surface-raised); border: 1px solid var(--border); border-radius: 4px; white-space: pre; }
 
+.verified-badge { display: inline-block; font-family: var(--font-mono); font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 999px; border: 1px solid; vertical-align: middle; }
+.verified-badge--no { color: var(--risk-high); border-color: var(--risk-high); }
+.verified-badge--yes { color: var(--risk-low); border-color: var(--risk-low); }
+
 @media (max-width: 600px) { .ba { grid-template-columns: 1fr; } }
