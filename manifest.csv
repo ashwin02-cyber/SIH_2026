@@ -1,217 +1,217 @@
 filename,combo_name,cipher,mode,dh_group,pfs,traffic_class,timestamp,notes,capture_stop,capture_seconds,config_version
-aes128-dh14-transport-pfs-off__icmp_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,icmp,2026-09-17T08:18:42.303994,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-off__file_transfer_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,file_transfer,2026-09-17T08:18:46.856048,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-off__web_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,web,2026-09-17T08:19:09.607579,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-off__video_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,video,2026-09-17T08:19:15.631513,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-off__voip_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,voip,2026-09-17T08:19:40.936106,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__icmp_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,icmp,2026-09-17T08:20:07.696914,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__file_transfer_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,file_transfer,2026-09-17T08:20:11.943626,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__web_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,web,2026-09-17T08:20:35.831791,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__video_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,video,2026-09-17T08:20:41.774966,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__voip_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,voip,2026-09-17T08:21:06.997465,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__icmp_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,icmp,2026-09-17T08:21:33.599038,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,file_transfer,2026-09-17T08:21:37.808684,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__web_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,web,2026-09-17T08:21:59.647138,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__video_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,video,2026-09-17T08:22:05.644190,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__voip_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,voip,2026-09-17T08:22:11.365725,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__icmp_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,icmp,2026-09-17T08:22:38.016393,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,file_transfer,2026-09-17T08:22:42.358315,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__web_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,web,2026-09-17T08:23:04.364019,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__video_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,video,2026-09-17T08:23:10.455331,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__voip_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,voip,2026-09-17T08:23:16.221313,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__icmp_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,icmp,2026-09-17T08:23:42.962718,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__file_transfer_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,file_transfer,2026-09-17T08:23:47.096281,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__web_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,web,2026-09-17T08:24:09.773660,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__video_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,video,2026-09-17T08:24:15.784699,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__voip_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,voip,2026-09-17T08:24:41.070815,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__icmp_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,icmp,2026-09-17T08:25:07.724083,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__file_transfer_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,file_transfer,2026-09-17T08:25:11.898233,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__web_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,web,2026-09-17T08:25:34.610426,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__video_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,video,2026-09-17T08:25:40.628248,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__voip_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,voip,2026-09-17T08:26:05.933471,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__icmp_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,icmp,2026-09-17T08:26:32.654902,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,file_transfer,2026-09-17T08:26:36.848341,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__web_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,web,2026-09-17T08:27:00.606586,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__video_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,video,2026-09-17T08:27:06.691207,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__voip_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,voip,2026-09-17T08:27:12.434098,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__icmp_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,icmp,2026-09-17T09:23:07.446189,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,file_transfer,2026-09-17T09:23:11.882268,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__web_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,web,2026-09-17T09:23:34.641224,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__video_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,video,2026-09-17T09:23:40.777383,run 1,packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__voip_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,voip,2026-09-17T09:23:46.548700,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__icmp_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,icmp,2026-09-17T08:28:45.377248,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__file_transfer_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,file_transfer,2026-09-17T08:28:49.319535,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__web_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,web,2026-09-17T08:29:12.420263,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__video_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,video,2026-09-17T08:29:18.402634,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__voip_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,voip,2026-09-17T08:29:43.671846,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__icmp_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,icmp,2026-09-17T09:24:13.238232,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__file_transfer_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,file_transfer,2026-09-17T09:24:17.474482,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__web_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,web,2026-09-17T09:24:39.231340,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__video_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,video,2026-09-17T09:24:45.204381,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__voip_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,voip,2026-09-17T09:25:10.447109,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__icmp_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,icmp,2026-09-17T08:31:36.176490,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,file_transfer,2026-09-17T08:31:40.227682,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__web_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,web,2026-09-17T08:32:04.838976,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__video_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,video,2026-09-17T08:32:10.932802,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__voip_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,voip,2026-09-17T08:32:16.727616,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__icmp_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,icmp,2026-09-17T08:32:43.706242,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,file_transfer,2026-09-17T08:32:48.184500,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__web_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,web,2026-09-17T08:33:11.127419,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__video_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,video,2026-09-17T08:33:17.176487,run 1,packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__voip_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,voip,2026-09-17T08:33:22.891842,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,icmp,2026-09-17T09:25:37.082926,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,file_transfer,2026-09-17T09:25:41.213285,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__web_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,web,2026-09-17T09:26:04.587451,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__video_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,video,2026-09-17T09:26:10.656350,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,voip,2026-09-17T09:26:35.991214,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,icmp,2026-09-17T08:35:14.415541,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,file_transfer,2026-09-17T08:35:18.467036,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__web_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,web,2026-09-17T08:35:41.473529,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__video_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,video,2026-09-17T08:35:47.402792,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,voip,2026-09-17T08:36:12.705247,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,icmp,2026-09-17T08:36:39.329056,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,file_transfer,2026-09-17T08:36:43.233866,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,web,2026-09-17T08:37:05.154594,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,video,2026-09-17T08:37:11.128533,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,voip,2026-09-17T08:37:16.868470,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,icmp,2026-09-17T08:37:43.573412,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,file_transfer,2026-09-17T08:37:47.569174,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,web,2026-09-17T08:38:09.369554,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,video,2026-09-17T08:38:15.380439,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,voip,2026-09-17T08:38:21.101937,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,icmp,2026-09-17T09:27:02.586559,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,file_transfer,2026-09-17T09:27:06.645138,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__web_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,web,2026-09-17T09:27:29.557068,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__video_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,video,2026-09-17T09:27:35.513697,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,voip,2026-09-17T09:28:00.755697,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,icmp,2026-09-17T08:40:13.547559,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,file_transfer,2026-09-17T08:40:17.693774,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__web_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,web,2026-09-17T08:40:39.555930,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__video_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,video,2026-09-17T08:40:45.492799,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,voip,2026-09-17T08:41:10.782331,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,icmp,2026-09-17T08:41:37.370421,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,file_transfer,2026-09-17T08:41:41.426624,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,web,2026-09-17T08:42:05.578402,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,video,2026-09-17T08:42:11.570602,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,voip,2026-09-17T08:42:17.271214,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,icmp,2026-09-17T09:28:27.375615,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,file_transfer,2026-09-17T09:28:31.777641,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,web,2026-09-17T09:28:54.896500,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,video,2026-09-17T09:29:01.007237,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,voip,2026-09-17T09:29:06.688938,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,icmp,2026-09-17T08:43:51.040083,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,file_transfer,2026-09-17T08:43:55.289038,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__web_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,web,2026-09-17T08:44:17.963906,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__video_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,video,2026-09-17T08:44:24.011591,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,voip,2026-09-17T08:44:49.275083,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,icmp,2026-09-17T08:45:15.944218,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,file_transfer,2026-09-17T08:45:20.002514,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__web_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,web,2026-09-17T08:45:42.850021,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__video_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,video,2026-09-17T08:45:48.845928,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,voip,2026-09-17T08:46:14.111070,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,icmp,2026-09-17T08:46:40.677646,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,file_transfer,2026-09-17T08:46:44.661215,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,web,2026-09-17T08:47:07.162057,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,video,2026-09-17T08:47:13.114228,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,voip,2026-09-17T08:47:18.819595,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,icmp,2026-09-17T08:55:48.619714,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,file_transfer,2026-09-17T08:55:53.776815,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,web,2026-09-17T08:56:15.903719,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,video,2026-09-17T08:56:21.954549,run 1,packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,voip,2026-09-17T08:56:27.688358,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__icmp_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,icmp,2026-09-17T08:56:54.439046,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__file_transfer_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,file_transfer,2026-09-17T08:56:58.717382,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__web_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,web,2026-09-17T08:57:20.890225,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__video_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,video,2026-09-17T08:57:26.868074,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__voip_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,voip,2026-09-17T08:57:52.139494,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__icmp_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,icmp,2026-09-17T08:58:18.900241,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__file_transfer_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,file_transfer,2026-09-17T08:58:23.396950,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__web_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,web,2026-09-17T08:58:46.120777,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__video_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,video,2026-09-17T08:58:52.116621,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__voip_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,voip,2026-09-17T08:59:17.393461,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__icmp_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,icmp,2026-09-17T08:59:44.057924,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,file_transfer,2026-09-17T08:59:48.186906,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__web_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,web,2026-09-17T09:00:12.134240,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__video_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,video,2026-09-17T09:00:18.190979,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__voip_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,voip,2026-09-17T09:00:23.894514,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__icmp_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,icmp,2026-09-17T09:00:50.589959,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,file_transfer,2026-09-17T09:00:54.771715,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__web_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,web,2026-09-17T09:01:20.304358,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__video_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,video,2026-09-17T09:01:26.332190,run 1,packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__voip_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,voip,2026-09-17T09:01:32.061314,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__icmp_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,icmp,2026-09-17T09:01:58.709346,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__file_transfer_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,file_transfer,2026-09-17T09:02:02.966111,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__web_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,web,2026-09-17T09:02:25.764722,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__video_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,video,2026-09-17T09:02:31.810271,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__voip_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,voip,2026-09-17T09:02:57.090281,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__icmp_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,icmp,2026-09-17T09:03:23.686032,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__file_transfer_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,file_transfer,2026-09-17T09:03:27.896053,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__web_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,web,2026-09-17T09:03:49.133859,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__video_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,video,2026-09-17T09:03:55.079878,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__voip_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,voip,2026-09-17T09:04:20.317423,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__icmp_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,icmp,2026-09-17T09:04:46.841575,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,file_transfer,2026-09-17T09:04:50.857377,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__web_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,web,2026-09-17T09:05:14.744967,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__video_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,video,2026-09-17T09:05:20.715468,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__voip_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,voip,2026-09-17T09:05:26.433910,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__icmp_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,icmp,2026-09-17T09:05:53.027437,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,file_transfer,2026-09-17T09:05:57.285489,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__web_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,web,2026-09-17T09:06:21.397382,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__video_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,video,2026-09-17T09:06:27.430798,run 1,packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__voip_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,voip,2026-09-17T09:06:33.139607,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__icmp_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,icmp,2026-09-17T09:06:59.673288,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__file_transfer_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,file_transfer,2026-09-17T09:07:03.779442,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__web_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,web,2026-09-17T09:07:25.467158,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__video_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,video,2026-09-17T09:07:31.435260,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__voip_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,voip,2026-09-17T09:07:56.728009,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__icmp_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,icmp,2026-09-17T09:08:23.448916,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__file_transfer_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,file_transfer,2026-09-17T09:08:27.622881,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__web_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,web,2026-09-17T09:08:47.253095,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__video_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,video,2026-09-17T09:08:53.263194,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__voip_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,voip,2026-09-17T09:09:18.548827,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__icmp_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,icmp,2026-09-17T09:29:33.428638,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,file_transfer,2026-09-17T09:29:37.919878,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__web_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,web,2026-09-17T09:30:01.235318,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__video_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,video,2026-09-17T09:30:07.323275,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__voip_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,voip,2026-09-17T09:30:13.039061,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__icmp_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,icmp,2026-09-17T09:10:52.370239,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,file_transfer,2026-09-17T09:10:56.979326,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__web_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,web,2026-09-17T09:11:19.817259,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__video_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,video,2026-09-17T09:11:25.803675,run 1,packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__voip_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,voip,2026-09-17T09:11:31.536383,run 1,packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-off__handshake.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,handshake,2026-09-17T08:18:30.047991,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh14-transport-pfs-on__handshake.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,handshake,2026-09-17T08:19:55.432577,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-off__handshake.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,handshake,2026-09-17T08:21:21.436365,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh14-tunnel-pfs-on__handshake.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,handshake,2026-09-17T08:22:25.848309,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-off__handshake.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,handshake,2026-09-17T08:23:30.681100,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh19-transport-pfs-on__handshake.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,handshake,2026-09-17T08:24:55.493350,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-off__handshake.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,handshake,2026-09-17T08:26:20.391989,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh19-tunnel-pfs-on__handshake.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,handshake,2026-09-17T09:22:55.145233,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-off__handshake.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,handshake,2026-09-17T08:28:33.226093,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh2-transport-pfs-on__handshake.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,handshake,2026-09-17T09:24:01.095759,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-off__handshake.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,handshake,2026-09-17T08:31:23.984314,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128-dh2-tunnel-pfs-on__handshake.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,handshake,2026-09-17T08:32:31.393268,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-off__handshake.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,handshake,2026-09-17T09:25:24.923645,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh14-transport-pfs-on__handshake.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,handshake,2026-09-17T08:35:02.263433,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,handshake,2026-09-17T08:36:27.103294,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh14-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,handshake,2026-09-17T08:37:31.256853,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-off__handshake.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,handshake,2026-09-17T09:26:50.446792,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh19-transport-pfs-on__handshake.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,handshake,2026-09-17T08:40:01.339156,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,handshake,2026-09-17T08:41:25.181479,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh19-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,handshake,2026-09-17T09:28:15.182828,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-off__handshake.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,handshake,2026-09-17T08:43:38.871362,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh2-transport-pfs-on__handshake.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,handshake,2026-09-17T08:45:03.690220,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,handshake,2026-09-17T08:46:28.503690,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes128gcm16-dh2-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,handshake,2026-09-17T08:47:33.277841,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-off__handshake.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,handshake,2026-09-17T08:56:42.215565,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh14-transport-pfs-on__handshake.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,handshake,2026-09-17T08:58:06.737119,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-off__handshake.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,handshake,2026-09-17T08:59:31.850010,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh14-tunnel-pfs-on__handshake.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,handshake,2026-09-17T09:00:38.388567,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-off__handshake.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,handshake,2026-09-17T09:01:46.540337,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh19-transport-pfs-on__handshake.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,handshake,2026-09-17T09:03:11.520663,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-off__handshake.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,handshake,2026-09-17T09:04:34.663009,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh19-tunnel-pfs-on__handshake.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,handshake,2026-09-17T09:05:40.846080,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-off__handshake.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,handshake,2026-09-17T09:06:47.536681,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh2-transport-pfs-on__handshake.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,handshake,2026-09-17T09:08:11.271370,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-off__handshake.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,handshake,2026-09-17T09:29:21.257025,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
-aes256-dh2-tunnel-pfs-on__handshake.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,handshake,2026-09-17T09:10:40.211985,"IKE negotiation, captured during container restart",packet-count,,v1-pfs-identical
+aes128-dh14-transport-pfs-off__icmp_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,icmp,2026-09-24T17:12:04.887438,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-off__file_transfer_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,file_transfer,2026-09-24T17:12:38.487782,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-off__web_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,web,2026-09-24T17:13:11.407007,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-off__video_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,video,2026-09-24T17:13:44.176113,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-off__voip_run1.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,voip,2026-09-24T17:14:17.371016,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__icmp_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,icmp,2026-09-24T17:15:13.818358,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__file_transfer_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,file_transfer,2026-09-24T17:15:47.343637,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__web_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,web,2026-09-24T17:16:20.253827,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__video_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,video,2026-09-24T17:16:53.019979,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__voip_run1.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,voip,2026-09-24T17:17:26.157205,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__icmp_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,icmp,2026-09-24T17:18:22.441813,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,file_transfer,2026-09-24T17:18:55.896478,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__web_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,web,2026-09-24T17:19:28.954007,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__video_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,video,2026-09-24T17:20:01.733712,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__voip_run1.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,voip,2026-09-24T17:20:34.884816,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__icmp_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,icmp,2026-09-24T17:21:31.255804,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,file_transfer,2026-09-24T17:22:04.628476,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__web_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,web,2026-09-24T17:22:37.588201,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__video_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,video,2026-09-24T17:23:10.342927,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__voip_run1.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,voip,2026-09-24T17:23:43.474081,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__icmp_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,icmp,2026-09-24T17:24:39.857081,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__file_transfer_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,file_transfer,2026-09-24T17:25:13.197478,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__web_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,web,2026-09-24T17:25:46.327649,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__video_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,video,2026-09-24T17:26:19.057690,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__voip_run1.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,voip,2026-09-24T17:26:52.201174,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__icmp_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,icmp,2026-09-24T17:27:48.478167,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__file_transfer_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,file_transfer,2026-09-24T17:28:22.020632,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__web_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,web,2026-09-24T17:28:55.003318,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__video_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,video,2026-09-24T17:29:27.756523,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__voip_run1.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,voip,2026-09-24T17:30:00.887797,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__icmp_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,icmp,2026-09-24T17:30:57.148892,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,file_transfer,2026-09-24T17:31:30.714772,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__web_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,web,2026-09-24T17:32:03.357844,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__video_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,video,2026-09-24T17:32:36.111064,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__voip_run1.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,voip,2026-09-24T17:33:09.254498,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__icmp_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,icmp,2026-09-24T17:34:05.589167,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,file_transfer,2026-09-24T17:34:38.955454,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__web_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,web,2026-09-24T17:35:11.936550,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__video_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,video,2026-09-24T17:35:44.689430,run 1,time,30,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__voip_run1.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,voip,2026-09-24T17:36:17.807375,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__icmp_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,icmp,2026-09-24T17:37:14.117297,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__file_transfer_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,file_transfer,2026-09-24T17:37:47.452884,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__web_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,web,2026-09-24T17:38:20.924607,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__video_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,video,2026-09-24T17:38:53.664375,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__voip_run1.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,voip,2026-09-24T17:39:26.795333,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__icmp_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,icmp,2026-09-24T17:40:23.093155,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__file_transfer_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,file_transfer,2026-09-24T17:40:56.278492,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__web_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,web,2026-09-24T17:41:29.594714,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__video_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,video,2026-09-24T17:42:03.305865,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__voip_run1.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,voip,2026-09-24T17:42:37.293478,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__icmp_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,icmp,2026-09-24T17:43:34.542234,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,file_transfer,2026-09-24T17:44:08.846573,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__web_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,web,2026-09-24T17:44:42.868906,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__video_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,video,2026-09-24T17:45:16.662935,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__voip_run1.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,voip,2026-09-24T17:45:50.614241,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__icmp_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,icmp,2026-09-24T17:46:47.740715,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,file_transfer,2026-09-24T17:47:21.452654,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__web_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,web,2026-09-24T17:47:55.634906,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__video_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,video,2026-09-24T17:48:29.511024,run 1,time,30,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__voip_run1.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,voip,2026-09-24T17:49:03.579994,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,icmp,2026-09-24T17:50:01.040336,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,file_transfer,2026-09-24T17:50:34.977835,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__web_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,web,2026-09-24T17:51:08.925299,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__video_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,video,2026-09-24T17:51:42.629275,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,voip,2026-09-24T17:52:16.621853,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,icmp,2026-09-24T17:53:13.860014,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,file_transfer,2026-09-24T17:53:48.101490,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__web_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,web,2026-09-24T17:54:21.483364,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__video_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,video,2026-09-24T17:54:55.193420,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,voip,2026-09-24T17:55:29.138679,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,icmp,2026-09-24T17:56:26.365155,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,file_transfer,2026-09-24T17:57:00.430755,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,web,2026-09-24T17:57:34.342820,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,video,2026-09-24T17:58:08.079823,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,voip,2026-09-24T17:58:42.074793,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,icmp,2026-09-24T17:59:39.306415,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,file_transfer,2026-09-24T18:00:13.676545,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,web,2026-09-24T18:00:47.145886,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,video,2026-09-24T18:01:21.036156,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,voip,2026-09-24T18:01:55.107368,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,icmp,2026-09-24T18:02:52.749173,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,file_transfer,2026-09-24T18:03:26.745290,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__web_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,web,2026-09-24T18:04:00.491211,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__video_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,video,2026-09-24T18:04:34.194089,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,voip,2026-09-24T18:05:08.222793,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,icmp,2026-09-24T18:06:05.495371,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,file_transfer,2026-09-24T18:06:39.617426,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__web_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,web,2026-09-24T18:07:13.786307,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__video_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,video,2026-09-24T18:07:47.501196,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,voip,2026-09-24T18:08:21.455509,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,icmp,2026-09-24T18:09:18.739737,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,file_transfer,2026-09-24T18:09:53.123109,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,web,2026-09-24T18:10:26.642130,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,video,2026-09-24T18:11:00.456218,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,voip,2026-09-24T18:11:34.462503,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,icmp,2026-09-24T18:12:31.738287,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,file_transfer,2026-09-24T18:13:05.907109,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,web,2026-09-24T18:13:39.246838,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,video,2026-09-24T18:14:13.072044,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,voip,2026-09-24T18:14:47.031399,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__icmp_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,icmp,2026-09-24T18:15:44.226709,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,file_transfer,2026-09-24T18:16:18.934748,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__web_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,web,2026-09-24T18:16:52.667846,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__video_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,video,2026-09-24T18:17:26.472659,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__voip_run1.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,voip,2026-09-24T18:18:00.502234,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__icmp_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,icmp,2026-09-24T18:18:57.815052,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,file_transfer,2026-09-24T18:19:31.747255,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__web_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,web,2026-09-24T18:20:05.367814,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__video_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,video,2026-09-24T18:20:39.081869,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__voip_run1.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,voip,2026-09-24T18:21:13.082837,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__icmp_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,icmp,2026-09-24T18:22:10.343480,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,file_transfer,2026-09-24T18:22:44.576663,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__web_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,web,2026-09-24T18:23:18.046439,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__video_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,video,2026-09-24T18:23:51.763360,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__voip_run1.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,voip,2026-09-24T18:24:25.745275,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__icmp_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,icmp,2026-09-24T18:25:23.099475,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,file_transfer,2026-09-24T18:25:57.635869,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__web_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,web,2026-09-24T18:26:31.787651,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__video_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,video,2026-09-24T18:27:05.660373,run 1,time,30,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__voip_run1.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,voip,2026-09-24T18:27:39.777613,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__icmp_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,icmp,2026-09-24T18:28:37.388198,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__file_transfer_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,file_transfer,2026-09-24T18:29:11.557104,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__web_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,web,2026-09-24T18:29:45.677479,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__video_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,video,2026-09-24T18:30:19.391975,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__voip_run1.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,voip,2026-09-24T18:30:53.346622,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__icmp_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,icmp,2026-09-24T18:31:50.767198,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__file_transfer_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,file_transfer,2026-09-24T18:32:24.835390,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__web_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,web,2026-09-24T18:32:58.965590,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__video_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,video,2026-09-24T18:33:32.710788,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__voip_run1.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,voip,2026-09-24T18:34:06.733553,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__icmp_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,icmp,2026-09-24T18:35:04.365047,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,file_transfer,2026-09-24T18:35:38.328918,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__web_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,web,2026-09-24T18:36:11.724637,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__video_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,video,2026-09-24T18:36:45.513293,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__voip_run1.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,voip,2026-09-24T18:37:19.579364,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__icmp_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,icmp,2026-09-24T18:38:17.049152,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,file_transfer,2026-09-24T18:38:50.931411,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__web_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,web,2026-09-24T18:39:24.177259,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__video_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,video,2026-09-24T18:39:57.961968,run 1,time,30,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__voip_run1.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,voip,2026-09-24T18:40:32.073463,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__icmp_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,icmp,2026-09-24T18:41:29.384858,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__file_transfer_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,file_transfer,2026-09-24T18:42:03.754172,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__web_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,web,2026-09-24T18:42:37.305740,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__video_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,video,2026-09-24T18:43:11.121334,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__voip_run1.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,voip,2026-09-24T18:43:45.158375,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__icmp_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,icmp,2026-09-24T18:44:42.444053,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__file_transfer_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,file_transfer,2026-09-24T18:45:16.528606,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__web_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,web,2026-09-24T18:45:50.640409,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__video_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,video,2026-09-24T18:46:24.498576,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__voip_run1.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,voip,2026-09-24T18:46:58.490196,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__icmp_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,icmp,2026-09-24T18:47:55.758466,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,file_transfer,2026-09-24T18:48:30.016836,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__web_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,web,2026-09-24T18:49:03.397859,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__video_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,video,2026-09-24T18:49:37.164039,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__voip_run1.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,voip,2026-09-24T18:50:11.176040,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__icmp_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,icmp,2026-09-24T18:51:08.607987,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,file_transfer,2026-09-24T18:51:42.981137,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__web_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,web,2026-09-24T18:52:16.542384,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__video_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,video,2026-09-24T18:52:50.483383,run 1,time,30,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__voip_run1.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,voip,2026-09-24T18:53:24.585099,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__icmp_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,icmp,2026-09-24T18:54:22.184698,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__file_transfer_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,file_transfer,2026-09-24T18:54:56.425954,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__web_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,web,2026-09-24T18:55:30.482949,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__video_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,video,2026-09-24T18:56:04.211568,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__voip_run1.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,voip,2026-09-24T18:56:38.246892,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__icmp_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,icmp,2026-09-24T18:57:36.170973,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__file_transfer_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,file_transfer,2026-09-24T18:58:10.477320,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__web_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,web,2026-09-24T18:58:44.142550,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__video_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,video,2026-09-24T18:59:17.945367,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__voip_run1.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,voip,2026-09-24T18:59:52.025960,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__icmp_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,icmp,2026-09-24T19:00:49.547099,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__file_transfer_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,file_transfer,2026-09-24T19:01:23.822985,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__web_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,web,2026-09-24T19:01:57.325790,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__video_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,video,2026-09-24T19:02:30.848814,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__voip_run1.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,voip,2026-09-24T19:03:04.146275,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__icmp_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,icmp,2026-09-24T19:03:59.855036,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__file_transfer_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,file_transfer,2026-09-24T19:04:33.432557,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__web_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,web,2026-09-24T19:05:06.636323,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__video_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,video,2026-09-24T19:05:39.526095,run 1,time,30,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__voip_run1.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,voip,2026-09-24T19:06:12.814048,run 1,time,30,v2-pfs-in-esp
+aes128-dh14-transport-pfs-off__handshake.pcap,aes128-dh14-transport-pfs-off,aes128,transport,dh14,off,handshake,2026-09-24T17:11:31.954173,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh14-transport-pfs-on__handshake.pcap,aes128-dh14-transport-pfs-on,aes128,transport,dh14,on,handshake,2026-09-24T17:14:40.797337,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-off__handshake.pcap,aes128-dh14-tunnel-pfs-off,aes128,tunnel,dh14,off,handshake,2026-09-24T17:17:49.543996,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh14-tunnel-pfs-on__handshake.pcap,aes128-dh14-tunnel-pfs-on,aes128,tunnel,dh14,on,handshake,2026-09-24T17:20:58.334030,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh19-transport-pfs-off__handshake.pcap,aes128-dh19-transport-pfs-off,aes128,transport,dh19,off,handshake,2026-09-24T17:24:06.910672,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh19-transport-pfs-on__handshake.pcap,aes128-dh19-transport-pfs-on,aes128,transport,dh19,on,handshake,2026-09-24T17:27:15.554649,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-off__handshake.pcap,aes128-dh19-tunnel-pfs-off,aes128,tunnel,dh19,off,handshake,2026-09-24T17:30:24.250486,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh19-tunnel-pfs-on__handshake.pcap,aes128-dh19-tunnel-pfs-on,aes128,tunnel,dh19,on,handshake,2026-09-24T17:33:32.611841,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh2-transport-pfs-off__handshake.pcap,aes128-dh2-transport-pfs-off,aes128,transport,dh2,off,handshake,2026-09-24T17:36:41.197478,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh2-transport-pfs-on__handshake.pcap,aes128-dh2-transport-pfs-on,aes128,transport,dh2,on,handshake,2026-09-24T17:39:50.160125,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-off__handshake.pcap,aes128-dh2-tunnel-pfs-off,aes128,tunnel,dh2,off,handshake,2026-09-24T17:43:00.626304,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128-dh2-tunnel-pfs-on__handshake.pcap,aes128-dh2-tunnel-pfs-on,aes128,tunnel,dh2,on,handshake,2026-09-24T17:46:13.859287,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-off__handshake.pcap,aes128gcm16-dh14-transport-pfs-off,aes128gcm16,transport,dh14,off,handshake,2026-09-24T17:49:27.092180,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh14-transport-pfs-on__handshake.pcap,aes128gcm16-dh14-transport-pfs-on,aes128gcm16,transport,dh14,on,handshake,2026-09-24T17:52:39.873236,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh14-tunnel-pfs-off,aes128gcm16,tunnel,dh14,off,handshake,2026-09-24T17:55:52.474987,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh14-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh14-tunnel-pfs-on,aes128gcm16,tunnel,dh14,on,handshake,2026-09-24T17:59:05.365739,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-off__handshake.pcap,aes128gcm16-dh19-transport-pfs-off,aes128gcm16,transport,dh19,off,handshake,2026-09-24T18:02:18.698266,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh19-transport-pfs-on__handshake.pcap,aes128gcm16-dh19-transport-pfs-on,aes128gcm16,transport,dh19,on,handshake,2026-09-24T18:05:31.593462,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh19-tunnel-pfs-off,aes128gcm16,tunnel,dh19,off,handshake,2026-09-24T18:08:44.779276,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh19-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh19-tunnel-pfs-on,aes128gcm16,tunnel,dh19,on,handshake,2026-09-24T18:11:57.801854,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-off__handshake.pcap,aes128gcm16-dh2-transport-pfs-off,aes128gcm16,transport,dh2,off,handshake,2026-09-24T18:15:10.253855,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh2-transport-pfs-on__handshake.pcap,aes128gcm16-dh2-transport-pfs-on,aes128gcm16,transport,dh2,on,handshake,2026-09-24T18:18:23.816573,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-off__handshake.pcap,aes128gcm16-dh2-tunnel-pfs-off,aes128gcm16,tunnel,dh2,off,handshake,2026-09-24T18:21:36.419684,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes128gcm16-dh2-tunnel-pfs-on__handshake.pcap,aes128gcm16-dh2-tunnel-pfs-on,aes128gcm16,tunnel,dh2,on,handshake,2026-09-24T18:24:49.142446,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh14-transport-pfs-off__handshake.pcap,aes256-dh14-transport-pfs-off,aes256,transport,dh14,off,handshake,2026-09-24T18:28:03.397106,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh14-transport-pfs-on__handshake.pcap,aes256-dh14-transport-pfs-on,aes256,transport,dh14,on,handshake,2026-09-24T18:31:16.819706,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-off__handshake.pcap,aes256-dh14-tunnel-pfs-off,aes256,tunnel,dh14,off,handshake,2026-09-24T18:34:30.170631,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh14-tunnel-pfs-on__handshake.pcap,aes256-dh14-tunnel-pfs-on,aes256,tunnel,dh14,on,handshake,2026-09-24T18:37:43.086560,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh19-transport-pfs-off__handshake.pcap,aes256-dh19-transport-pfs-off,aes256,transport,dh19,off,handshake,2026-09-24T18:40:55.410192,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh19-transport-pfs-on__handshake.pcap,aes256-dh19-transport-pfs-on,aes256,transport,dh19,on,handshake,2026-09-24T18:44:08.524993,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-off__handshake.pcap,aes256-dh19-tunnel-pfs-off,aes256,tunnel,dh19,off,handshake,2026-09-24T18:47:21.850728,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh19-tunnel-pfs-on__handshake.pcap,aes256-dh19-tunnel-pfs-on,aes256,tunnel,dh19,on,handshake,2026-09-24T18:50:34.598304,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh2-transport-pfs-off__handshake.pcap,aes256-dh2-transport-pfs-off,aes256,transport,dh2,off,handshake,2026-09-24T18:53:48.138831,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh2-transport-pfs-on__handshake.pcap,aes256-dh2-transport-pfs-on,aes256,transport,dh2,on,handshake,2026-09-24T18:57:02.005171,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-off__handshake.pcap,aes256-dh2-tunnel-pfs-off,aes256,tunnel,dh2,off,handshake,2026-09-24T19:00:15.415177,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
+aes256-dh2-tunnel-pfs-on__handshake.pcap,aes256-dh2-tunnel-pfs-on,aes256,tunnel,dh2,on,handshake,2026-09-24T19:03:26.794842,IKE negotiation captured from before teardown; tunnel up,time,20,v2-pfs-in-esp
