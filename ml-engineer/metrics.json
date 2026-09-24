@@ -1,6 +1,6 @@
 {
-  "generated_utc": "2026-09-21T13:45:28+00:00",
-  "selected_model": "random_forest",
+  "generated_utc": "2026-09-24T16:00:44+00:00",
+  "selected_model": "xgboost",
   "classes": [
     "file_transfer",
     "icmp",
@@ -30,15 +30,15 @@
     "total_bytes"
   ],
   "data": {
-    "windows": 1027,
+    "windows": 1264,
     "captures": 180,
     "vpn_configs": 36,
     "windows_per_class": {
-      "file_transfer": 36,
-      "icmp": 266,
-      "video_streaming": 78,
+      "file_transfer": 52,
+      "icmp": 360,
+      "video_streaming": 108,
       "voip": 36,
-      "web_browsing": 611
+      "web_browsing": 708
     },
     "esp_only": true
   },
@@ -47,9 +47,9 @@
     "candidates": {
       "random_forest": {
         "window_level": {
-          "accuracy": 1.0,
-          "balanced_accuracy": 1.0,
-          "macro_f1": 1.0
+          "accuracy": 0.9984,
+          "balanced_accuracy": 0.9923,
+          "macro_f1": 0.9955
         },
         "capture_level": {
           "accuracy": 1.0,
@@ -59,9 +59,9 @@
       },
       "xgboost": {
         "window_level": {
-          "accuracy": 0.999,
-          "balanced_accuracy": 0.9974,
-          "macro_f1": 0.9985
+          "accuracy": 0.9992,
+          "balanced_accuracy": 0.9962,
+          "macro_f1": 0.9978
         },
         "capture_level": {
           "accuracy": 1.0,
@@ -72,27 +72,27 @@
     },
     "selected": {
       "window_level": {
-        "accuracy": 1.0,
-        "balanced_accuracy": 1.0,
-        "macro_f1": 1.0,
+        "accuracy": 0.9992,
+        "balanced_accuracy": 0.9962,
+        "macro_f1": 0.9978,
         "per_class": {
           "file_transfer": {
             "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 36.0
+            "recall": 0.9807692307692307,
+            "f1-score": 0.9902912621359223,
+            "support": 52.0
           },
           "icmp": {
-            "precision": 1.0,
+            "precision": 0.997229916897507,
             "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 266.0
+            "f1-score": 0.9986130374479889,
+            "support": 360.0
           },
           "video_streaming": {
             "precision": 1.0,
             "recall": 1.0,
             "f1-score": 1.0,
-            "support": 78.0
+            "support": 108.0
           },
           "voip": {
             "precision": 1.0,
@@ -104,49 +104,49 @@
             "precision": 1.0,
             "recall": 1.0,
             "f1-score": 1.0,
-            "support": 611.0
+            "support": 708.0
           },
-          "accuracy": 1.0,
+          "accuracy": 0.9992088607594937,
           "macro avg": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 1027.0
+            "precision": 0.9994459833795014,
+            "recall": 0.9961538461538462,
+            "f1-score": 0.9977808599167822,
+            "support": 1264.0
           },
           "weighted avg": {
-            "precision": 1.0,
-            "recall": 1.0,
-            "f1-score": 1.0,
-            "support": 1027.0
+            "precision": 0.9992110522809354,
+            "recall": 0.9992088607594937,
+            "f1-score": 0.9992055689179936,
+            "support": 1264.0
           }
         },
         "confusion_matrix": [
           [
+            51,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            360,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            108,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
             36,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            266,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            78,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            36,
             0
           ],
           [
@@ -154,7 +154,7 @@
             0,
             0,
             0,
-            611
+            708
           ]
         ]
       },
@@ -249,73 +249,73 @@
         {
           "fold": 1,
           "test_configs": 6,
-          "test_windows": 173,
+          "test_windows": 211,
           "accuracy": 1.0,
           "macro_f1": 1.0
         },
         {
           "fold": 2,
           "test_configs": 6,
-          "test_windows": 170,
+          "test_windows": 213,
           "accuracy": 1.0,
           "macro_f1": 1.0
         },
         {
           "fold": 3,
           "test_configs": 6,
-          "test_windows": 171,
+          "test_windows": 209,
           "accuracy": 1.0,
           "macro_f1": 1.0
         },
         {
           "fold": 4,
           "test_configs": 6,
-          "test_windows": 172,
+          "test_windows": 209,
           "accuracy": 1.0,
           "macro_f1": 1.0
         },
         {
           "fold": 5,
           "test_configs": 6,
-          "test_windows": 171,
-          "accuracy": 1.0,
-          "macro_f1": 1.0
+          "test_windows": 210,
+          "accuracy": 0.9952,
+          "macro_f1": 0.985
         },
         {
           "fold": 6,
           "test_configs": 6,
-          "test_windows": 170,
+          "test_windows": 212,
           "accuracy": 1.0,
           "macro_f1": 1.0
         }
       ],
-      "n_windows": 1027,
+      "n_windows": 1264,
       "n_captures": 180
     },
     "sanity_checks": {
-      "majority_class_window_accuracy": 0.5949,
-      "label_shuffled_window_accuracy": 0.4625,
-      "label_shuffled_capture_accuracy": 0.4889,
+      "majority_class_window_accuracy": 0.5601,
+      "label_shuffled_window_accuracy": 0.3022,
+      "label_shuffled_capture_accuracy": 0.3833,
       "without_rate_features": {
-        "window_accuracy": 1.0,
-        "window_macro_f1": 1.0,
+        "window_accuracy": 0.9992,
+        "window_macro_f1": 0.9978,
         "capture_accuracy": 1.0
       },
       "window_accuracy_by_packets_in_window": {
         "2-3 packets": {
-          "windows": 264,
-          "accuracy": 1.0
+          "windows": 362,
+          "accuracy": 0.9972
         },
         "4-10 packets": {
-          "windows": 303,
+          "windows": 354,
           "accuracy": 1.0
         },
         "11-50 packets": {
-          "windows": 370,
+          "windows": 390,
           "accuracy": 1.0
         },
         ">50 packets": {
-          "windows": 90,
+          "windows": 158,
           "accuracy": 1.0
         }
       }
@@ -323,28 +323,28 @@
   },
   "top_features": [
     {
-      "feature": "bytes_per_sec",
-      "importance": 0.1395
-    },
-    {
       "feature": "pkts_per_sec",
-      "importance": 0.1265
-    },
-    {
-      "feature": "min_size",
-      "importance": 0.1245
-    },
-    {
-      "feature": "max_size",
-      "importance": 0.124
-    },
-    {
-      "feature": "std_size",
-      "importance": 0.1232
+      "importance": 0.20280000567436218
     },
     {
       "feature": "mean_size",
-      "importance": 0.1173
+      "importance": 0.20160000026226044
+    },
+    {
+      "feature": "std_size",
+      "importance": 0.19099999964237213
+    },
+    {
+      "feature": "min_size",
+      "importance": 0.16500000655651093
+    },
+    {
+      "feature": "median_size",
+      "importance": 0.164000004529953
+    },
+    {
+      "feature": "fwd_packet_ratio",
+      "importance": 0.061400000005960464
     }
   ],
   "caveats": [
