@@ -1,0 +1,599 @@
+{
+ "schema_version": "1.1",
+ "filename": "aes128-dh14-tunnel-pfs-on__handshake.pcap",
+ "score": 60,
+ "raw_score": 60,
+ "risk_level": "MEDIUM",
+ "score_basis": "observed",
+ "cipher": "AES-CBC-128",
+ "mode": "tunnel",
+ "dh_group": "Group 14 (2048-bit MODP)",
+ "pfs": "unknown",
+ "sources": {
+  "cipher": "observed",
+  "dh_group": "observed",
+  "pfs": "unknown",
+  "mode": "declared"
+ },
+ "confidence": {},
+ "breakdown": [
+  {
+   "factor": "Cipher",
+   "value": "AES-CBC-128",
+   "rating": "medium",
+   "weight": 0.4,
+   "source": "observed",
+   "reason": "AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues."
+  },
+  {
+   "factor": "DH group",
+   "value": "Group 14 (2048-bit MODP)",
+   "rating": "medium",
+   "weight": 0.4,
+   "source": "observed",
+   "reason": "2048-bit MODP is currently acceptable but has no long-term safety margin."
+  },
+  {
+   "factor": "PFS",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.2,
+   "source": "unknown",
+   "reason": "Whether Perfect Forward Secrecy is enabled could not be determined from this capture."
+  },
+  {
+   "factor": "Mode",
+   "value": "tunnel",
+   "rating": "strong",
+   "weight": 0.0,
+   "source": "declared",
+   "reason": "Tunnel mode encrypts the whole original packet, including its IP header."
+  },
+  {
+   "factor": "Integrity",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "no ESP packets"
+  },
+  {
+   "factor": "Key lifetime",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "not observable in this capture (no ESP packets)"
+  },
+  {
+   "factor": "Replay protection",
+   "value": "unknown",
+   "rating": "unknown",
+   "weight": 0.0,
+   "source": "unknown",
+   "reason": "no ESP packets with a readable header"
+  }
+ ],
+ "assessment": {
+  "completeness_pct": 50.0,
+  "completeness_detail": [
+   {
+    "fact": "ike_version",
+    "label": "IKE version",
+    "weight": 5,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "protocol",
+    "label": "IPsec protocol (ESP / AH)",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "mode",
+    "label": "Tunnel or transport mode",
+    "weight": 10,
+    "status": "declared",
+    "known_fraction": 0.5
+   },
+   {
+    "fact": "cipher",
+    "label": "Cipher (algorithm / family)",
+    "weight": 15,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "key_length",
+    "label": "Key length",
+    "weight": 10,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "integrity",
+    "label": "Integrity protection",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "dh_group",
+    "label": "Key exchange (DH group)",
+    "weight": 15,
+    "status": "observed",
+    "known_fraction": 1.0
+   },
+   {
+    "fact": "pfs",
+    "label": "Perfect Forward Secrecy",
+    "weight": 15,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "auth_method",
+    "label": "Authentication method",
+    "weight": 5,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "key_lifetime",
+    "label": "SA / key lifetime",
+    "weight": 8,
+    "status": "unknown",
+    "known_fraction": 0.0
+   },
+   {
+    "fact": "replay",
+    "label": "Replay protection",
+    "weight": 7,
+    "status": "unknown",
+    "known_fraction": 0.0
+   }
+  ],
+  "raw_score": 60,
+  "score_cap": 68,
+  "score_capped": false,
+  "adjustments": [],
+  "unknown_facts": [
+   "IPsec protocol (ESP / AH)",
+   "Integrity protection",
+   "Perfect Forward Secrecy",
+   "Authentication method",
+   "SA / key lifetime",
+   "Replay protection"
+  ],
+  "findings": [
+   {
+    "id": "ike_version",
+    "title": "IKE version",
+    "value": "2.0",
+    "status": "observed",
+    "confidence": 1.0,
+    "rating": "info",
+    "weight": 5,
+    "evidence": "read from an IKE_SA_INIT header in the capture"
+   },
+   {
+    "id": "protocol",
+    "title": "IPsec protocol (ESP / AH)",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "no ESP packets in this capture"
+   },
+   {
+    "id": "mode",
+    "title": "Tunnel or transport mode",
+    "value": "tunnel",
+    "status": "declared",
+    "confidence": null,
+    "rating": "strong",
+    "weight": 10,
+    "evidence": "from the testbed file name (unverified)"
+   },
+   {
+    "id": "cipher",
+    "title": "Cipher (algorithm / family)",
+    "value": "AES-CBC-128",
+    "status": "observed",
+    "confidence": null,
+    "rating": "medium",
+    "weight": 15,
+    "evidence": "read from the IKE_SA_INIT proposal"
+   },
+   {
+    "id": "key_length",
+    "title": "Key length",
+    "value": "128 bits",
+    "status": "observed",
+    "confidence": null,
+    "rating": "info",
+    "weight": 10,
+    "evidence": "read from the IKE_SA_INIT proposal"
+   },
+   {
+    "id": "integrity",
+    "title": "Integrity protection",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "no ESP packets"
+   },
+   {
+    "id": "dh_group",
+    "title": "Key exchange (DH group)",
+    "value": "Group 14 (2048-bit MODP)",
+    "status": "observed",
+    "confidence": null,
+    "rating": "medium",
+    "weight": 15,
+    "evidence": "read from the IKE_SA_INIT proposal"
+   },
+   {
+    "id": "pfs",
+    "title": "Perfect Forward Secrecy",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 15,
+    "evidence": "negotiated inside encrypted IKE messages; not observable passively"
+   },
+   {
+    "id": "auth_method",
+    "title": "Authentication method",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 5,
+    "evidence": "pre-shared key vs certificate is negotiated in the encrypted IKE_AUTH exchange; not observable passively"
+   },
+   {
+    "id": "key_lifetime",
+    "title": "SA / key lifetime",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 8,
+    "evidence": "not observable in this capture (no ESP packets)"
+   },
+   {
+    "id": "replay",
+    "title": "Replay protection",
+    "value": "unknown",
+    "status": "unknown",
+    "confidence": null,
+    "rating": "unknown",
+    "weight": 7,
+    "evidence": "no ESP packets with a readable header"
+   }
+  ],
+  "metadata_exposure": {
+   "score": 8,
+   "level": "LOW",
+   "scale": "0 = an eavesdropper learns nothing, 100 = learns everything listed",
+   "items": [
+    {
+     "what": "Traffic type",
+     "weight": 30,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "not identified",
+     "why": "packet sizes and timing reveal what the tunnel is used for, even though the payload is encrypted"
+    },
+    {
+     "what": "Tunnel vs transport mode",
+     "weight": 10,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "undetermined",
+     "why": "extra inner IP header changes every packet size"
+    },
+    {
+     "what": "Cipher family",
+     "weight": 10,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "undetermined",
+     "why": "padding granularity (CBC vs AEAD) shows in the packet lengths"
+    },
+    {
+     "what": "Packet-size distribution",
+     "weight": 15,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "always visible",
+     "why": "ESP does not hide packet lengths unless padding is added"
+    },
+    {
+     "what": "Timing and volume",
+     "weight": 20,
+     "exposed_fraction": 0.0,
+     "points": 0.0,
+     "learned": "always visible",
+     "why": "packet times and byte counts are visible on the wire"
+    },
+    {
+     "what": "Communicating endpoints",
+     "weight": 15,
+     "exposed_fraction": 0.5,
+     "points": 7.5,
+     "learned": "the two gateways only",
+     "why": "outer IP addresses are always in clear; tunnel mode hides the real endpoints behind the gateways"
+    }
+   ],
+   "note": "IPsec cannot hide timing, volume or outer addresses; padding and dummy traffic reduce the traffic-type leak (see the defence simulation)."
+  },
+  "compliance": {
+   "label": "Guideline mapping against published guidance - NOT a certification or audit result",
+   "checks": [
+    {
+     "id": "nist-131a-tdea",
+     "guideline": "NIST SP 800-131A Rev. 2",
+     "requirement": "Three-key TDEA (3DES) is not acceptable for encryption after 2023",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "observed"
+    },
+    {
+     "id": "nist-aes",
+     "guideline": "NIST FIPS 197 / SP 800-38",
+     "requirement": "Use an approved block cipher (AES) and mode",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "observed"
+    },
+    {
+     "id": "nist-112bit-kex",
+     "guideline": "NIST SP 800-131A Rev. 2 / SP 800-57",
+     "requirement": "Key establishment with at least 112 bits of security strength (finite-field DH of at least 2048 bits)",
+     "result": "meets",
+     "evidence": "Group 14 (2048-bit MODP) provides at least 112 bits",
+     "input_status": "observed"
+    },
+    {
+     "id": "rfc8221-esp-alg",
+     "guideline": "RFC 8221",
+     "requirement": "ESP encryption algorithm is one of the mandatory-to-implement AES-CBC or AES-GCM-16",
+     "result": "meets",
+     "evidence": "cipher is AES-CBC",
+     "input_status": "observed"
+    },
+    {
+     "id": "rfc8247-group14",
+     "guideline": "RFC 8247",
+     "requirement": "IKEv2 MODP group 14 (2048-bit) is a mandatory-to-implement group",
+     "result": "meets",
+     "evidence": "negotiated group is 14",
+     "input_status": "observed"
+    }
+   ],
+   "summary": {
+    "meets": 5,
+    "does_not_meet": 0,
+    "cannot_assess": 0
+   },
+   "not_evaluated": [
+    "NIST SP 800-77 Rev. 1 (Guide to IPsec VPNs): used as general background only; no individual requirement is encoded here.",
+    "RFC 8247 is encoded for one item only (IKEv2 group 14); other group requirement levels are not evaluated.",
+    "FIPS 140 module validation, key management, authentication strength and certificate policy are outside what a capture can show."
+   ]
+  },
+  "score_after_cap": 60,
+  "cap_rule": "score <= 35 + 65 x completeness (LOW needs a score of at least 80, i.e. completeness of at least 69%)",
+  "consistency_checks": []
+ },
+ "recommendations": {
+  "items": [
+   {
+    "id": "dh",
+    "priority": "Medium",
+    "title": "Move to an elliptic-curve key exchange",
+    "action": "Group 14 (2048-bit MODP) is acceptable today but has little safety margin; use group 19 or 20.",
+    "why": "Longer safety margin, faster handshakes.",
+    "based_on": {
+     "status": "observed",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": "ike=...-ecp384!",
+    "rank": 1
+   },
+   {
+    "id": "cipher",
+    "priority": "Medium",
+    "title": "Prefer an AEAD cipher (AES-256-GCM) over AES-CBC",
+    "action": "Use aes256gcm16 for IKE and ESP: it protects integrity and confidentiality in one step and needs no separate HMAC.",
+    "why": "Removes padding-oracle style risks of CBC + HMAC and gives a 256-bit key.",
+    "based_on": {
+     "status": "observed",
+     "confidence": null
+    },
+    "standards": [
+     "RFC 8221 (AES-GCM-16 is mandatory to implement)"
+    ],
+    "config_hint": "esp=aes256gcm16-ecp384!",
+    "rank": 2
+   },
+   {
+    "id": "pfs",
+    "priority": "Medium",
+    "title": "Verify that Perfect Forward Secrecy is enabled",
+    "action": "PFS is negotiated inside encrypted IKE messages and cannot be seen in a capture. Confirm the ESP proposal contains a DH group (for strongSwan: esp=...-ecp384!) with `ipsec statusall`.",
+    "why": "It carries 15% of the assessment.",
+    "based_on": {
+     "status": "unknown",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": "esp=aes256gcm16-ecp384!",
+    "rank": 3
+   },
+   {
+    "id": "lifetime",
+    "priority": "Low",
+    "title": "Set and verify a short SA lifetime",
+    "action": "Set keylife=1h and ikelifetime=4h, then verify with a capture at least twice as long as keylife so a rekey is observed.",
+    "why": "The lifetime cannot be observed unless a rekey happens inside the capture.",
+    "based_on": {
+     "status": "unknown",
+     "confidence": null
+    },
+    "standards": [],
+    "config_hint": "keylife=1h",
+    "rank": 4
+   }
+  ],
+  "secure_config": {
+   "format": "strongSwan ipsec.conf",
+   "text": "# Generated by the IPsec VPN Analyzer - a starting point, NOT a tested production config.\n# Replace the <placeholders>, then test in a lab (ipsec statusall, tcpdump) before using it.\nconfig setup\n    charondebug=\"ike 1, esp 1\"\n\nconn secure-vpn\n    keyexchange=ikev2\n    left=<THIS_GATEWAY_IP>\n    right=<PEER_GATEWAY_IP>\n    type=tunnel\n    authby=pubkey                 # certificates; if you must use a pre-shared key: authby=secret with 20+ random characters\n    leftcert=<THIS_GATEWAY_CERT>\n    ike=aes256gcm16-prfsha384-ecp384!             # AES-256-GCM, SHA-384 PRF, ECP-384 (group 20)\n    esp=aes256gcm16-ecp384!             # AES-256-GCM; the ecp384 group here enables Perfect Forward Secrecy\n    ikelifetime=4h\n    keylife=1h\n    rekeymargin=9m\n    dpdaction=restart\n    dpddelay=30s\n    auto=start\n",
+   "verified": false,
+   "note": "Standard strongSwan syntax, but NOT verified against a running strongSwan in this project (Docker was unavailable). Test it in a lab first; replace every <placeholder>."
+  },
+  "before_after": {
+   "label": "Projection - what the tool would report if the recommended configuration were applied (not a measurement)",
+   "configuration": {
+    "recommended": {
+     "cipher": "AES-GCM-16",
+     "key_length_bits": 256,
+     "dh_group": 20,
+     "pfs": true,
+     "mode": "tunnel"
+    }
+   },
+   "before": {
+    "score": 60,
+    "raw_score": 60,
+    "risk_level": "MEDIUM",
+    "completeness_pct": 50.0
+   },
+   "after_passive_capture": {
+    "score": 80,
+    "raw_score": 100,
+    "risk_level": "LOW",
+    "completeness_pct": 69.0,
+    "assumption": "a new capture that includes the cleartext IKE_SA_INIT; PFS, authentication and key lifetime stay invisible to a passive capture, which is why even a perfect configuration cannot reach 100 from a capture alone"
+   },
+   "after_config_review": {
+    "score": 100,
+    "raw_score": 100,
+    "risk_level": "LOW",
+    "completeness_pct": 100.0,
+    "assumption": "the gateway configuration is read directly, so every fact is known"
+   }
+  }
+ },
+ "traffic": null,
+ "model_confidence": null,
+ "explanation": [
+  "Overall security score 60/100 - medium risk.",
+  "Only 50% of the security facts that matter could be established from this capture.",
+  "Cipher - AES-CBC-128 - is rated medium. AES-CBC-128 provides confidentiality only \u2014 it needs a separate HMAC for integrity, and mis-set integrity checking can open padding-oracle-style issues.",
+  "DH group - Group 14 (2048-bit MODP) - is rated medium. 2048-bit MODP is currently acceptable but has no long-term safety margin.",
+  "Not determinable from this capture: PFS. They are left out of the raw score instead of being counted as weak, but they lower the completeness."
+ ],
+ "anomalies": [],
+ "timeline": [],
+ "capture": null,
+ "details": {
+  "ike": {
+   "ike_version": "2.0",
+   "mode": "unknown",
+   "ike_sa": {
+    "cipher": "AES-CBC",
+    "key_length_bits": 128,
+    "integrity": "HMAC-SHA2-256-128",
+    "prf": "PRF-HMAC-SHA2-256",
+    "dh_group": 14,
+    "dh_group_label": "Group 14 (2048-bit MODP)"
+   },
+   "esp_sa": null,
+   "handshake": {
+    "ike_sa_init_seen": true,
+    "sa_source": "responder-selected",
+    "ike_packets": 8,
+    "encrypted_ike_packets": 6,
+    "esp_packets": 0,
+    "ah_packets": 0,
+    "truncated": false
+   },
+   "warnings": [
+    "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+    "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+   ]
+  },
+  "esp_fingerprint": {
+   "esp_packets": 0,
+   "cipher_family": {
+    "value": "undetermined",
+    "confidence": null,
+    "evidence": "no ESP packets in this capture"
+   },
+   "integrity_tag": {
+    "value": null,
+    "candidates": [],
+    "evidence": "no ESP packets"
+   },
+   "mode": {
+    "value": "undetermined",
+    "confidence": null,
+    "evidence": "no ESP packets in this capture"
+   },
+   "distinct_sizes": 0,
+   "residues_mod16": {},
+   "not_observable": [
+    "AES-128 vs AES-256 (key length does not change packet sizes)",
+    "Diffie-Hellman group (only visible in the cleartext IKE_SA_INIT)",
+    "Perfect Forward Secrecy (negotiated inside encrypted IKE messages)",
+    "Authentication method (pre-shared key vs certificate: encrypted IKE_AUTH)",
+    "Receiver's anti-replay window setting"
+   ],
+   "method": "packet sizes only (no file names, no keys, no IKE)",
+   "protocols": {
+    "ESP": 0,
+    "AH": 0,
+    "IPv6": 0
+   },
+   "ah_only": false
+  },
+  "esp_sequence": {
+   "esp_packets": 0,
+   "sas": [],
+   "replay_protection": {
+    "status": "not_observable",
+    "evidence": "no ESP packets with a readable header",
+    "limits": [
+     "Whether the receiver enforces the anti-replay window (and its size) is a receiver-side setting and is not observable.",
+     "Only the sender's sequence counter can be checked; a capture point can also see duplicates/reordering that never reached the receiver.",
+     "The configured SA lifetime is not observable; only the interval between successive SAs seen in this capture."
+    ]
+   },
+   "rekey_events": [],
+   "sa_lifetime": {
+    "observable": false,
+    "estimate_seconds": null,
+    "lower_bound_seconds": null,
+    "basis": null,
+    "note": "not observable in this capture (no ESP packets)"
+   }
+  }
+ },
+ "warnings": [
+  "Tunnel/transport mode is negotiated inside the encrypted IKE_AUTH exchange and is not observable in this capture; it is reported as 'unknown'.",
+  "The ESP SA's own cipher/DH/PFS live inside the encrypted IKE_AUTH exchange and were not observed; PFS is reported as unknown."
+ ],
+ "errors": [
+  "Traffic classification: No IP packets found in this capture"
+ ]
+}

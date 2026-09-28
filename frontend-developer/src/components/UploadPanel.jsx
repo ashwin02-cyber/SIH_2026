@@ -8,7 +8,32 @@ export default function UploadPanel({ onAnalyzeFile, onAnalyzeSample, busy, serv
   const [file, setFile] = useState(null);
   const [dragActive, setDragActive] = useState(false);
   const [localError, setLocalError] = useState(null);
+  const [selectedSampleKey, setSelectedSampleKey] = useState("");
   const inputRef = useRef(null);
+
+  // Server online: options are raw filenames (the API resolves them by name).
+  // Server offline: options are the bundled samples, each carrying its own real analysis.
+  const sampleOptions = serverOnline
+    ? serverSamples.map((name) => ({
+        value: name,
+        label: name.replace(/_run1\.pcap$|\.pcap$/, ""),
+      }))
+    : bundledSamples.map((s) => ({
+        value: s.key,
+        label: s.meta
+          ? `${s.meta.title} — ${s.meta.cipher}, ${s.meta.mode}, PFS ${s.meta.pfs} (${s.meta.risk_level})`
+          : s.title,
+      }));
+
+  function handleLoadSample() {
+    if (!selectedSampleKey) return;
+    if (serverOnline) {
+      onAnalyzeSample(selectedSampleKey);
+    } else {
+      const sample = bundledSamples.find((s) => s.key === selectedSampleKey);
+      if (sample) onAnalyzeSample(sample);
+    }
+  }
 
   function handleFile(f) {
     if (!f) return;
@@ -89,19 +114,30 @@ export default function UploadPanel({ onAnalyzeFile, onAnalyzeSample, busy, serv
       )}
 
       <div className="samples">
-        <p className="samples__title">Or try a sample</p>
-        <div className="samples__list">
-          {serverOnline
-            ? serverSamples.map((name) => (
-                <button key={name} className="samples__button" disabled={busy} onClick={() => onAnalyzeSample(name)}>
-                  {name.replace(/_run1\.pcap$|\.pcap$/, "")}
-                </button>
-              ))
-            : bundledSamples.map((s) => (
-                <button key={s.key} className="samples__button" onClick={() => onAnalyzeSample(s)}>
-                  {s.title}
-                </button>
-              ))}
+        <p className="samples__title">Or load a sample file</p>
+        <div className="samples__dropdown">
+          <select
+            className="samples__select"
+            value={selectedSampleKey}
+            disabled={busy || sampleOptions.length === 0}
+            onChange={(e) => setSelectedSampleKey(e.target.value)}
+          >
+            <option value="">
+              {sampleOptions.length === 0 ? "No sample files available" : "Choose a sample file..."}
+            </option>
+            {sampleOptions.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <button
+            className="samples__load-button"
+            disabled={busy || !selectedSampleKey}
+            onClick={handleLoadSample}
+          >
+            {busy ? "Loading..." : "Load sample file"}
+          </button>
         </div>
       </div>
     </section>
